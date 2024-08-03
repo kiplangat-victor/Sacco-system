@@ -1,0 +1,108 @@
+<div *ngIf="loading">
+	<p><small>Loading Cheques Data, please wait...</small></p>
+	<p>
+		<mat-progress-bar mode="query"></mat-progress-bar>
+	</p>
+</div>
+<mat-card-header class="breadcrumb">
+	<div>Cheques Look-up</div>
+	<div class="col-md-6 col-sm-12 ml-auto">
+		<input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+	</div>
+</mat-card-header>
+<form action="" [formGroup]="formData" novalidate class="form" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm">
+	<div class="row">
+		<div class="col-md-6 col-sm-12">
+			<div class="form-group">
+				<div class="col-md-4 col-sm-12 form-column">
+					<label for="">Trans. Status</label>
+				</div>
+				<div class="col-md-8 col-sm-12 form-column">
+					<select class="form-control" formControlName="status">
+						<option value="" disabled>SELECT STATUS</option>
+						<option *ngFor="let item of transactionStatusArray" [value]="item">
+							{{ item }}
+						</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-12">
+			<div class="form-group">
+				<div class="col-md-4 col-sm-12 form-column">
+					<label>Transaction Code</label>
+				</div>
+				<div class="col-md-8 col-sm-12 form-column">
+					<input type="text" class="form-control" formControlName="chequeRandCode">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-12">
+			<div class="form-group">
+				<div class="col-md-4 col-sm-12 form-column">
+					<label class="start pull-left">From Date</label>
+				</div>
+				<div class="col-md-8 col-sm-12 form-column">
+					<input [matDatepicker]="fromDate" formControlName="fromDate" class="form-control">
+					<span>
+						<mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+					</span>
+					<mat-datepicker #fromDate></mat-datepicker>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-12">
+			<div class="form-group">
+				<div class="col-md-4 col-sm-12 form-column">
+					<label class="start pull-left">To Date</label>
+				</div>
+				<div class="col-md-8 col-sm-12 form-column">
+					<input [matDatepicker]="toDate" formControlName="toDate" class="form-control">
+					<span>
+						<mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+					</span>
+					<mat-datepicker #toDate></mat-datepicker>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="col-md-2 ml-auto">
+		<button type="submit" class="btn btn-primary btn-sm pull-right btn" (click)="onSubmit()">SUBMIT</button>
+	</div>
+	<br>
+</form>
+<div class="table-row">
+	<table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+		<ng-container matColumnDef="index">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+		</ng-container>
+		<ng-container matColumnDef="chequeRandCode">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Cheque Code</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.chequeRandCode}} </td>
+		</ng-container>
+		<ng-container matColumnDef="bankName">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Bank</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.bankName}} </td>
+		</ng-container>
+		<ng-container matColumnDef="bankBranch">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Branch</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.bankBranch}} </td>
+		</ng-container>
+		<ng-container matColumnDef="debitAccount">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Debit Account</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.debitAccount}} </td>
+		</ng-container>
+		<ng-container matColumnDef="creditCustOperativeAccount">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>OperativeAccount</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.creditCustOperativeAccount}} </td>
+		</ng-container>
+		<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+		<tr class="mat-row" *matNoDataRow>
+			<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+		</tr>
+	</table>
+</div>
+<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>

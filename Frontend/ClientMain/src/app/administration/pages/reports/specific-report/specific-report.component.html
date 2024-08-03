@@ -1,0 +1,118 @@
+<div class="card">
+  <h2 class="text-center">{{ message.reportName }} REPORT</h2>
+  <form class="container">
+    <div class="row form-group containcer-fluid">
+      <div class="col-md-6" *ngIf="startDateAvailable">
+        <div class="form-group row mb-1">
+          <div class="col-md-3">
+            <label class="col-form-label col-form-label-sm text-left" for="alpay">Start Date</label>
+          </div>
+          <div class="col-md-9">
+            <input [(ngModel)]="startDate" class="form-control form-control-sm" id="alpay" name="endDate"
+                   type="date">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-md-6" *ngIf="endDateAvailable">
+        <div class="form-group row mb-1">
+
+          <div class="col-md-3">
+            <label class="col-form-label col-form-label-sm text-left" for="alpay">End Date</label>
+          </div>
+          <div class="col-md-9">
+            <input [(ngModel)]="endDate" class="form-control form-control-sm" id="alpay" name="startDate"
+                   type="date">
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group containcer-fluid">
+      <div class="col-md-6" *ngIf="accountCodeAvailable">
+        <div class="form-group row mb-1">
+          <div class="col-md-3">
+            <label class="col-form-label col-form-label-sm text-left" for="alpay">Account Number</label>
+          </div>
+          <div class="col-md-8">
+            <input [(ngModel)]="accountCode" class="form-control form-control-sm" id="alpay" name="endDate"
+                   type="text">
+          </div>
+
+          <div class="col-md-1">
+            <button
+              class="btn btn-sm col-sm-1 search text-center"
+              type="button"
+            >
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-md-6" *ngIf="sol_codeAvailable">
+        <div class="form-group row mb-1">
+
+          <div class="col-md-3">
+            <label class="col-form-label col-form-label-sm text-left" for="alpay">Branch</label>
+          </div>
+          <div class="col-md-9">
+            <select [(ngModel)]="sol_code" class="form-select form-select-sm" id="license" name="branch">
+
+              <option value="%">All</option>
+
+              <option *ngFor="let s of sols; let i=index" [ngValue]=s>{{s}}</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group containcer-fluid">
+      <div class="col-md-6" *ngIf="managerAvailable">
+        <div class="form-group row mb-1">
+          <div class="col-md-3">
+            <label class="col-form-label col-form-label-sm text-left" for="alpay">Manager</label>
+          </div>
+          <div class="col-md-8">
+            <input [(ngModel)]="manager" class="form-control form-control-sm" id="alpay" name="endDate"
+                   type="text">
+          </div>
+
+          <div class="col-md-1">
+            <button
+              class="btn btn-sm col-sm-1 search text-center"
+              type="button"
+            >
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-md-2 offset-md-10">
+        <button class="btn btn-success" (click)="downloadReport()">Download</button>
+      </div>
+
+    </div>
+
+  </form>
+
+
+  <div class="container mt-8" *ngIf="reportPresent" >
+    <iframe id="pdfViewer" [src]="sanitizer.bypassSecurityTrustResourceUrl(testurl)" style="width: 100%; height: 450px; margin-top: 30px;"
+            zindex="100" ></iframe>
+  </div>
+
+</div>
+

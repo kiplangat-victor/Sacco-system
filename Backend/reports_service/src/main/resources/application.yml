@@ -1,0 +1,66 @@
+server:
+  port: 9008
+  #SSL configuration
+  # ssl:
+  #   enabled: true
+  #   key-store: classpath:Key/emtech.p12
+  #   key-store-type: PKCS12
+  #   key-store-password: Emtech@2021
+
+spring:
+  application:
+    name: REPORTS-SERVICE
+  banner:
+    location: classpath:banner.txt
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDB53Dialect
+        show_sql: true
+        format_sql: false
+
+  datasource:
+
+
+    url: jdbc:mariadb://localhost:3306/22thaprilgoodway_dump
+
+    username: root
+    password:
+
+    driverClassName: org.mariadb.jdbc.Driver
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:9001/eureka
+
+      #defaultZone: http://52.15.152.26:9001/eureka
+#      defaultZone: http://52.15.152.26:9001/eureka
+
+  instance:
+    hostname: localhost
+
+users:
+  app:
+    jwtSecret: /buCOEjS/+H7ZwekxyLKLdDeegHUGEytjxuivosdrzjRG4g4E+kA3uXO5lvGBVsl2NwqsgiGUUI5bjgY/6WG/VSIIG+22b1Rvdb59BY0YRod6Dnjnp0REsPn//hshs6ucnOVCBRp0lbVb1kP+EDOM7W7N72/+t+R1d8JQ4pjisoJZI4e0MV3PlZtzXKI0SY2EQUtI
+    jwtExpirationMs: 43200000
+    client:
+      origin: http://localhost:4200/
+
+##Reports JRXML storage path
+sacco:
+  reports:
+    path: D:\EMT_GAMBIA_COREBANKING\Server\reports_service\reports\jrxmls
+    icon: D:\EMT_GAMBIA_COREBANKING\Server\reports_service\reports\report-icon\gambia.png
+    authimage: D:\EMT_GAMBIA_COREBANKING\Server\reports_service\reports\report-icon\gambia.png
+    sacco_name: THE GAMBIA NATIONAL BANK
+    chargelink: http://localhost:9006/accounts/account/statement/
+    chargeevent: print
+
+

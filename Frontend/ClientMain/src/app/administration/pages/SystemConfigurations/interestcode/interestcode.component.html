@@ -1,0 +1,362 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/interestcode/maintenance">Interest Code Maintenenace / </a>Interest Codes
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-4 col-sm-12">
+      <div class="row">
+        <div class="col-md-5 col-sm-12">
+          <h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-7 col-sm-12">
+          <h4>Interest Code:- <strong>{{this.fmData.interestCode}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 col-sm-12 row" *ngIf="onShowResults">
+      <div class="row">
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted BY:- <strong>{{this.postedBy}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted ON:- <strong>{{this.postedTime | date}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verification:- <strong>{{this.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verified BY:- <strong>{{this.verifiedBy}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start ">Interest Name</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="interestName" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.interestName.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start ">Penal Int. Based On <span class="warning">*</span></label>
+            </div>
+              <div class="col-md-6 col-sm-12 form-column">
+                <mat-radio-group class="pull-right" aria-label="Select an option" formControlName="penalIntBasedOn">
+                  <mat-radio-button value="Fixed" color="primary">Fixed</mat-radio-button>
+                  <mat-radio-button value="Percent">Percent (%)</mat-radio-button>
+                </mat-radio-group>
+              </div>
+          </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start ">Penal Interest</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="number" formControlName="penalInterest" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.penalInterest.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start ">Penal Interest Type</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <select formControlName="penalInterestType" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.penalInterestType.errors}">
+              <option value="" disabled>SELECT FILE TYPE</option>
+              <option *ngFor="let item of penalInterestTypeArray"
+                [value]="item.value">{{item.name}}
+              </option>
+            </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start ">Effective From Date</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input  [matDatepicker]="fromDate" formControlName="fromDate" class="form-control">
+              <span>
+                <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+              </span>
+              <mat-datepicker #fromDate></mat-datepicker>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start ">Effective To Date</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input [matDatepicker]="toDate" formControlName="toDate" class="form-control">
+              <span>
+                <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+              </span>
+              <mat-datepicker #toDate></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start ">Calculation Method <span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <mat-radio-group class="pull-right" aria-label="Select an option" formControlName="calculationMethod">
+                <mat-radio-button value="Reducing_Balance" color="primary">Reducing Balance</mat-radio-button>
+                <mat-radio-button value="flat_rate">Flat Rate.</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start ">Interest Period <span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <mat-radio-group class="pull-right" aria-label="Select an option" formControlName="interestPeriod">
+                <mat-radio-button value="p.m" color="primary">Per Month</mat-radio-button>
+                <mat-radio-button value="p.a">Per Anum</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h5>Organization Charges </h5>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start ">Charge Derivation <span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+                <mat-radio-group class="pull-right" aria-label="Select an option" formControlName="interestType">
+                  <mat-radio-button (change)="onFlatRate($event)" value="FlatRate" color="primary">Constant Rate.</mat-radio-button>
+                  <mat-radio-button (change)="onSlabFormat($event)" value="SlabFormat">Slab Format.</mat-radio-button>
+                </mat-radio-group>
+              </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div *ngIf="onShowFlatRate" class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start ">Enter Rate</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="number" formControlName="interestrate" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.interestrate.errors }" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="onShowSlabs">
+        <div>
+          <div [formGroup]="chargesForm">
+            <hr>
+            <H3>Slab Charges Details</H3>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <label class="start ">Slab Name.</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="text" maxlength="15"
+                      formControlName="slabName" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6"></div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label class="start ">Use Percentage.</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <mat-radio-group aria-label="Select an option" formControlName="usePercentage">
+                      <mat-radio-button (change)="onSlabUsePercentage($event)" value="Y">Yes</mat-radio-button>
+                      <mat-radio-button (change)="onSlabUsePercentage($event)" value="N">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="showChargeField" class="col-md-6">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <label class="start ">Charge Amount</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="number" formControlName="chargeAmount"
+                      class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="showPercentageField" class="col-md-6">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <label class="start ">Percentage.</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="number" maxlength="2"
+                      formControlName="percentage" class="form-control" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <label class="start ">LowerLimit</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="number" formControlName="lowerLimit"
+                      class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <label class="start ">UpperLimit.</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="number" formControlName="upperLimit"
+                      class="form-control" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <mat-divider></mat-divider>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row">
+                <button *ngIf="addButton" (click)="addToArray()" class="my-3 mx-4"
+                  [disabled]="!chargesForm.valid || disableAddButton" mat-raised-button color="primary" type="button">
+                  + Add charge details
+                </button>
+                <button *ngIf="editButton" (click)="updateChargeDetails()" class="my-3 mx-4"
+                  [disabled]="!chargesForm.valid || disableAddButton" mat-raised-button color="primary" type="button">
+                  + Update charge details
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                <span matPrefix> </span>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Search..." #input>
+                <button matSuffix mat-button>
+                  <mat-icon>search</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="table-row">
+            <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+              </ng-container>
+
+              <!-- Position Column -->
+              <ng-container matColumnDef="slabName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>SlabName</th>
+                <td mat-cell *matCellDef="let row">{{ row.slabName}}</td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="lowerLimit">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>LowerLimit</th>
+                <td mat-cell *matCellDef="let row">{{ row.lowerLimit}}</td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="upperLimit">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>UpperLimit</th>
+                <td mat-cell *matCellDef="let row">{{ row.upperLimit }}</td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="chargeAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ChargeAmount</th>
+                <td mat-cell *matCellDef="let row">{{ row.chargeAmount}}</td>
+              </ng-container>
+              <ng-container matColumnDef="percentage">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Percentage</th>
+                <td mat-cell *matCellDef="let row">{{ row.percentage}}</td>
+              </ng-container>
+              <ng-container matColumnDef="usePercentage">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>UsePercentage?</th>
+                <td mat-cell *matCellDef="let row">{{ row.usePercentage}}</td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                <td mat-cell *matCellDef="let row">
+                  <button mat-icon-button matTooltip="Click to Edit" [disabled]="disableActions" color="primary"
+                    (click)="editItem(row)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Click to Delete" [disabled]="disableActions"
+                    (click)="deleteItem(row)" color="warn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr (click)="onSelect(row)" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+              </tr>
+            </table>
+          </div>
+          <mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+        </div>
+      </div>
+      <br>
+      <button mat-raised-button class=" bg-secondarytext-white" routerLink="/system/interestcode/maintenance"
+      skipLocationChange="">BACK</button>
+      <button *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor" type="submit">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+      </button>
+      <br />
+    </form>
+  </div>
+</mat-card>

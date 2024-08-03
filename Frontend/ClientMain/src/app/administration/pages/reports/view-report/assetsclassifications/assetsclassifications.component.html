@@ -1,0 +1,27 @@
+<h1>Account Statement</h1>
+<form action="" [formGroup]="downloadReport" #resetRequestsForm="ngForm" novalidate>
+    Please provide the following details:
+<p>
+    <mat-form-field appearance="outline" required>
+      <mat-label>From Date</mat-label>
+      <input formControlName="fromDate" matInput [matDatepicker]="Apicker" />
+      <mat-datepicker-toggle matSuffix [for]="Apicker"></mat-datepicker-toggle>
+      <mat-datepicker #Apicker></mat-datepicker>
+  </mat-form-field>
+</p>
+<p>
+  <mat-form-field appearance="outline" required>
+      <mat-label>To Date</mat-label>
+      <input formControlName="toDate" matInput [matDatepicker]="Bpicker" />
+      <mat-datepicker-toggle matSuffix [for]="Bpicker"></mat-datepicker-toggle>
+      <mat-datepicker #Bpicker></mat-datepicker>
+  </mat-form-field>
+</p>
+<br>
+    <div class=" btn btn-sm btn-block example-button-row" >
+      <button (click)="generateReport()" mat-raised-button color="primary">
+          <mat-icon>cloud_download</mat-icon>
+        Generate Report
+      </button>
+    </div>
+  </form>

@@ -1,0 +1,88 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a>
+			<a routerLink="/system/loan-account/maintenance">Loans account Maintenenace / </a>Massive interest reversals
+		</div>
+	</mat-card-header>
+
+	<div class="row">
+		<div class="col-md-5 col-sm-12">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<h4>Account Code: <strong>{{this.fmData.account_code}}</strong></h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-7 col-sm-12 row">
+			<div class="row" *ngIf="this.results">
+				<div class="col-md-4 col-sm-12">
+					<h4>Posted ON:- <strong>{{this.results.postedTime | date}}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<mat-divider></mat-divider>
+	<br>
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData" #resetRequestsForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+			<div class="row">
+				<div class="col-md-4 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label class="start pull-left">Loan Account ID<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column ">
+							<input readonly type="text" formControlName="acid" class="pull-right form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.acid.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="20" minlength="1"/>
+						</div>
+					</div>
+				</div>
+                <div class="col-md-4 col-sm-12">
+					<div class="form-group">
+                        <div class="col-md-4 col-sm-12 form-column">
+                            <label for="">startDate:</label>
+                        </div>
+                        <div class="col-md-8 col-sm-12 form-column">
+                            <input [matDatepicker]="fromDate" formControlName="fromDate" class="form-control">
+                            <span>
+                                <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                            </span>
+                            <mat-datepicker #fromDate></mat-datepicker>
+                        </div>
+                    </div>
+				</div>
+				
+			</div>
+			<br />
+			<div class="col-md-12 col-sm-12">
+				<button mat-raised-button class="pull-left bg-secondary text-white" routerLink="/system/"
+					skipLocationChange="">BACK</button>
+				<button mat-raised-button type="submit" class="float-right" color="primary"
+					style="margin-bottom:20px ;">
+					<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>SUBMIT</button>
+			</div>
+			<br />
+		</form>
+	</div>
+</mat-card>
+
+

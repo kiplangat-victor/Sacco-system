@@ -1,0 +1,146 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/configurations/global/linked/organization/maintenance">Organization Maintenenace /
+      </a>Organization
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-4 col-sm-12">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h4>Function:- <strong>{{this.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h4>Org Code: <strong>{{this.linkedOrganizationCode}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 col-sm-12 row" *ngIf="onShowResults">
+      <div class="row" *ngIf="this.results">
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted ON:- <strong>{{this.results.postedTime | date}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verified BY:- <strong>{{this.results.verifiedBy}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Organization Name<span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="organization_name" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.organization_name.errors }"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="40" minlength="3" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Organization Main Office <span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="organization_main_office" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.organization_main_office.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Organization Tel <span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="organization_tel" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.organization_tel.errors }"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="13" minlength="10" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Organization Mail <span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="email" formControlName="organization_mail" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.organization_mail.errors }"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="55" minlength="10" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Organization Website <span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="organization_website" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.organization_website.errors }"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="100" minlength="2" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Organization Country <span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="organization_country" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.organization_country.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Organization Address <span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <textarea formControlName="organization_address" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.organization_address.errors }"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="200"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <button mat-raised-button class="pull-left bg-secondary text-white"
+        [routerLink]="['/system/configurations/global/linked/organization/maintenance']"
+        skipLocationChange="">BACK</button>
+      <button [disabled]="submitting" *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor" type="submit">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+      </button>
+      <br>
+    </form>
+  </div>
+</mat-card>

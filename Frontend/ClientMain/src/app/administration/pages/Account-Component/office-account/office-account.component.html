@@ -1,0 +1,517 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Loading, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+  </div>
+  <div *ngIf="isSubmitting">
+    <p><small>Submitting Office Account Data, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/office/account/maintenance">Office Account Maintenenace / </a> Office Account
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="showAccountType">
+          <h4>Account Type:- <strong>{{this.fmData.account_type}}</strong></h4>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="showAccountCode">
+          <h4>Account Code:- <strong>{{this.fmData.account_code}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12 row" *ngIf="onShowResults">
+      <div class="row" *ngIf="this.results">
+        <div class="col-md-6 col-sm-12">
+          <h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <form action="" [formGroup]="statementForm">
+    <div class="row" *ngIf="onShowAccountStatementDateParams">
+      <div class="col-md-5 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="" class="start pull-left">From Date<span class="warning" *ngIf="onShowWarning">*</span></label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input [matDatepicker]="fromdate" formControlName="fromdate" (dateChange)="eventStart($event)"
+              class="form-control">
+            <span>
+              <mat-datepicker-toggle matSuffix [for]="fromdate"></mat-datepicker-toggle>
+            </span>
+            <mat-datepicker #fromdate></mat-datepicker>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="" class="start pull-left">To Date<span class="warning" *ngIf="onShowWarning">*</span></label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input [matDatepicker]="todate" formControlName="todate" class="form-control"
+              (dateChange)="eventEnd($event)">
+            <span>
+              <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
+            </span>
+            <mat-datepicker #todate></mat-datepicker>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 col-sm-12">
+        <div class="form-group">
+          <button type="button" (click)="getAccounStatementRecords()" class="btn btn-primary btn-sm">SUBMIT</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <br>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form action="" [formGroup]="formData" novalidate class="form">
+      <mat-tab-group mat-align-tabs="center">
+        <mat-tab class="mat-tab container-fluid" label="General Details" *ngIf="onShowGeneralDetailsTab">
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">Account Balance<span class="warning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" formControlName="accountBalance" class="form-control" readonly
+                    [ngClass]="{ 'is-invalid': submitted && f.accountBalance.errors }"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                <label class="start pull-left">Is Teller Account</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <mat-radio-group class="pull-right" aria-label="Select an option"
+                    formControlName="tellerAccount"
+                    [ngClass]="{ 'is-invalid': submitted && f.tellerAccount.errors }">
+                    <mat-radio-button [value]="true" color="primary">YES</mat-radio-button>
+                    <mat-radio-button [value]="false">NO</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">Product Code<span class="warning"
+                      *ngIf="onShowWarning"></span>*</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="productCode" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.productCode.errors }"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="1">
+                  <mat-icon *ngIf="showSearch" color="primary" (click)="officeAccountProductCodeLookUp()">
+                    search</mat-icon>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">Account Type</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" placeholder="{{this.fmData.account_type}}" readonly formControlName="accountType"
+                    class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">Account Ownership</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" readonly placeholder="OFFICE ACCOUNT" formControlName="accountOwnership"
+                    class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">Branch Code<span class="warning"
+                      *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="solCode" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.solCode.errors }">
+
+                  <mat-icon *ngIf="showSearch" color="primary" (click)="branchesCodeLookup()">
+                    search</mat-icon>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">GL Subhead<span class="warning"
+                      *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="glSubhead" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.glSubhead.errors }">
+
+                  <mat-icon *ngIf="showSearch" color="primary" (click)="glSubheadCodeLookup()">
+                    search
+                  </mat-icon>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12" *ngIf="onShowGlCode">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">GL Code</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input readonly type="text" formControlName="glCode" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">Currency(CCY)</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input readonly type="text" formControlName="currency" maxlength="3" placeholder="KES"
+                    class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">Opening Date</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input readonly [matDatepicker]="openingDate" formControlName="openingDate" class="form-control">
+                  <span *ngIf="onShowOpeningDate" color="primary"><mat-datepicker-toggle matSuffix
+                      [for]="openingDate"></mat-datepicker-toggle></span>
+                  <mat-datepicker color="primary" #openingDate></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12" *ngIf="onShowAccountStatus">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">Account Status</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <select formControlName="accountStatus" class="form-control">
+                    <option value="" disabled>SELECT STATUS</option>
+                    <option *ngFor="let item of accountStatusArray" [value]="item">{{item}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <mat-divider></mat-divider>
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">Manager ID</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input readonly formControlName="managerCode" placeholder="" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">Manager Name</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input readonly formControlName="accountManager" placeholder="" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">Account Name<span class="warning"
+                      *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input formControlName="accountName" placeholder="" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.accountName.errors }">
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button *ngIf="displayBackButton" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+                routerLink="/system/office/account/maintenance">BACK</button>
+              <button *ngIf="displayApprovalBtn" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+                routerLink="/system/new/notification/allerts">BACK</button>
+              <button mat-raised-button type="submit" *ngIf="onShowDeleteButton" class="float-right" color="accent"
+                style="margin-bottom:20px ;">DELETE</button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="SPECIFIC DETAILS" *ngIf="onShowSpecificDetailsTab">
+          <br>
+          <form [formGroup]="officeAccountsForm" (ngSubmit)="onSubmit()">
+            <br>
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Head Office Name</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input formControlName="accountHeadName" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Supervisor ID<span class="warning"
+                        *ngIf="onShowWarning">*</span></label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input formControlName="accountSupervisorId" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && officeAccount.accountSupervisorId.errors }">
+                    <mat-icon *ngIf="showSearch" color="primary" (click)="supervisorCodeLookup()">
+                      search</mat-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Supervisor Name<span class="warning"
+                        *ngIf="onShowWarning">*</span></label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input readonly formControlName="accountSupervisorName" placeholder="" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && officeAccount.accountSupervisorName.errors }">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+            <mat-divider></mat-divider>
+            <br>
+            <div class="row">
+              <div class="col-md-12 col-sm-12">
+                <h4><strong>Account Limits</strong></h4>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label class="start pull-left">Cash limit debit <span class="warning"
+                        *ngIf="onShowWarning">*</span></label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" maxlength="12" formControlName="cashLimitDr" class="form-control"
+                      placeholder="100,000.00"
+                      [ngClass]="{ 'is-invalid': submitted && officeAccount.cashLimitDr.errors }" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label class="start pull-left">Cash Limit credit <span class="warning"
+                        *ngIf="onShowWarning">*</span></label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" maxlength="12" formControlName="cashLimitCr" class="form-control"
+                      placeholder="100,000.00"
+                      [ngClass]="{ 'is-invalid': submitted && officeAccount.cashLimitCr.errors }" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label class="start pull-left">Transfer Limit Debit <span class="warning"
+                        *ngIf="onShowWarning">*</span></label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" maxlength="15" formControlName="transferLimitDr" class="form-control"
+                      placeholder="100,000.00"
+                      [ngClass]="{ 'is-invalid': submitted && officeAccount.transferLimitDr.errors }" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label class="start pull-left">Transfer Limit Credit <span class="warning"
+                        *ngIf="onShowWarning">*</span></label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" maxlength="15" formControlName="transferLimitCr" class="form-control"
+                      placeholder="100,000.00"
+                      [ngClass]="{ 'is-invalid': submitted && officeAccount.transferLimitCr.errors }" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label class="start pull-left">Tranfer Restrictions <span class="warning"
+                        *ngIf="onShowWarning">*</span></label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <select class="form-control" formControlName="clearingLimitCrExce"
+                      [ngClass]="{ 'is-invalid': submitted && officeAccount.clearingLimitCrExce.errors }">
+                      <option value="" disabled>--SELECT TRANSFER--</option>
+                      <option *ngFor="let tranRestriction of tranferRestrictionArray" [value]="tranRestriction">{{
+                        tranRestriction }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Clg. Limit Dr.</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input readonly placeholder="9,999,999,999,999.99" class="form-control">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Clg. Limit Cr.</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input readonly placeholder="9,999,999,999,999.99" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <br>
+          <button *ngIf="displayBackButton" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+            routerLink="/system/office/account/maintenance">BACK</button>
+          <button *ngIf="displayApprovalBtn" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+            routerLink="/system/new/notification/allerts">BACK</button>
+          <button *ngIf="!hideBtn" class="pull-right approval" mat-raised-button [color]="btnColor" type="submit" (click)="onSubmit()">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+          </button>
+          <button *ngIf="hideRejectBtn" class="pull-right approval" mat-raised-button [color]="btnRejectColor" (click)="onRejectAccount()">
+            {{rejectBtnText}}
+          </button>
+        </mat-tab>
+        <mat-tab class="mat-tab" label="OFFICE ACCOUNT STATEMENT" *ngIf="onShowAccountStatementTab">
+          <br>
+          <div id="print-section">
+            <div *ngIf="onDisplayAccountRecords">
+              <div class="row" *ngIf="this.results">
+                <div class="col-md-4 col-sm-12">
+                  <h4>Account ID: <strong>{{this.results.acid}}</strong></h4>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                  <h4>Account Balance: <strong>{{this.results.accountBalance | currency: 'KES'}}</strong></h4>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                  <h4>Account Status: <strong>{{this.results.accountStatus}}</strong></h4>
+                </div>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="row" *ngIf="this.results">
+                <div class="col-md-4 col-sm-12">
+                  <h4>Account Type:- <strong>{{this.results.accountType}}</strong> </h4>
+                </div>
+                <div class="col-md-8 col-sm-12">
+                  <h4>Account Name:- <strong>{{this.results.accountName}}</strong></h4>
+                </div>
+              </div>
+            </div>
+            <h4 class="text-center"><strong>OFFICE ACCOUNT STATEMENT REPORT FOR ACCOUNT <strong
+                  *ngIf="this.results">{{this.results.acid}}</strong> </strong></h4>
+            <mat-divider></mat-divider>
+            <br>
+            <div class="row">
+              <div class="col-md-4 col-sm-12">
+                <h4>FROM:- &nbsp;<strong>{{this.fromdate | date: 'yyyy-MM-dd'}}</strong> </h4>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <h4>TO:- &nbsp; <strong>{{this.todate | date: 'yyyy-MM-dd'}}</strong></h4>
+              </div>
+            </div>
+            <table class="table table-striped table-bordered table-sm row-border hover" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>T. TYPE</th>
+                  <th>T. CODE</th>
+                  <th>PART-TRAN</th>
+                  <th>T. AMOUNT</th>
+                  <th>ACC. BALANCE</th>
+                  <th>DESCRIPTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of this.account_statement, let i = index">
+                  <td>{{i + 1}}</td>
+                  <td>{{item.transaction_type}}</td>
+                  <td>{{item.transaction_code}}</td>
+                  <td>{{item.part_tran_type}}</td>
+                  <td>{{item.tran_amount | currency: 'KES'}}</td>
+                  <td>{{item.account_balance}}</td>
+                  <td>{{item.tran_particulars}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <button type="button" class="pull-right btn btn-success btn-sm"
+            (click)="printAccountStatement()">PRINT</button>
+          <button type="button" class="pull-right btn btn-secondary btn-sm"
+            (click)="onExportAccountStatement()">EXPORT</button>
+          <br>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button mat-raised-button type="button" class="pull-left bg-secondary text-white"
+                routerLink="/system/office/account/maintenance">BACK</button>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </form>
+  </div>
+</mat-card>

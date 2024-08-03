@@ -1,0 +1,289 @@
+<mat-card>
+    <mat-card-header class="breadcrumb">
+        <div>
+            <a routerLink="/system">Dashboard / </a> Approvals
+        </div>
+        <div class="reload-button " style="margin-left: 50px;">
+            <button mat-raised-button color="primary" (click)="reloadPage()" >Reload</button>
+         </div>
+    </mat-card-header>
+    <div class="container-fluid content-row">
+        <mat-tab-group mat-align-tabs="center">
+            <mat-tab label="Membership">
+                <div *ngIf="loadingMemberData">
+                    <p><small>Processing, please wait...</small></p>
+                    <p>
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </p>
+                </div>
+                <br>
+                <div class="col-md-6 col-sm-12 ml-auto">
+                    <input class="pull-right search form-control" (keyup)="membershipFilter($event)" placeholder="Filter..." #input>
+                </div>
+                <br>
+                <br>
+                <div class="table-row">
+                    <table mat-table matSort matTableExporter [dataSource]="membershipDataSource">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                            <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="customerUniqueId">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>National ID / Birth Cert.</th>
+                            <td mat-cell *matCellDef="let row"> {{row.customerUniqueId}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="customerName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+                            <td mat-cell *matCellDef="let row"> {{row.customerName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="postedOn">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Created On</th>
+                            <td mat-cell *matCellDef="let row"> {{row.postedOn | date: 'dd-MM-yyyy'}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="verifiedFlag">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Verified</th>
+                            <td mat-cell *matCellDef="let row"> {{row.verifiedFlag}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="verify">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                            <td mat-cell *matCellDef="let row">
+                                <button mat-icon-button color="primary" (click)="verifyMember(row)">
+									<mat-icon>launch</mat-icon>
+								</button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="membershipColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: membershipColumns;"></tr>
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                        </tr>
+                    </table>
+                </div>
+                <mat-paginator #membershipPaginator="matPaginator" [pageSizeOptions]="[5, 10, 15,20,30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+            </mat-tab>
+            <mat-tab label="New Accounts">
+                <br>
+                <div *ngIf="loadingNewAccountsData">
+                    <p><small>Processing, please wait...</small></p>
+                    <p>
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </p>
+                </div>
+                <div class="col-md-6 col-sm-12 ml-auto">
+                    <input class="pull-right search form-control" (keyup)="nonLoanccountsFilter($event)" placeholder="Filter..." #input>
+                </div>
+                <br>
+                <br>
+                <div class="table-row">
+                    <table mat-table matSort matTableExporter [dataSource]="nonLoanAccountsDataSource">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                            <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="customer_code">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer Code</th>
+                            <td mat-cell *matCellDef="let row"> {{row.customer_code}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="acid">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Account ID</th>
+                            <td mat-cell *matCellDef="let row"> {{row.acid}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="account_name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Name</th>
+                            <td mat-cell *matCellDef="let row"> {{row.account_name}} {{row.surname}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="account_type">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Account Type</th>
+                            <td mat-cell *matCellDef="let row"> {{row.account_type}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="product_code">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Code</th>
+                            <td mat-cell *matCellDef="let row"> {{row.product_code}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="product_name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Name</th>
+                            <td mat-cell *matCellDef="let row"> {{row.product_code_desc}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="account_status">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                            <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                                <span *ngIf="row.account_status == 'ACTIVE' " class="badge badge-pill badge-success">ACTIVE</span>
+                                <span *ngIf="row.account_status == 'DORMANT' " class="badge badge-pill badge-danger ">DORMANT</span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="verified_flag">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Verified</th>
+                            <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                                <span *ngIf="row.verified_flag == 'Y' " class="badge badge-pill badge-primary">VERIFIED</span>
+                                <span *ngIf="row.verified_flag == 'N' " class="badge badge-pill badge-danger ">NOT
+									VERIFIED</span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="verify">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                            <td mat-cell *matCellDef="let row">
+                                <button mat-icon-button color="primary" (click)="verifyNonLoanAccount(row)">
+									<mat-icon>launch</mat-icon>
+								</button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="nonLoanccountsColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: nonLoanccountsColumns;"></tr>
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                        </tr>
+                    </table>
+                    <mat-paginator #nonLonAccountsPaginator="matPaginator" [pageSizeOptions]="[5, 10, 15,20,30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+                </div>
+            </mat-tab>
+            <mat-tab label="Loans">
+                <br>
+                <div *ngIf="loadingLoanAccountsData">
+                    <p><small>Processing, please wait...</small></p>
+                    <p>
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </p>
+                </div>
+                <div class="col-md-6 col-sm-12 ml-auto">
+                    <input class="pull-right search form-control" (keyup)="loanccountsFilter($event)" placeholder="Filter..." #input>
+                </div>
+                <br>
+                <br>
+                <div class="table-row">
+                    <table mat-table matSort matTableExporter [dataSource]="loanAccountsDataSource">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                            <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="customer_code">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer Code</th>
+                            <td mat-cell *matCellDef="let row"> {{row.customer_code}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="acid">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Account ID</th>
+                            <td mat-cell *matCellDef="let row"> {{row.acid}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="account_name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Name</th>
+                            <td mat-cell *matCellDef="let row"> {{row.account_name}} {{row.surname}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="account_type">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Account Type</th>
+                            <td mat-cell *matCellDef="let row"> {{row.account_type}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="product_code">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Code</th>
+                            <td mat-cell *matCellDef="let row"> {{row.product_code}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="product_name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Name</th>
+                            <td mat-cell *matCellDef="let row"> {{row.product_code_desc}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="account_status">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                            <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                                <span *ngIf="row.account_status == 'ACTIVE' " class="badge badge-pill badge-success">ACTIVE</span>
+                                <span *ngIf="row.account_status == 'DORMANT' " class="badge badge-pill badge-danger ">DORMANT</span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="verification">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Verified</th>
+                            <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                                <span *ngIf="row.verification == 'Application' " class="badge badge-pill badge-primary">{{row.verification}}</span>
+                                <span *ngIf="row.verification == 'Disbursement'" class="badge badge-pill badge-primary ">{{row.verification}}</span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="verify">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                            <td mat-cell *matCellDef="let row">
+                                <button mat-icon-button color="primary" (click)="verifyLoanAccount(row)">
+									<mat-icon>launch</mat-icon>
+								</button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="loanAccountsColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: loanAccountsColumns;"></tr>
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                        </tr>
+                    </table>
+                    <mat-paginator #loanAccountsPaginator="matPaginator" [pageSizeOptions]="[5, 10, 15,20,30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+                </div>
+            </mat-tab>
+            <mat-tab label="Transactions">
+                <br>
+                <div *ngIf="loadingTransactionsData">
+                    <p><small>Processing, please wait...</small></p>
+                    <p>
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </p>
+                </div>
+                <div class="col-md-6 col-sm-12 ml-auto">
+                    <input class="pull-right search form-control" (keyup)="transactionsFilter($event)" placeholder="Filter..." #input>
+                </div>
+                <br>
+                <br>
+                <div class="table-row">
+                    <table mat-table matSort matTableExporter [dataSource]="transactionsDataSource">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                            <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="transactionCode">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction Code</th>
+                            <td mat-cell *matCellDef="let row"> {{row.transactionCode}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="transactionType">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Transaction Type</th>
+                            <td mat-cell *matCellDef="let row"> {{row.transactionType}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                            <td mat-cell *matCellDef="let row"> {{row.status }} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="transactionDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Trans. ON</th>
+                            <td mat-cell *matCellDef="let row"> {{row.transactionDate | date: 'dd-MM-yyyy'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="verifiedFlag">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>First Verification</th>
+                            <td mat-cell *matCellDef="let row"> {{row.verifiedFlag }} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="verifiedFlag_2">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Second Verification</th>
+                            <td mat-cell *matCellDef="let row"> {{row.verifiedFlag_2 }} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="verifiedBy_2">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Second Verifier</th>
+                            <td mat-cell *matCellDef="let row"> {{row.verifiedBy_2 }} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="verify">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                            <td mat-cell *matCellDef="let row">
+                                <button mat-icon-button color="primary" (click)="verifyTransaction(row.transactionCode, row.transactionType)">
+									<mat-icon>launch</mat-icon>
+								</button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="transactionsColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: transactionsColumns;"></tr>
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                        </tr>
+                    </table>
+                </div>
+                <mat-paginator #transactionsPaginator="matPaginator" [pageSizeOptions]="[5, 10, 15,20,30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+
+            </mat-tab>
+            <mat-tab label="Salaries | Batches | Cheques">
+                <br>
+                <app-sbcnotifications></app-sbcnotifications>
+            </mat-tab>
+            <mat-tab label="Saving Instructions">
+                <br>
+                <app-direct-approvals></app-direct-approvals>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</mat-card>

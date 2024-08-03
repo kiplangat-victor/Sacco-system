@@ -1,0 +1,104 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>General Ledger Subhead Maintenance
+    </div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Function<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <select (change)="onSelectFunction($event)" class="form-control" formControlName="function_type"
+                [ngClass]="{ 'is-invalid': submitted && f.function_type.errors }">
+                <option value="" disabled>-- CHOOSE FUNCTION --</option>
+                <option *ngFor="let flag of functionArray" [value]="flag">{{ flag }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="showCode">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">GL. Subhead Code<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" [value]="this.glSubheadCode"
+                formControlName="glSubheadCode" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.glSubheadCode.errors }"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="6" minlength="1"/> &nbsp;
+              <mat-icon color="primary" *ngIf="existingData" (click)="glSubheadCodeLookup()">search</mat-icon>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <mat-hint>{{this.glDescription}}</mat-hint>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <hr>
+      <button mat-raised-button class="pull-left bg-secondary text-white" routerLink="/system/"
+        skipLocationChange="">BACK</button>
+      <button [disabled]="proceed" mat-raised-button type="submit" class="float-right" color="primary" style="margin-bottom:20px ;"> <span
+          *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>PROCEED</button>
+      <br>
+    </form>
+    <hr>
+      <div>GL's List</div>
+      <div class="col-md-6 col-sm-12 ml-auto">
+        <input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+      </div>
+      <br>
+      <br>
+    <div class="table-row">
+      <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+          <td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+        </ng-container>
+        <ng-container matColumnDef="glCode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> GL Code</th>
+          <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.glCode}} </td>
+        </ng-container>
+        <ng-container matColumnDef="glDescription">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+          <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.glDescription}} </td>
+        </ng-container>
+        <ng-container matColumnDef="classification">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Classification</th>
+          <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.classification}} </td>
+        </ng-container>
+        <ng-container matColumnDef="verifiedFlag">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Verification</th>
+          <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+            <span *ngIf="row.verifiedFlag == 'Y' " class="badge badge-pill badge-primary">Verified</span>
+            <span *ngIf="row.verifiedFlag == 'N' " class="badge badge-pill badge-danger ">Unverified</span>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+  </div>
+</mat-card>

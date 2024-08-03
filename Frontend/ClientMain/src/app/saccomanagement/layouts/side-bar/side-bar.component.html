@@ -1,0 +1,129 @@
+<mat-nav-list>
+  <div class="profile-card">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="header">
+          <div class="sidebar-header">
+            <div class="user-profile">
+              <img src="{{ userImg }}" alt="User Image" class="user-image" />
+            </div>
+          </div>
+          <div class="user-details">
+            <p>
+              <small><b>User :</b> {{ this.username }}</small>
+            </p>
+            <p>
+              <small><b>Status :</b> {{ this.status }}</small>
+            </p>
+            <p>
+              <small><b>Role :</b>{{ this.role }}</small>
+            </p>
+
+            <p>
+              <small><b>Email:</b> {{ this.email }}</small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <h2 matSubheader style="color: white !important">Pages</h2>
+  <a
+    *ngIf="authorized"
+    mat-list-item
+    routerLinkActive="list-item-active"
+    routerLink="/saccomanagement"
+    skipLocationChange
+    class="nav-title"
+  >
+    <div class="icon-container">
+      <mat-icon>dashboard</mat-icon>
+    </div>
+    <span class="title">Dashboard</span>
+  </a>
+  <a
+    *ngIf="authorized"
+    mat-list-item
+    routerLinkActive="list-item-active"
+    routerLink="/saccomanagement/sacco-entity/maintenance"
+    skipLocationChange
+    class="nav-title"
+  >
+    <mat-icon>business</mat-icon>Sacco Entities</a
+  >
+  <!-- <a
+    *ngIf="authorized"
+    mat-list-item
+    routerLinkActive="list-item-active"
+    routerLink="/saccomanagement/entity-branches/maintenance"
+    skipLocationChange
+    class="nav-title"
+  >
+    <mat-icon>ballot</mat-icon>Entity Branches</a
+  > -->
+  <!-- <a
+    *ngIf="authorized"
+    mat-list-item
+    class="nav-title"
+    routerLinkActive="list-item-active"
+    routerLink="/saccomanagement/entity-branches/maintenance"
+    skipLocationChange=""
+  >
+    <mat-icon>notifications_active</mat-icon>
+    Approvals
+  </a> -->
+
+  <mat-accordion *ngIf="authorized" class="app-nav-accordion text-light">
+    <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="nav-title">
+          <mat-icon>keyboard_hide</mat-icon>
+          Access Management
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-nav-list>
+        <a
+          mat-list-item
+          routerLinkActive="list-item-active"
+          routerLink="/saccomanagement/entity-roles/maintenance"
+          skipLocationChange=""
+        >
+          <mat-icon>subdirectory_arrow_right</mat-icon>Roles
+        </a>
+        <a
+          mat-list-item
+          routerLinkActive="list-item-active"
+          routerLink="/saccomanagement/entity-work-class/maintenance"
+          skipLocationChange=""
+        >
+          <mat-icon>subdirectory_arrow_right</mat-icon>Work Class
+        </a>
+        <a
+          mat-list-item
+          routerLinkActive="list-item-active"
+          routerLink="/saccomanagement/entity-basic-actions/maintenance"
+          skipLocationChange
+        >
+          <mat-icon>subdirectory_arrow_right</mat-icon>Actions
+        </a>
+        <a
+          mat-list-item
+          routerLinkActive="list-item-active"
+          routerLink="/saccomanagement/entity-users/maintenance"
+          skipLocationChange=""
+        >
+          <mat-icon>subdirectory_arrow_right</mat-icon>Users
+        </a>
+        <!-- <a
+          mat-list-item
+          routerLinkActive="list-item-active"
+          routerLink="/saccomanagement/entity-tellers/maintenance"
+          skipLocationChange=""
+        >
+          <mat-icon>subdirectory_arrow_right</mat-icon>Tellers
+        </a> -->
+      </mat-nav-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-nav-list>

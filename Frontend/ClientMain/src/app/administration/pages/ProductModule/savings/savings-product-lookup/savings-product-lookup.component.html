@@ -1,0 +1,66 @@
+<div *ngIf="loading">
+	<p><small>Loading Savings Product Data, please wait...</small></p>
+	<p>
+		<mat-progress-bar mode="query"></mat-progress-bar>
+	</p>
+</div>
+<mat-card-header class="breadcrumb">
+	<div>Savings Product Look-up</div>
+	<div class="col-md-6 col-sm-12 ml-auto">
+		<input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+	</div>
+</mat-card-header>
+<div class="table-row">
+	<table mat-table matSort matTableExporter [dataSource]="dataSource">
+		<ng-container matColumnDef="index">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>No</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">
+				{{ i + 1 }}
+			</td>
+		</ng-container>
+		<ng-container matColumnDef="productCode">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Product Code</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+				{{ row.productCode }}
+			</td>
+		</ng-container>
+		<ng-container matColumnDef="productCodeDesc">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>
+				Description
+			</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+				{{ row.productCodeDesc }}
+			</td>
+		</ng-container>
+		<ng-container matColumnDef="postedTime">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>
+				Posted ON
+			</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+				{{ row.postedTime | date }}
+			</td>
+		</ng-container>
+		<ng-container matColumnDef="verifiedFlag">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Verified</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+				<span *ngIf="row.verifiedFlag == 'Y' " class="badge badge-pill badge-success ">Verified</span>
+				<span *ngIf="row.verifiedFlag == 'N' " class="badge badge-pill badge-warning ">Unverified</span>
+			</td>
+		</ng-container>
+		<ng-container matColumnDef="deletedFlag">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Verified</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+				<span *ngIf="row.deletedFlag == 'Y' " class="badge badge-pill badge-danger ">YES</span>
+				<span *ngIf="row.deletedFlag == 'N' " class="badge badge-pill badge-primary ">NO</span>
+			</td>
+		</ng-container>
+		<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+		<tr class="mat-row" *matNoDataRow>
+			<td class="mat-cell" colspan="4">
+				No data matching the filter "{{ input.value }}"
+			</td>
+		</tr>
+	</table>
+</div>
+<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>

@@ -1,0 +1,82 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="query"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a>
+			<a routerLink="/system/loan/account/penalties/maintenance">Manual Loan Penalty Maintenance / </a>Manual Loan
+			Penalty
+		</div>
+	</mat-card-header>
+	<div class="row">
+		<div class="col-md-3 col-sm-12">
+			<h4>Function :- <strong>{{this.fmData.function_type}}</strong> </h4>
+		</div>
+		<div class="col-md-4 col-sm-12">
+			<h4>Account ID :- <strong>{{this.acid}}</strong> </h4>
+		</div>
+		<div class="col-md-9 col-sm-12 row" *ngIf="onShowResults">
+			<div class="row" *ngIf="this.resultsData">
+				<div class="col-md-3 col-sm-12">
+					<h4>Posted On :- <strong>{{ this.resultsData.postedTime | date }}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Posted BY :- <strong>{{ this.resultsData.postedBy }}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Verified :- <strong>{{ this.resultsData.verifiedFlag }}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Verified BY :- <strong>{{this.resultsData.verifiedBy }}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<mat-divider></mat-divider>
+	<br>
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+			<div class="row">
+				<div class="col-md-5 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-4 col-sm-12 form-column ">
+							<label>Penalty Amount</label>
+						</div>
+						<div class="col-md-8 col-sm-12 form-column">
+							<input type="text" formControlName="penaltyAmount" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.penaltyAmount.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="12" minlength="1" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-7 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-4 col-sm-12 form-column ">
+							<label>Penalty Description</label>
+						</div>
+						<div class="col-md-8 col-sm-12 form-column">
+							<textarea type="text" class="form-control" formControlName="penaltyDescription"
+								[ngClass]="{ 'is-invalid': submitted && f.penaltyDescription.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="120" minlength="2"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<hr>
+			<br>
+			<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+				routerLink="/system/loan/account/penalties/maintenance">BACK</button>
+			<button *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor" type="submit">
+				<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+			</button>
+			<br>
+		</form>
+	</div>
+</mat-card>

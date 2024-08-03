@@ -1,0 +1,113 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/administration"> Dashboard / </a>
+			<a routerLink="/administration/tellers/maintenance">Entity Teller Account Maintenance / </a> Entity Teller Account
+		</div>
+	</mat-card-header>
+	<br>
+
+	<div class="row">
+		<div class="col-md-5 col-sm-12">
+			<div class="row">
+				<div class="col-md-4 col-sm-12">
+					<h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+				</div>
+				<div class="col-md-4 col-sm-12" *ngIf="onShowResults">
+					<h4>Role ID: <strong>{{this.id}}</strong></h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-7 col-sm-12 row" *ngIf="onShowResults">
+			<div class="row">
+				<div class="col-md-4 col-sm-12">
+					<h4>Verification:- <strong>{{this.verifiedFlag}}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Posted BY:- <strong>{{this.postedBy}}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Posted Time:- <strong>{{this.postedTime | date}}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<mat-divider></mat-divider>
+	<br>
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData" #resetRequestsForm="ngForm" novalidate>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Teller Name<span class="text-danger">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="tellerUserName" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.tellerUserName.errors }" /> &nbsp; &nbsp;
+							<mat-icon color="primary" (click)="userLookup()">search</mat-icon><br>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Teller A/C<span class="text-danger">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="tellerAc" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.tellerAc.errors }" /> &nbsp; &nbsp;
+							<mat-icon color="primary" (click)="tellerAccountIdLookup()">search</mat-icon><br>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Shortage A/C<span class="text-danger">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="shortageAc" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.shortageAc.errors }" /> &nbsp; &nbsp;
+							<mat-icon color="primary" (click)="shortageAccountIdLookup()">search</mat-icon><br>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Excess A/C<span class="text-danger">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="excessAc" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.excessAc.errors }" /> &nbsp; &nbsp;
+							<mat-icon color="primary" (click)="excessAccountIdLookup()">search</mat-icon><br>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<hr>
+			<br>
+			<button mat-raised-button type="button" class="bg-secondary text-white"
+				routerLink="/administration/tellers/maintenance">
+				BACK
+			</button>
+			<button *ngIf="!hideSubmit" class="pull-right mb-3 ml-2" mat-raised-button [color]="btnColor"
+				(click)="onSubmit()">
+				<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+				{{ submitData }}
+			</button>
+			<br />
+		</form>
+	</div>
+</mat-card>

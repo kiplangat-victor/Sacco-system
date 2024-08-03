@@ -1,0 +1,149 @@
+:host {
+  .mat-icon {
+    vertical-align: middle;
+    margin-right: 20px;
+  }
+
+  .profile-card {
+    text-align: center;
+    padding: 0 20px 20px 20px;
+
+    img {
+      width: 40% !important;
+      object-fit: cover;
+      // border-radius: 50%;
+    }
+  }
+}
+
+p, h2{
+  color: white;
+}
+
+.header {
+  text-align: left !important;
+}
+
+.mat-icon {
+ color: white !important;
+  font-size: 15px !important;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  margin: 0px !important;
+}
+
+.mat-list-item,
+a,
+.mat-panel-title {
+  color: white !important;
+  font-size: 12px !important;
+  height: min-content !important;
+  flex: block !important;
+  font-weight: 450 !important;
+  letter-spacing: normal !important;
+}
+
+.mat-panel-title {
+  font-size: 12px !important;
+  height: min-content !important;
+  flex: block !important;
+  font-weight: 450 !important;
+  letter-spacing: normal !important;
+}
+
+.mat-drawer-container {
+ color: white !important;
+}
+
+.nav-title {
+  color: white !important;
+  font-size: 13px !important;
+  height: min-content !important;
+  background: transparent  !important;;
+  flex: block !important;
+  font-weight: 450 !important;
+  letter-spacing: normal !important;
+}
+
+.mat-drawer{
+  color: white !important;
+}
+
+// .mat-expansion-indicator::after {
+//   color: orange !important;
+// }
+
+.mat-expansion-panel-header-description, .mat-expansion-indicator::after, .mat-expansion-indicator {
+  //color: white !important;
+}
+
+.mat-divider {
+  border-top-color: white;
+}
+
+mat-menu {
+  margin: 10px;
+  margin: auto;
+}
+
+a {
+  padding-bottom: 2px !important;
+  margin-bottom: 1px !important;
+  font-size: 16px !important;
+  font-weight: 450 !important;
+  letter-spacing: normal !important;
+}
+
+.expansion {
+  color: rgb(129, 129, 129);
+  float: right !important;
+}
+
+// .app-nav-accordion {
+//   color: transparent; /* Set color to transparent */
+//   background-color: transparent; /* Ensure background is also transparent */
+
+//   .mat-expansion-panel {
+//     // Inherit transparent background from parent
+//     background-color: inherit;
+
+//     /* ... rest of your styles ... */
+//   }
+// }
+
+.app-nav-accordion {
+  color: transparent !important;
+  background-color: transparent !important;
+  .mat-expansion-panel {
+    background: transparent !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+
+    &.mat-expansion-panel-spacing {
+      margin: 0px;
+    }
+    .mat-expansion-panel {
+      background-color: inherit !important;
+      }
+    .mat-expansion-panel-body {
+      padding: 0px;
+    }
+
+    .mat-expansion-panel-header {
+      height: 40px;
+      padding: 0px 24px 0px 16px;
+      font-size: 16px !important;
+      font-weight: 450 !important;
+      letter-spacing: normal !important;
+    }
+
+    .mat-expansion-panel-header-title {
+      color: rgba(0, 0, 0, 0.54);
+      // font-size: 14px;
+      // font-weight: 500;
+    }
+
+   
+  }
+
+}

@@ -1,0 +1,240 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Loading, please wait...</small></p>
+    <p>
+      <mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>End Of Day</div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br />
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-5 col-sm-12">
+        <div class="row mb-4">
+          <div class="col-md-6 col-sm-12">
+            <div class="row">
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title>Initiate EOD</mat-card-title>
+                  <mat-card-subtitle> </mat-card-subtitle>
+                  <div class="col">
+                    <button [disabled]="usersLoading" (click)="beginEndOfDay()" class="pull-right mb-3" mat-raised-button color="primary">
+                      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                      Start
+                    </button>
+                  </div>
+                </mat-card-header>
+              </mat-card>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="row">
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title>Activate Accounts</mat-card-title>
+                  <mat-card-subtitle> </mat-card-subtitle>
+                  <div class="col">
+                    <button [disabled]="!eodInitated" (click)="resetUserAccounts()" class="pull-right mb-3" mat-raised-button color="primary">
+                      <span *ngIf="usersLoading" class="spinner-border spinner-border-sm mr-1"></span>
+                      Start
+                    </button>
+                  </div>
+                </mat-card-header>
+              </mat-card>
+            </div>
+          </div>
+          <!-- <div class="col-6">
+          </div> -->
+        </div>
+        <br>
+        
+
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <div class="row">
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title>HTD DATA BACKUP</mat-card-title>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && step1"> <span class="badge badge-success">SUCCESSFUL!</span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && !step1">FAILED </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && !eodInitated">Click start to initiate </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="loading">
+                    <img src="assets/Images/load.gif" width="10%" height="10%" />
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title>DTD DATA BACKUP</mat-card-title>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && step2"> <span class="badge badge-success">SUCCESSFUL!</span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && !step2" > <span class="badge badge-danger" >FAILED! </span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && !eodInitated">Click start to initiate </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="loading">
+                    <img src="assets/Images/load.gif" width="10%" height="10%" />
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title>SIGN OUT ALL USERS</mat-card-title>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && step3"> <span class="badge badge-success">SUCCESSFUL!</span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && !step3" > <span class="badge badge-danger" >FAILED! </span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && !eodInitated">Click start to initiate </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="loading">
+                    <img src="assets/Images/load.gif" width="10%" height="10%" />
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title>PERFORM PRE-EOD</mat-card-title>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && step4"> <span class="badge badge-success">SUCCESSFUL!</span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && !step4" > <span class="badge badge-danger" >FAILED! </span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && !eodInitated">Click start to initiate </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="loading">
+                    <img src="assets/Images/load.gif" width="10%" height="10%" />
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title>UNPOSTED TRANSACTIONS </mat-card-title>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && step5"> <span class="badge badge-success">SUCCESSFUL!</span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && !step5" > <span class="badge badge-danger" >FAILED! </span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && !eodInitated">Click start to initiate </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="loading">
+                    <img src="assets/Images/load.gif" width="10%" height="10%" />
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title>VERIFYING TRANSACTIONS</mat-card-title>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && step6"> <span class="badge badge-success">SUCCESSFUL!</span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && !step6" > <span class="badge badge-danger" >FAILED! </span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && !eodInitated">Click start to initiate </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="loading">
+                    <img src="assets/Images/load.gif" width="10%" height="10%" />
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="row">
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title> SUM OF DEBITS & CREDITS</mat-card-title>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && step7"> <span class="badge badge-success">SUCCESSFUL!</span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && !step7" > <span class="badge badge-danger" >FAILED! </span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && !eodInitated">Click start to initiate </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="loading">
+                    <img src="assets/Images/load.gif" width="10%" height="10%" />
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title>DATA FROM DTD TO HTD </mat-card-title>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && step8"> <span class="badge badge-success">SUCCESSFUL!</span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && !step8" > <span class="badge badge-danger" >FAILED! </span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && !eodInitated">Click start to initiate </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="loading">
+                    <img src="assets/Images/load.gif" width="10%" height="10%" />
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title>NEXT WORKING DAY </mat-card-title>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && step9"> <span class="badge badge-success">SUCCESSFUL!</span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && !step9" > <span class="badge badge-danger" >FAILED! </span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && !eodInitated">Click start to initiate </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="loading">
+                    <img src="assets/Images/load.gif" width="10%" height="10%" />
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title>ENABLE USER ACCOUNTS </mat-card-title>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && step10"> <span class="badge badge-success">SUCCESSFUL!</span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && !step10" > <span class="badge badge-danger" >FAILED! </span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && !eodInitated">Click start to initiate </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="loading">
+                    <img src="assets/Images/load.gif" width="10%" height="10%" />
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+              <mat-card class="example-card mb-2">
+                <mat-card-header>
+                  <mat-card-title>POST-EOD DB BACKUP </mat-card-title>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && step11"> <span class="badge badge-success">SUCCESSFUL!</span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && eodInitated && !step11" > <span class="badge badge-danger" >FAILED! </span> </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="!loading && !eodInitated">Click start to initiate </mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="loading">
+                    <img src="assets/Images/load.gif" width="10%" height="10%" />
+                  </mat-card-subtitle>
+                </mat-card-header>
+              </mat-card>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7 col-sm-12">
+        <mat-card class="main-card">
+          <mat-card-header>
+            <div class="container">
+              <div class="row">
+                <mat-card-title>EOD Summary</mat-card-title>
+                <mat-card-subtitle> </mat-card-subtitle>
+              </div>
+            </div>
+          </mat-card-header>
+          <div class="col">
+            <div class="container mt-2">
+              <div class="row">
+                <div class="col-sm-12" *ngIf="!eodInitated">
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>End Of Day not initiated</strong> A summary report shall be displayed here.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-sm-12" *ngIf="loading">
+                  <div class="d-flex justify-content-center">
+                    <img src="assets/Images/load.gif" class="spinner"  width="8%" height="8%" />
+                  </div>
+                </div>
+                <div class="col-sm-12" *ngFor="let item of successfulEods; let i = index">
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <p>Success!</p>
+                    <strong>{{item.eodStep}}:</strong> {{item.message}}.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="this.parentElement.style.display='none';"
+                    matTooltip="Close the widget">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-sm-12" *ngFor="let item of failedEods; let i = index">
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <p>Failed!</p>
+                    <strong>{{item.eodStep}}:</strong> {{item.message}}.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="this.parentElement.style.display='none';"
+                    matTooltip="Close the widget">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</mat-card>

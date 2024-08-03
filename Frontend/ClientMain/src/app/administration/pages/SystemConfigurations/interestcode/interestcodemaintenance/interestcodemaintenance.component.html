@@ -1,0 +1,62 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <a routerLink="/system">Dashboard / </a>Interest Code Maintenance
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Function<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <select (change)="onSelectFunction($event)" class="form-control" formControlName="function_type"
+                [ngClass]="{ 'is-invalid': submitted && f.function_type.errors }">
+                <option value="" disabled>-- CHOOSE FUNCTION --</option>
+                <option *ngFor="let flag of functionArray" [value]="flag">{{ flag }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="showCode">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Interest Code<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="interestCode" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.interestCode.errors }"
+
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="6" minlength="2" />
+              <mat-icon *ngIf="existingData" (click)="interestCodeLookup()">search</mat-icon><br>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <mat-hint>{{this.interestName}}</mat-hint>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <hr>
+      <button mat-raised-button class="pull-left bg-secondarytext-white" routerLink="/system/"
+        skipLocationChange="">BACK</button>
+      <button mat-raised-button type="submit" class="float-right" color="primary"> <span *ngIf="loading"
+          class="spinner-border spinner-border-sm mr-1"></span>PROCEED</button>
+      <br>
+    </form>
+  </div>
+</mat-card>

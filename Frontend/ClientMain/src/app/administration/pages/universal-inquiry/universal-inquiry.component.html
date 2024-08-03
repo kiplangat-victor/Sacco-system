@@ -1,0 +1,18 @@
+<div>
+    <app-new-membership [membershipCode]="key" *ngIf="entity==='retailcustomer'"
+        [function_type]="function_type"></app-new-membership>
+    <app-new-membership [membershipCode]="key" *ngIf="entity==='group_member'"
+        [function_type]="function_type"></app-new-membership>
+    <app-loan-account [account_code]="key" [fromlookup]="'test'" [account_type]="'laa'" *ngIf="entity==='laa'"
+        [function_type]="function_type"></app-loan-account>
+    <app-savings-account [account_code]="key" [fromlookup]="'test'" [account_type]="'sba'" *ngIf="entity==='sba'"
+        [function_type]="function_type"></app-savings-account>
+    <app-office-account [account_code]="key" [fromlookup]="'test'" [account_type]="'oab'" *ngIf="entity==='oab'"
+        [function_type]="function_type"></app-office-account>
+    <!-- <app-new-membership  [membershipCode]="key"  *ngIf="entity=='sba'"  [function_type]="function_type" ></app-new-membership>
+    <app-new-membership  [membershipCode]="key"  *ngIf="entity=='oab'"  [function_type]="function_type" ></app-new-membership> -->
+
+    <div>
+        <button (click)="cancel()" mat-raised-button color="warn">Close</button>
+    </div>
+</div>

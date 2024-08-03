@@ -1,0 +1,1501 @@
+<div *ngIf="loading">
+	<p><small>Loading Account Data, please wait...</small></p>
+	<p>
+		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+	</p>
+</div>
+<mat-card-header class="breadcrumb">
+	<div>
+		<a routerLink="/system">Dashboard / </a>
+		<a routerLink="/system/">Account Details Maintenenace / </a>Account Details
+	</div>
+	<div class="ml-auto">
+		&nbsp; <mat-icon color="accent" mat-dialog-close>cancel</mat-icon> &nbsp;
+	</div>
+</mat-card-header>
+<div class="row">
+	<div class="col-md-5 col-sm-12">
+		<div class="row">
+			<div class="col-md-6 col-sm-12">
+				<h4><strong>Account Details</strong> </h4>
+			</div>
+			<div class="col-md-6 col-sm-12" *ngIf="this.results">
+				<h4>Account Code: <strong>{{this.results.acid}}</strong></h4>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-7 col-sm-12 row">
+		<div class="row" *ngIf="this.results">
+			<div class="col-md-3 col-sm-12">
+				<h4>Posted ON:- <strong>{{this.results.postedTime | date}}</strong></h4>
+			</div>
+			<div class="col-md-3 col-sm-12">
+				<h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+			</div>
+			<div class="col-md-3 col-sm-12">
+				<h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+			</div>
+			<div class="col-md-3 col-sm-12">
+				<h4>Verification BY:- <strong>{{this.results.verifiedBy}}</strong></h4>
+			</div>
+
+		</div>
+	</div>
+</div>
+<mat-divider></mat-divider>
+<br>
+<div class="container-fluid">
+	<form action="" [formGroup]="formData" class="form">
+		<mat-tab-group mat-align-tabs="center">
+			<mat-tab class="mat-tab container-fluid" label="General Details">
+				<br>
+				<div class="row">
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Account Balance</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input readonly type="text" placeholder="0.0000" formControlName="accountBalance"
+									class="form-control"
+									oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+									maxlength="60">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Membership Code
+										</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input type="text" formControlName="customerCode" class="form-control"
+									[ngClass]="{ 'is-invalid': submitted && f.customerCode.errors}"
+									oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+									maxlength="15">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Account Name</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input readonly type="text" formControlName="accountName" class="form-control"
+									oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+									maxlength="60">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Manager Code
+										</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input readonly type="text" formControlName="managerCode" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Manager Name</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input readonly type="text" formControlName="accountManager" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Membership Type Code</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input type="text" readonly formControlName="customerType" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Account Type</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input type="text" readonly formControlName="accountType" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Account Ownership</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input readonly type="text" formControlName="accountOwnership" class="form-control"
+									placeholder="SINGLE ACCOUNT"
+									oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+									maxlength="20">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Branch Code
+										</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input readonly type="text" formControlName="solCode" class="form-control"
+									oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+									maxlength="6">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Currency(CCY)</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input readonly type="text" formControlName="currency" placeholder="KES" maxlength="3"
+									class="form-control"
+									oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+									maxlength="3">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Opening Date</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input readonly formControlName="openingDate" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Product Code</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input type="text" formControlName="productCode" class="form-control"
+									[ngClass]="{ 'is-invalid': submitted && f.productCode.errors}"
+									oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+									maxlength="15" minlength="1">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">GL Subhead
+										</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input readonly type="text" formControlName="glSubhead" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Sector Code
+										</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<!-- <select formControlName="misSectorCode" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.misSectorCode.errors }">
+										<option value="" disabled>SELECT SECTOR</option>
+										<option *ngFor="let item of mainSectorData" [value]="item.misCode">
+											{{item.misSector}}
+										</option>
+									</select> -->
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Sub Sector Code
+										</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input type="text" formControlName="misSubSectorCode" class="form-control"
+									[ngClass]="{ 'is-invalid': submitted && f.misSubSectorCode.errors }"
+									oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+									maxlength="120">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Account Status</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input readonly type="text" formControlName="accountStatus" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label class="start pull-left">Joint Account?</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<mat-checkbox formControlName="checkedJointAccount" class="example-margin pull-right"
+									color="primary">
+								</mat-checkbox>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Account Statement</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<mat-checkbox formControlName="accountStatement" class="example-margin pull-right"
+									color="primary">
+								</mat-checkbox>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12" *ngIf="onShowAccountStatement">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Statement Frequency</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<select formControlName="statementFreq" class="form-control">
+									<option value="" disabled>-SELECT FREQUENCY-</option>
+									<option *ngFor="let item of statementFreqArray" [value]="item">{{item}}
+									</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12" *ngIf="onShowAccountStatement">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label for="" class="start pull-left">Dispatch Mode</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<select formControlName="dispatchMode" class="form-control">
+									<option value="" disabled>--SELECT MODE--</option>
+									<option *ngFor="let item of despatch_mode_array" [value]="item">{{item}}
+									</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</mat-tab>
+
+			<!-- OFFICE ACCOUNT -->
+			<mat-tab label="SPECIFIC DETAILS" *ngIf="showOfficeAccountTab">
+				<br>
+				<form [formGroup]="officeAccountsForm">
+					<br>
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Head Office Name</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input formControlName="accountHeadName" class="form-control">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Supervisor ID
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input formControlName="accountSupervisorId" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && officeAccount.accountSupervisorId.errors }">
+
+									<mat-icon *ngIf="showSearch" color="primary" (click)="supervisorCodeLookup()">
+										search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Supervisor Name
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly formControlName="accountSupervisorName" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && officeAccount.accountSupervisorName.errors }">
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<mat-divider></mat-divider>
+					<br>
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<h4><strong>Account Limits</strong></h4>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Cash limit debit
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" maxlength="12" formControlName="cashLimitDr"
+										class="form-control" placeholder="100,000.00"
+										[ngClass]="{ 'is-invalid': submitted && officeAccount.cashLimitDr.errors }" />
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Cash Limit credit
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" maxlength="12" formControlName="cashLimitCr"
+										class="form-control" placeholder="100,000.00"
+										[ngClass]="{ 'is-invalid': submitted && officeAccount.cashLimitCr.errors }" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Transfer Limit Debit
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" maxlength="15" formControlName="transferLimitDr"
+										class="form-control" placeholder="100,000.00"
+										[ngClass]="{ 'is-invalid': submitted && officeAccount.transferLimitDr.errors }" />
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Transfer Limit Credit
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" maxlength="15" formControlName="transferLimitCr"
+										class="form-control" placeholder="100,000.00"
+										[ngClass]="{ 'is-invalid': submitted && officeAccount.transferLimitCr.errors }" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Tranfer Restrictions
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<select class="form-control" formControlName="clearingLimitCrExce"
+										[ngClass]="{ 'is-invalid': submitted && officeAccount.clearingLimitCrExce.errors }">
+										<option value="" disabled>--SELECT TRANSFER--</option>
+										<option *ngFor="let tranRestriction of tranferRestrictionArray"
+											[value]="tranRestriction">{{
+											tranRestriction }}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Clg. Limit Dr.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly placeholder="9,999,999,999,999.99" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Clg. Limit Cr.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly placeholder="9,999,999,999,999.99" class="form-control">
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+				<br>
+			</mat-tab>
+
+
+
+			<!-- SAVINGS ACCOUNT -->
+			<mat-tab label="SPECIFIC DETAILS" *ngIf="showSavingsAccountTab">
+				<br>
+				<form [formGroup]="savingsForm">
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Monthly Saving Amount
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="sba_monthlyValue" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submittedSba && s.sba_monthlyValue.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Saving Period(MM)
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="sba_savingPeriod" placeholder=""
+										class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Matured Saving Amount
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" formControlName="sba_maturedValue" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submittedSba && s.sba_maturedValue.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Start Date</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly [matDatepicker]="picker1" formControlName="sba_startDate"
+										class="form-control">
+									<span *ngIf="onShowDatePicker">
+										<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker #picker1></mat-datepicker>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Saving Maturity Date(1YR)</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly [matDatepicker]="picker2" formControlName="sba_maturedDate"
+										class="form-control">
+									<span *ngIf="onShowDatePicker">
+										<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker #picker2></mat-datepicker>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</mat-tab>
+			<!-- TERM/FIXED DEPOSIT ACCOUN-->
+			<mat-tab label="SPECIFIC DETAILS" *ngIf="showFixedDepositAccountTab">
+				<br>
+				<form [formGroup]="termDepositForm">
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Interest Accr. Account ID</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column ">
+									<input type="text" formControlName="interestCrAccountId" class="form-control"
+										oninput="this.value=this.value.toUpperCase()"
+										[ngClass]="{ 'is-invalid': submittedTda && td.interestCrAccountId.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="20" minlength="4" /> &nbsp; &nbsp;
+									<mat-icon color="primary" (click)="savingsCodeLookUp()">search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Principal Dr. Account</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column ">
+									<input type="text" formControlName="principalDrAccountId" class="form-control"
+										oninput="this.value=this.value.toUpperCase()"
+										[ngClass]="{ 'is-invalid': submittedTda && td.principalDrAccountId.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="20" minlength="4" /> &nbsp; &nbsp;
+									<mat-icon color="primary" (click)="principalDrAccountIdLookUp()">search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Principal Cr. Account</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column ">
+									<input type="text" formControlName="principalCrAccountId" class="form-control"
+										oninput="this.value=this.value.toUpperCase()"
+										[ngClass]="{ 'is-invalid': submittedTda && td.principalCrAccountId.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="20" minlength="4" /> &nbsp; &nbsp;
+									<mat-icon color="primary" (click)="principalCrAccountIdLookUp()">search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Interest Rate</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" formControlName="interestRate" placeholder=""
+										class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Deposit Period(MM)
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="periodInMonths" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submittedTda && td.periodInMonths.errors }"
+										maxlength="4">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="input-group mb-3">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Value Date</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input [matDatepicker]="valueDate" formControlName="valueDate" class="form-control">
+									<span *ngIf="onShowDate" color="primary">
+										<mat-datepicker-toggle matSuffix [for]="valueDate"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker color="primary" #valueDate></mat-datepicker>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Matured Amount</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" formControlName="maturityValue" placeholder=""
+										class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Interest Preferential
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="interestPreferential" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submittedTda && td.interestPreferential.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="4">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Interest Amount</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" formControlName="interestAmount" placeholder=""
+										class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Last Accrual Date</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly [matDatepicker]="accrualLastDate" formControlName="accrualLastDate"
+										class="form-control">
+									<span *ngIf="onShowDatePicker">
+										<mat-datepicker-toggle matSuffix
+											[for]="accrualLastDate"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker #accrualLastDate></mat-datepicker>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Sum Accrued</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" formControlName="sumAccruedAmount" placeholder=""
+										class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Term Deposit Amount
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="termDepositAmount" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submittedTda && td.termDepositAmount.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Withholding Tax Rate
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="withholdingTax" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submittedTda && td.withholdingTax.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="2">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Term Deposit Status</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" formControlName="termDepositStatus" placeholder=""
+										class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Maturity Date</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly [matDatepicker]="maturityDate" formControlName="maturityDate"
+										class="form-control">
+									<span *ngIf="onShowDatePicker">
+										<mat-datepicker-toggle matSuffix [for]="maturityDate"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker #maturityDate></mat-datepicker>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+				<br>
+			</mat-tab>
+			<!-- RELATED PARTIES -->
+			<mat-tab class="mat-tab" label="RELATED PARTIES" *ngIf="onShowRelatedPartiesTab">
+				<br>
+				<div class="row table-action-row">
+					<div class="on-mobile-hide col-md-6 col-sm-12">
+						<strong>Related Parties List</strong>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<input class="pull-right search form-control" (keyup)="applyrelatedPartiesFilter($event)"
+							placeholder="Search..." #input />
+					</div>
+				</div>
+				<div class="table-row">
+					<table mat-table matSort matTableExporter [dataSource]="relatedPartiesDataSource">
+						<ng-container matColumnDef="index">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+							<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+						</ng-container>
+						<ng-container matColumnDef="relPartyCustomerCode">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Rel. Party Customer Code</th>
+							<td mat-cell *matCellDef="let row">{{ row.relPartyCustomerCode}}</td>
+						</ng-container>
+						<ng-container matColumnDef="relPartyCustomerName">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Rel. Party Customer Name
+							<td mat-cell *matCellDef="let row">{{ row.relPartyCustomerName}}</td>
+						</ng-container>
+						<ng-container matColumnDef="relPartyRelationType">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Related Party Relationship</th>
+							<td mat-cell *matCellDef="let row">{{ row.relPartyRelationType }}</td>
+						</ng-container>
+						<ng-container matColumnDef="relPartyPostalAddress">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Rel. Party Postal Address</th>
+							<td mat-cell *matCellDef="let row">{{ row.relPartyPostalAddress }}</td>
+						</ng-container>
+						<tr mat-header-row *matHeaderRowDef="relatedPartiesColumns"></tr>
+						<tr mat-row *matRowDef="let row; columns: relatedPartiesColumns;"></tr>
+						<tr class="mat-row" *matNoDataRow>
+							<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+						</tr>
+					</table>
+				</div>
+				<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+				<br>
+			</mat-tab>
+
+
+			<!-- NOMINESS -->
+			<mat-tab class="mat-tab" label="NOMINESS" *ngIf="onShowNomineesTab">
+				<br>
+				<div class="row table-action-row">
+					<div class="on-mobile-hide col-md-6 col-sm-12">
+						<strong>Nominees List</strong>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<input class="pull-right search form-control" (keyup)="applyFilter($event)"
+							placeholder="Search..." #input />
+					</div>
+				</div>
+				<div class="table-row">
+					<table mat-table matSort matTableExporter [dataSource]="nomineesDataSource">
+						<ng-container matColumnDef="index">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+							<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+						</ng-container>
+						<ng-container matColumnDef="firstName">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+							<td mat-cell *matCellDef="let row">{{ row.firstName}}</td>
+						</ng-container>
+						<ng-container matColumnDef="middleName">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Middle Name
+							<td mat-cell *matCellDef="let row">{{ row.middleName}}</td>
+						</ng-container>
+						<ng-container matColumnDef="lastName">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+							<td mat-cell *matCellDef="let row">{{ row.lastName }}</td>
+						</ng-container>
+						<ng-container matColumnDef="identificationNo">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>National ID.</th>
+							<td mat-cell *matCellDef="let row">{{ row.identificationNo }}</td>
+						</ng-container>
+						<ng-container matColumnDef="dob">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>D.O.B</th>
+							<td mat-cell *matCellDef="let row">{{ row.dob | date }}</td>
+						</ng-container>
+						<ng-container matColumnDef="phone">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
+							<td mat-cell *matCellDef="let row">{{ row.phone }}</td>
+						</ng-container>
+						<ng-container matColumnDef="emailAddress">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Email Address</th>
+							<td mat-cell *matCellDef="let row">{{ row.emailAddress }}</td>
+						</ng-container>
+						<ng-container matColumnDef="relationship">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Relationship</th>
+							<td mat-cell *matCellDef="let row">{{ row.relationship }}</td>
+						</ng-container>
+						<ng-container matColumnDef="occupation">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Occupation</th>
+							<td mat-cell *matCellDef="let row">{{ row.occupation }}</td>
+						</ng-container>
+						<tr mat-header-row *matHeaderRowDef="nomineesColumns"></tr>
+						<tr mat-row *matRowDef="let row; columns: nomineesColumns;"></tr>
+						<tr class="mat-row" *matNoDataRow>
+							<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+						</tr>
+					</table>
+				</div>
+				<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+				<br>
+			</mat-tab>
+			<!-- LOAN ACCOUNT -->
+			<mat-tab class="mat-tab" label="Specific Details" *ngIf="showLoanAccountTab">
+				<br>
+				<form [formGroup]="loansForm">
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column ">
+									<label class="start pull-left">Collect Interest</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<div class="form-check form-check-inline">
+										<input readonly disabled class="form-check-input" type="radio"
+											name="inlineRadioOptions" id="YES" value="YES" checked>
+										<label class="form-check-label" for="YES">YES</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input readonly disabled class="form-check-input" type="radio"
+											name="inlineRadioOptions" id="NO" value="NO">
+										<label class="form-check-label" for="NO">NO</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Loan Category
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" class="form-control" formControlName="loanType"
+										[ngClass]="{ 'is-invalid': submitted && loan.loanType.errors}"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="40">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Principal Amount
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" class="form-control" formControlName="principalAmount">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column ">
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<mat-hint></mat-hint>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="showCurrentRate">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Current Rate</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" readonly formControlName="interestDemandAmount"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Interest Demand</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" readonly formControlName="interestDemandAmount"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Principal Demand</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" readonly formControlName="principalDemandAmount"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Sum Principal Demand</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" readonly formControlName="sumPrincipalDemand"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onShowNextRepaymentDate">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Next Repayment Date</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly [matDatepicker]="picker1" formControlName="nextRepaymentDate"
+										class="form-control">
+									<span *ngIf="onShowOpeningDate">
+										<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker #picker1></mat-datepicker>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Maturity Date</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly [matDatepicker]="picker1" formControlName="maturityDate"
+										class="form-control">
+									<span *ngIf="onShowOpeningDate">
+										<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker #picker1></mat-datepicker>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Interest Calculation Method</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" formControlName="interestCalculationMethod"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="40">
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="col-md-6 col-sm-12">
+						<h4><strong>DISBURSMENT DETAILS</strong></h4>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Repayment Account
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="operativeAcountId" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && loan.operativeAcountId.errors}">
+									&nbsp; &nbsp;
+									<mat-icon *ngIf="showSearch" color="primary" (click)="operativeAcountIdLookUp()">
+										search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Disbursment Account
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="disbursmentAccount" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && loan.disbursmentAccount.errors}">
+									&nbsp; &nbsp;
+									<mat-icon *ngIf="showSearch" color="primary" (click)="disbursmentAccountLookUp()">
+										search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Disbursment Amount</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" formControlName="disbursementAmount"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Disbursemnt Date</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly [matDatepicker]="picker2" formControlName="disbursementDate"
+										class="form-control">
+									<span *ngIf="onShowOpeningDate">
+										<mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker #picker2></mat-datepicker>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Overflow Amount</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" readonly formControlName="overFlowAmount" class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Demand Carry Forward</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" readonly formControlName="demandCarryForward"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="col-md-6 col-sm-12">
+						<h4><strong>Loan Inteterest Details</strong></h4>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Interest Rate</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" formControlName="interestRate" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Interest Period</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" formControlName="displayPeriod" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Interest Preferential</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="interestPreferential" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">No. of Installments
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="numberOfInstallments" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Installment Frequency
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<select (change)="onFrequencyIdChange($event)" form-control
+										formControlName="frequencyId" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && loan.frequencyId.errors}">
+										<option value="" disabled>-SELECT FREQUENCY-</option>
+										<option *ngFor="let item of loanFrequency" [value]="item">{{item}}
+										</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Frequency Period
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="frequencyPeriod" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Installment Start Date</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input [matDatepicker]="picker5" formControlName="installmentStartDate"
+										class="form-control">
+									<span>
+										<mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker #picker5></mat-datepicker>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Installment Amount</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" readonly formControlName="installmentAmount"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onHiden">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Outstanding Principal</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" readonly formControlName="outStandingPrincipal"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onHiden">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Outstanding Interest</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" readostnly formControlName="outStandingInterest"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Total Loan Balance</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" readonly formControlName="totalLoanBalance"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Total Guranteed Amount</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" readonly formControlName="guarantorsTotal"
+										class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Total Collateral Amount</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" readonly formControlName="collateralsTotal"
+										class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label for="" class="start pull-left">Total Security </label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" readonly
+										formControlName="totalCollateralsAndGuarantors" class="form-control">
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</mat-tab>
+			<mat-tab class="mat-tab" label="Guarantors" *ngIf="showLoanAccountTab">
+				<br>
+				<div class="row table-action-row">
+					<div class="col-md-6 col-sm-12">
+						<strong>Loan Guarantors List</strong>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<input class="pull-right search form-control" (keyup)="guarantorsFilter($event)"
+							placeholder="Search..." #input />
+					</div>
+				</div>
+				<br>
+				<div class="table-row">
+					<table mat-table matSort matTableExporter [dataSource]="guarantorDataSource">
+						<ng-container matColumnDef="index">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+							<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+						</ng-container>
+						<ng-container matColumnDef="guarantorType">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Guarantor Type</th>
+							<td mat-cell *matCellDef="let row">{{ row.guarantorType}}</td>
+						</ng-container>
+						<ng-container matColumnDef="guarantorCustomerCode">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Customer Code</th>
+							<td mat-cell *matCellDef="let row">{{ row.guarantorCustomerCode}}</td>
+						</ng-container>
+						<ng-container matColumnDef="loanSeries">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+							<td mat-cell *matCellDef="let row">{{ row.loanSeries}}</td>
+						</ng-container>
+						<ng-container matColumnDef="guaranteeAmount">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+							<td mat-cell *matCellDef="let row">{{ row.guaranteeAmount}}</td>
+						</ng-container>
+						<tr mat-header-row *matHeaderRowDef="guarantoColumns"></tr>
+						<tr mat-row *matRowDef="let row; columns: guarantoColumns;"></tr>
+						<tr class="mat-row" *matNoDataRow>
+							<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+						</tr>
+					</table>
+				</div>
+				<mat-paginator #guarantorPaginator="matPaginator" [pageSize]="5"
+					[pageSizeOptions]="[2, 5, 10, 20, 30, 40, 50, 100]"
+					aria-label="Select page of Employee Experience"></mat-paginator>
+
+			</mat-tab>
+			<mat-tab class="mat-tab" label="Collaterals" *ngIf="showLoanAccountTab">
+				<br>
+				<div class="row table-action-row">
+					<div class="col-md-6 col-sm-12">
+						<strong>Loan Collateral List</strong>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<input class="pull-right search form-control" (keyup)="collateralFilter($event)"
+							placeholder="Search..." #input />
+					</div>
+				</div>
+				<br>
+				<div class="table-row">
+					<table mat-table matSort matTableExporter [dataSource]="collateralDataSource">
+						<ng-container matColumnDef="index">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+							<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+						</ng-container>
+						<ng-container matColumnDef="collateralSerial">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Collateral Serial</th>
+							<td mat-cell *matCellDef="let row">{{ row.collateralSerial}}</td>
+						</ng-container>
+						<ng-container matColumnDef="collateralValue">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Collateral Value</th>
+							<td mat-cell *matCellDef="let row">{{ row.collateralValue}}</td>
+						</ng-container>
+						<ng-container matColumnDef="collateralType">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Collateral Type</th>
+							<td mat-cell *matCellDef="let row">{{ row.collateralType}}</td>
+						</ng-container>
+						<ng-container matColumnDef="collateralName">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Collateral Name</th>
+							<td mat-cell *matCellDef="let row">{{ row.collateralName}}</td>
+						</ng-container>
+						<tr mat-header-row *matHeaderRowDef="collateralColumns"></tr>
+						<tr mat-row *matRowDef="let row; columns: collateralColumns;"></tr>
+						<tr class="mat-row" *matNoDataRow>
+							<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+						</tr>
+					</table>
+				</div>
+				<mat-paginator #collateralPaginator="matPaginator" [pageSize]="5"
+					[pageSizeOptions]="[2, 5, 10, 20, 30, 40, 50, 100]"
+					aria-label="Select page of Employee Experience"></mat-paginator>
+
+			</mat-tab>
+			<mat-tab class="mat-tab" label="Product Fees" *ngIf="showLoanAccountTab">
+				<br>
+				<div class="row table-action-row">
+					<div class="col-md-6 col-sm-12">
+						<strong>Loan Fees List</strong>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<input class="pull-right search form-control" (keyup)="loanFeesFilter($event)"
+							placeholder="Search..." #input />
+					</div>
+				</div>
+				<br>
+				<div class="table-row">
+					<table mat-table matSort matTableExporter [dataSource]="loanFeesDataSource">
+						<ng-container matColumnDef="index">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+							<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+						</ng-container>
+						<ng-container matColumnDef="chargeCollectionAccount">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Charge Collection Account</th>
+							<td mat-cell *matCellDef="let row">{{ row.chargeCollectionAccount}}</td>
+						</ng-container>
+						<ng-container matColumnDef="eventIdCode">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Fee Code</th>
+							<td mat-cell *matCellDef="let row">{{ row.eventIdCode}}</td>
+						</ng-container>
+						<ng-container matColumnDef="eventTypeDesc">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Fee Desc.</th>
+							<td mat-cell *matCellDef="let row">{{ row.eventTypeDesc}}</td>
+						</ng-container>
+						<ng-container matColumnDef="initialAmt">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Initial Amount</th>
+							<td mat-cell *matCellDef="let row">{{ row.initialAmt}}</td>
+						</ng-container>
+						<ng-container matColumnDef="monthlyAmount">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Monthly Amount</th>
+							<td mat-cell *matCellDef="let row">{{ row.monthlyAmount}}</td>
+						</ng-container>
+						<ng-container matColumnDef="nextCollectionDate">
+							<th mat-header-cell *matHeaderCellDef mat-sort-header>Next Collection Date</th>
+							<td mat-cell *matCellDef="let row">{{ row.nextCollectionDate | date}}</td>
+						</ng-container>
+						<tr mat-header-row *matHeaderRowDef="loanFeesColumns"></tr>
+						<tr mat-row *matRowDef="let row; columns: loanFeesColumns;"></tr>
+						<tr class="mat-row" *matNoDataRow>
+							<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+						</tr>
+					</table>
+				</div>
+				<mat-paginator #loanFeesPaginator="matPaginator" [pageSize]="5"
+					[pageSizeOptions]="[2, 5, 10, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+
+			</mat-tab>
+			<mat-tab class="mat-tab" label="Loan Schedular" *ngIf="showLoanAccountTab">
+				<br>
+				<div id="print-section">
+					<h4 class="text-center"><strong>Amortization Schedule</strong></h4>
+					<table class="table table-striped table-bordered table-sm row-border hover" style="width: 100%;">
+						<thead>
+							<tr>
+								<th>No.</th>
+								<th>Principal Amount</th>
+								<th>Installment Ammount</th>
+								<th>Installment Number</th>
+								<th>Interest Amount</th>
+								<th>Principal Outstanding</th>
+								<th>Start Date</th>
+								<th>Demand Date</th>
+								<th>Overdue</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let item of this.loanSchedules, let i = index">
+								<td>{{i + 1}}</td>
+								<td>{{item.principleAmount}}</td>
+								<td>{{item.installmentAmount}}</td>
+								<td>{{item.installmentNumber}}</td>
+								<td>{{item.interestAmount}}</td>
+								<td>{{item.principalOutstanding}}</td>
+								<td>{{item.startDate | date: 'dd-MM-yyyy'}}</td>
+								<td>{{item.demandDate | date: 'dd-MM-yyyy'}}</td>
+								<td>{{item.overdue}}</td>
+								<td>{{item.status}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</mat-tab>
+			<mat-tab class="mat-tab" label="ACCOUNT DOCUMENTS" *ngIf="showAccountDocumentsTab">
+				<br>
+				<div>
+					<div class="row" *ngFor="let item of this.accountDocumentsArray, let i = index">
+						<div class="col-md-6 col-sm-12">
+							<label class="start pull-left">File Type:
+								&nbsp;&nbsp;&nbsp;</label>{{item.documentTitle}}
+						</div>
+						<br>
+						<mat-divider></mat-divider>
+						<br>
+						<div class="col-md-6 col-sm-12">
+							<img [src]="item.documentImage" class="col-md-6 img-preview">
+						</div>
+						<br>
+					</div>
+				</div>
+				<table class="table table-striped table-bordered table-sm row-border hover" style="width: 100%;"
+					*ngIf="onShowAccountImages">
+					<thead>
+						<tr>
+							<th>No.</th>
+							<th>Document Type</th>
+							<th *ngIf="showTableOperation">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let item of this.accountDocumentsArray, let i = index">
+							<td>{{i + 1}}</td>
+							<td>{{item.documentTitle}}</td>
+							<td *ngIf="showTableOperation">
+								<mat-icon color="primary" (click)="onEditDocument(i)">edit</mat-icon> &nbsp;
+								&nbsp;
+								<mat-icon color="accent" (click)="onDeleteDoument(i)">delete_sweep</mat-icon>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<br>
+			</mat-tab>
+		</mat-tab-group>
+	</form>
+</div>
+<br>
+<hr>
+<div class="d-grid gap-2">
+	<mat-dialog-actions align="center">
+		<button class="btn btn-primary" type="button" mat-dialog-close>Close</button>
+	</mat-dialog-actions>
+</div>

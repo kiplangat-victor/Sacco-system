@@ -1,0 +1,70 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/roles/maintenance">User Roles Maintenance / </a> User Roles
+    </div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="row">
+    <div class="col-md-5 col-sm-12">
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-4 col-sm-12" *ngIf="onShowResults">
+          <h4>Role ID: <strong>{{this.id}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7 col-sm-12 row" *ngIf="onShowResults">
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <h4>Verification:- <strong>{{this.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <h4>Posted BY:- <strong>{{this.postedBy}}</strong></h4>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <h4>Posted Time:- <strong>{{this.postedTime | date}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Role Name<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="name"
+                class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12"></div>
+      </div>
+      <br />
+      <button mat-raised-button type="button" class="bg-secondary text-white" routerLink="/system/roles/maintenance" skipLocationChange="">
+        BACK
+      </button>
+      <button *ngIf="!hideBtn" (click)="onSubmit()" class="pull-right" mat-raised-button [color]="btnColor"
+        type="submit">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{ btnText }}
+      </button>
+      <br />
+    </form>
+  </div>
+</mat-card>

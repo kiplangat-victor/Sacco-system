@@ -1,0 +1,110 @@
+<div class="">
+	<div *ngIf="loading">
+		<p><small>Loading Data, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</p>
+	</div>
+	<div class="breadcrumb">
+		<div>
+			Batch Data Lookup
+		</div>
+		<div class="col-md-6 col-sm-12 ml-auto">
+			<input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+		</div>
+	</div>
+	<form action="" [formGroup]="formData" novalidate class="form" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm">
+		<div class="row">
+			<div class="col-md-6 col-sm-12">
+				<div class="form-group">
+					<div class="col-md-4 col-sm-12 form-column">
+						<label for="">Action</label>
+					</div>
+					<div class="col-md-8 col-sm-12 form-column">
+						<select  class="form-control" formControlName="action">
+							<option value="" disabled>-- CHOOSE ACTION --</option>
+							<option *ngFor="let flag of actionsArray" [value]="flag">{{ flag }}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-12">
+				<div class="form-group">
+					<div class="col-md-4 col-sm-12 form-column">
+						<label for="" class="start pull-left">From Date</label>
+					</div>
+					<div class="col-md-8 col-sm-12 form-column">
+						<input [matDatepicker]="fromDate" formControlName="fromDate" class="form-control">
+						<span>
+							<mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+						</span>
+						<mat-datepicker #fromDate></mat-datepicker>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-sm-12">
+				<div class="form-group">
+					<div class="col-md-4 col-sm-12 form-column">
+						<label for="" class="start pull-left">To Date</label>
+					</div>
+					<div class="col-md-8 col-sm-12 form-column">
+						<input [matDatepicker]="toDate" formControlName="toDate" class="form-control">
+						<span>
+							<mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+						</span>
+						<mat-datepicker #toDate></mat-datepicker>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<br>
+		<div class="col-md-2 ml-auto">
+			<button type="submit" class="btn btn-primary btn-sm pull-right btn" (click)="onSubmit()">SUBMIT</button>
+		</div>
+		<br>
+	</form>
+</div>
+<br>
+<div class="table-row">
+	<table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+		<ng-container matColumnDef="index">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+		</ng-container>
+		<ng-container matColumnDef="batchUploadCode">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Code</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.batchUploadCode}} </td>
+		</ng-container>
+		<ng-container matColumnDef="amount">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.amount | currency: 'KES'}} </td>
+		</ng-container>
+		<ng-container matColumnDef="debitAccount">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Debit Account</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.debitAccount}} </td>
+		</ng-container>
+		<ng-container matColumnDef="tranParticulars">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Tran. Particulars</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.tranParticulars}} </td>
+		</ng-container>
+		<ng-container matColumnDef="status">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.status}} </td>
+		</ng-container>
+		<ng-container matColumnDef="verifiedFlag">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Verified Flag</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.verifiedFlag}}</td>
+		</ng-container>
+		<ng-container matColumnDef="enteredTime">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Entered Time</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.enteredTime | date: 'dd-MM-yyyy'}} </td>
+		</ng-container>
+		<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+		<tr class="mat-row" *matNoDataRow>
+			<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+		</tr>
+	</table>
+</div>
+<mat-paginator [pageSizeOptions]="[5, 10, 15,20,30, 40, 50, 100]" aria-label="Select page"></mat-paginator>

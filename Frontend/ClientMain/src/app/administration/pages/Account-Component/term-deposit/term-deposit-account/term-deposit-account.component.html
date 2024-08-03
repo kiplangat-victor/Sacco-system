@@ -1,0 +1,1238 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a>
+			<a routerLink="/system/term-deposit/account/maintenance">Fixed Deposit Account Maintenenace / </a> Fixed
+			Deposit Account
+		</div>
+	</mat-card-header>
+	<div class="row" *ngIf="onShowMainMenu">
+		<div class="col-md-6 col-sm-12">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+				</div>
+				<div class="col-md-6 col-sm-12" *ngIf="onShowResults">
+					<h4>Account Code: <strong>{{this.results.acid}}</strong></h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-12 row" *ngIf="onShowResults">
+			<div class="row" *ngIf="this.results">
+				<div class="col-md-6 col-sm-12">
+					<h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<form action="" [formGroup]="statementForm">
+		<div class="row" *ngIf="onShowAccountStatementDateParams">
+			<div class="col-md-5 col-sm-12">
+				<div class="form-group">
+					<div class="col-md-4 col-sm-12 form-column">
+						<label class="start pull-left">From Date<span class="warning"
+								*ngIf="onShowWarning">*</span></label>
+					</div>
+					<div class="col-md-8 col-sm-12 form-column">
+						<input [matDatepicker]="fromdate" formControlName="fromdate" (dateChange)="eventStart($event)"
+							class="form-control">
+						<span>
+							<mat-datepicker-toggle matSuffix [for]="fromdate"></mat-datepicker-toggle>
+						</span>
+						<mat-datepicker #fromdate></mat-datepicker>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-5 col-sm-12">
+				<div class="form-group">
+					<div class="col-md-4 col-sm-12 form-column">
+						<label class="start pull-left">To Date<span class="warning"
+								*ngIf="onShowWarning">*</span></label>
+					</div>
+					<div class="col-md-8 col-sm-12 form-column">
+						<input [matDatepicker]="todate" formControlName="todate" class="form-control"
+							(dateChange)="eventEnd($event)">
+						<span>
+							<mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
+						</span>
+						<mat-datepicker #todate></mat-datepicker>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2 col-sm-12">
+				<div class="form-group">
+					<button type="button" (click)="getAccounStatementRecords()"
+						class="btn btn-primary btn-sm">SUBMIT</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	<hr>
+	<div class="container-fluid">
+		<form action="" [formGroup]="formData" novalidate class="form">
+			<mat-tab-group mat-align-tabs="center">
+				<mat-tab class="mat-tab container-fluid" label="GENERAL DETAILS" *ngIf="onShowGeneralDetailsTab">
+					<br>
+					<div class="row" *ngIf="onShowAccountBalance">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Account Balance <span class="warning"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" placeholder="0.0000" formControlName="accountBalance"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="60">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Membership Code<span class="warning"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input (keyup)="customerKeyUp($event)" type="text" formControlName="customerCode" class="form-control"
+										oninput="this.value=this.value.toUpperCase()"
+										[ngClass]="{ 'is-invalid': submitted && f.customerCode.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="15">
+									&nbsp; &nbsp;
+									<mat-icon *ngIf="showSearch" color="primary" (click)="customerLookup()">
+										search</mat-icon>
+									&nbsp; &nbsp;
+									<mat-icon color="primary" (click)="memberDetailsLookup()" *ngIf="onMemberDetailsLookup">remove_red_eye</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Account Name</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" formControlName="accountName" class="form-control"
+										oninput="this.value=this.value.toUpperCase()"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="60">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Manager Code</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" formControlName="managerCode" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Manager Name</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" formControlName="accountManager" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Membership Type Code</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" readonly formControlName="customerType" class="form-control"
+										oninput="this.value=this.value.toUpperCase()">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Account Type</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" readonly formControlName="accountType" class="form-control"
+										oninput="this.value=this.value.toUpperCase()">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Account Ownership</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" formControlName="accountOwnership" class="form-control"
+										placeholder="SINGLE ACCOUNT"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="20">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Branch Code</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" formControlName="solCode" class="form-control"
+										oninput="this.value=this.value.toUpperCase()"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="6">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Currency(CCY)</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column ">
+									<input type="text" formControlName="chrg_calc_crncy"
+									  class="pull-right form-control" [ngClass]="{ 'is-invalid': submitted && f.chrg_calc_crncy.errors }" />
+									<mat-icon *ngIf="isEnabled" (click)="chrgCalcCrncyLookup()">search</mat-icon>
+									</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Opening Date</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly [matDatepicker]="openingDate" formControlName="openingDate"
+										class="form-control">
+									<span *ngIf="onShowOpeningDate" color="primary">
+										<mat-datepicker-toggle matSuffix [for]="openingDate"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker color="primary" #openingDate></mat-datepicker>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Product Code<span class="warning"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input (keyup)="onKeyUp($event)" type="text" formControlName="productCode"
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.productCode.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="15" minlength="1">
+									&nbsp; &nbsp;
+									<mat-icon *ngIf="showSearch" color="primary" (click)="tdaProductCodeLookUp()">
+										search</mat-icon>
+								</div>
+							</div>
+							<div class="form-group" *ngIf="this.tdaWithdrawals">
+								<div class="col-md-6 col-sm-12 form-column ">
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<mat-hint>Min. Deposit: {{ this.tdaWithdrawals.tda_deposit_amt_min }} Max. Deposit:
+										{{ this.tdaWithdrawals.tda_deposit_amt_max }}</mat-hint>
+								</div>
+							</div>
+							<div class="form-group" *ngIf="this.tdaWithdrawals">
+								<div class="col-md-6 col-sm-12 form-column ">
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<mat-hint>Min. Period(MM): {{ this.tdaWithdrawals.tda_period_mm_min }} Max.
+										Period(MM): {{ this.tdaWithdrawals.tda_period_mm_max }}</mat-hint>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">GL Subhead</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" formControlName="glSubhead" class="form-control"
+										oninput="this.value=this.value.toUpperCase()"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="6">
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Cash Exception Limit Dr.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" formControlName="cashExceptionLimitDr"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="6">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Cash Exception Limit Cr.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="text" formControlName="cashExceptionCr" class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="6">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Transfer Exception Limit Dr</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" formControlName="transferExceptionLimitDr"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Transfer Exception Limit Cr.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input readonly type="number" formControlName="transferExceptionLimitCr"
+										class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Sector Code<span class="warning"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<select (change)="onSectorCodeChange($event)" formControlName="misSectorCode"
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.misSectorCode.errors }">
+										<option value="" disabled>SELECT SECTOR</option>
+										<option *ngFor="let item of mainSectorData" [value]="item.misCode">
+											{{item.misSector}}
+										</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Sub Sector Code<span class="warning"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<select formControlName="misSubSectorCode" class="form-control" *ngIf="onShowSelect"
+										[ngClass]="{ 'is-invalid': submitted && f.misSubSectorCode.errors }">
+										<option value="" disabled>SELECT SUBSECTOR</option>
+										<option *ngFor="let sub of subSectorData" [value]="sub.misSubcode">
+											{{sub.misSubSector}}
+										</option>
+									</select>
+									<input type="text" formControlName="misSubSectorCode" class="form-control"
+										oninput="this.value=this.value.toUpperCase()" *ngIf="isHiddenInput"
+										[ngClass]="{ 'is-invalid': submitted && f.misSubSectorCode.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="100">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onShowAccountStatus">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Account Status</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<select formControlName="accountStatus" class="form-control">
+										<option value="" disabled>SELECT STATUS</option>
+										<option *ngFor="let item of accountStatusArray" [value]="item">{{item}}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Mode of Operation<span class="warning"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<select formControlName="operationMode" class="form-control">
+										<option value="" disabled>SELECT OPERATION</option>
+										<option *ngFor="let item of operationsArray" [value]="item">{{ item }}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onShowAccountOwnership">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Joint Account<span class="warning"
+											*ngIf="onShowWarning">?</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<mat-checkbox formControlName="checkedJointAccount"
+										class="example-margin pull-right" color="primary"
+										(change)="onCheckedJointAccount($event)">
+									</mat-checkbox>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Account Statement</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<mat-checkbox formControlName="accountStatement" class="example-margin pull-right"
+										color="primary" (change)="onCheckedAccountStatement($event)">
+									</mat-checkbox>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onShowAccountStatement">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Statement Frequency</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<select formControlName="statementFreq" class="form-control">
+										<option value="" disabled>-SELECT FREQUENCY-</option>
+										<option
+											*ngFor="let item of statementFreqArray" [value]="item">{{item}}
+										</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onShowAccountStatement">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Dispatch Mode</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<select formControlName="dispatchMode" class="form-control">
+										<option value="" disabled>SELECT MODE</option>
+										<option *ngFor="let item of despatch_mode_array" [value]="item">{{item}}
+										</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<hr>
+					<button mat-raised-button type="submit" *ngIf="displayBackButton"
+						class="pull-left bg-secondary text-white"
+						routerLink="/system/term-deposit/account/maintenance">BACK</button>
+						<button *ngIf="displayApprovalBtn" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+							routerLink="/system/new/notification/allerts">BACK</button>
+				</mat-tab>
+				<mat-tab label="SPECIFIC DETAILS" *ngIf="onShowSpecificDetailsTab">
+					<br>
+					<form [formGroup]="termDepositForm">
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Interest Accr. Account ID</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column ">
+										<input type="text" formControlName="interestCrAccountId" class="form-control"
+											oninput="this.value=this.value.toUpperCase()"
+											[ngClass]="{ 'is-invalid': submittedTda && td.interestCrAccountId.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="20" minlength="4" /> &nbsp; &nbsp;
+										<mat-icon color="primary" (click)="savingsCodeLookUp()">search</mat-icon>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Principal Dr. Account</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column ">
+										<input type="text" formControlName="principalDrAccountId" class="form-control"
+											oninput="this.value=this.value.toUpperCase()"
+											[ngClass]="{ 'is-invalid': submittedTda && td.principalDrAccountId.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="20" minlength="4" /> &nbsp; &nbsp;
+										<mat-icon color="primary"
+											(click)="principalDrAccountIdLookUp()">search</mat-icon>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Principal Cr. Account</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column ">
+										<input type="text" formControlName="principalCrAccountId" class="form-control"
+											oninput="this.value=this.value.toUpperCase()"
+											[ngClass]="{ 'is-invalid': submittedTda && td.principalCrAccountId.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="20" minlength="4" /> &nbsp; &nbsp;
+										<mat-icon color="primary"
+											(click)="principalCrAccountIdLookUp()">search</mat-icon>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Interest Rate</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input readonly type="number" formControlName="interestRate" placeholder=""
+											class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Deposit Period(MM)<span class="warning"
+												*ngIf="onShowWarning">*</span></label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="periodInMonths" placeholder=""
+											class="form-control"
+											[ngClass]="{ 'is-invalid': submittedTda && td.periodInMonths.errors }"
+											maxlength="4">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="input-group mb-3">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Value Date</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input [matDatepicker]="valueDate" formControlName="valueDate"
+											class="form-control">
+										<span *ngIf="onShowDate" color="primary">
+											<mat-datepicker-toggle matSuffix [for]="valueDate"></mat-datepicker-toggle>
+										</span>
+										<mat-datepicker color="primary" #valueDate></mat-datepicker>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Matured Amount</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input readonly type="number" formControlName="maturityValue" placeholder=""
+											class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Interest Preferential<span class="warning"
+												*ngIf="onShowWarning">*</span></label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="interestPreferential" placeholder=""
+											class="form-control"
+											[ngClass]="{ 'is-invalid': submittedTda && td.interestPreferential.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="4">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Interest Amount</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input readonly type="number" formControlName="interestAmount" placeholder=""
+											class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Last Accrual Date</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input readonly [matDatepicker]="accrualLastDate"
+											formControlName="accrualLastDate" class="form-control">
+										<span *ngIf="onShowDatePicker">
+											<mat-datepicker-toggle matSuffix
+												[for]="accrualLastDate"></mat-datepicker-toggle>
+										</span>
+										<mat-datepicker #accrualLastDate></mat-datepicker>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Sum Accrued</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input readonly type="number" formControlName="sumAccruedAmount" placeholder=""
+											class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Term Deposit Amount<span class="warning"
+												*ngIf="onShowWarning">*</span></label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="termDepositAmount" placeholder=""
+											class="form-control"
+											[ngClass]="{ 'is-invalid': submittedTda && td.termDepositAmount.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="12">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Withholding Tax Rate<span class="warning"
+												*ngIf="onShowWarning">*</span></label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="withholdingTax" placeholder="" class="form-control"
+											[ngClass]="{ 'is-invalid': submittedTda && td.withholdingTax.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="2">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Term Deposit Status</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input readonly type="text" formControlName="termDepositStatus" placeholder=""
+											class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12" *ngIf="onHideSpecificDetails">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Maturity Date</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input readonly [matDatepicker]="maturityDate" formControlName="maturityDate"
+											class="form-control">
+										<span *ngIf="onShowDatePicker">
+											<mat-datepicker-toggle matSuffix
+												[for]="maturityDate"></mat-datepicker-toggle>
+										</span>
+										<mat-datepicker #maturityDate></mat-datepicker>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					<br>
+					<hr>
+					<button *ngIf="displayBackButton" mat-raised-button type="submit"
+						class="pull-left bg-secondary text-white"
+						routerLink="/system/term-deposit/account/maintenance">BACK</button>
+						<button *ngIf="displayApprovalBtn" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+							routerLink="/system/new/notification/allerts">BACK</button>
+				</mat-tab>
+
+				<mat-tab class="mat-tab" label="RELATED PARTIES" *ngIf="onShowRelatedPartiesTab">
+					<br>
+					<form [formGroup]="relatedPartiesForm"  *ngIf="onShowRelatePartiesForm">
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Membership Code</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="text" formControlName="relPartyCustomerCode" class="form-control"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="15">
+										&nbsp; &nbsp;
+										<mat-icon *ngIf="showSearch" color="primary"
+											(click)="relatedPartyCustomerLookup()">
+											search</mat-icon>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Membership Name</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input readonly formControlName="relPartyCustomerName" class="form-control"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="100">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Relation Type</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<select formControlName="relPartyRelationType" class="form-control">
+											<option value="" disabled>SELECT RELATION TYPE</option>
+											<option *ngFor="let relationtype of relationtypes"
+												[value]="relationtype.description">
+												{{relationtype.code}} - {{relationtype.description}}
+											</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Postal Address</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input formControlName="relPartyPostalAddress" class="form-control"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											type="text" maxlength="55" minlength="4">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div *ngIf="showButtons">
+							<button *ngIf="addButton" (click)="addrelatedParties()"
+								class="pull-right btn btn-success btn-sm"
+								[disabled]="!relatedPartiesForm.valid || disableAddButton" mat-raised-button
+								color="primary" type="button">
+								Add Related Party.
+							</button>
+							<button *ngIf="editButton" (click)="updaterelatedParties()"
+								class="pull-right btn btn-primary btn-sm"
+								[disabled]="!relatedPartiesForm.valid || disableAddButton" mat-raised-button
+								color="primary" type="button">
+								Update Related Party.
+							</button>
+						</div>
+					</form>
+					<div class="row table-action-row">
+						<div class="on-mobile-hide col-md-6 col-sm-12">
+							<strong>Related Parties List</strong>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<input class="pull-right search form-control" (keyup)="applyrelatedPartiesFilter($event)"
+								placeholder="Search..." #input />
+						</div>
+					</div>
+					<div class="table-row">
+						<table mat-table matSort matTableExporter [dataSource]="relatedPartiesDataSource">
+							<ng-container matColumnDef="index">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+								<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+							</ng-container>
+							<ng-container matColumnDef="relPartyCustomerCode">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Rel. Party Customer Code</th>
+								<td mat-cell *matCellDef="let row">{{ row.relPartyCustomerCode}}</td>
+							</ng-container>
+							<ng-container matColumnDef="relPartyCustomerName">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Rel. Party Customer Name
+								<td mat-cell *matCellDef="let row">{{ row.relPartyCustomerName}}</td>
+							</ng-container>
+							<ng-container matColumnDef="relPartyRelationType">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Related Party Relationship</th>
+								<td mat-cell *matCellDef="let row">{{ row.relPartyRelationType }}</td>
+							</ng-container>
+							<ng-container matColumnDef="relPartyPostalAddress">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Rel. Party Postal Address</th>
+								<td mat-cell *matCellDef="let row">{{ row.relPartyPostalAddress }}</td>
+							</ng-container>
+							<ng-container matColumnDef="actions">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+								<td mat-cell *matCellDef="let row">
+									<button mat-icon-button [disabled]="disableActions" color="primary"
+										(click)="editrelatedParties(row)">
+										<mat-icon>edit</mat-icon>
+									</button>
+									<button mat-icon-button [disabled]="disableActions"
+										(click)="deleterelatedParties(row)" color="warn">
+										<mat-icon>delete</mat-icon>
+									</button>
+								</td>
+							</ng-container>
+							<tr mat-header-row *matHeaderRowDef="relatedPartiesColumns"></tr>
+							<tr mat-row *matRowDef="let row; columns: relatedPartiesColumns;"></tr>
+							<tr class="mat-row" *matNoDataRow>
+								<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+							</tr>
+						</table>
+					</div>
+					<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]"
+						aria-label="Select page"></mat-paginator>
+					<br>
+					<hr>
+					<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+						routerLink="/system/term-deposit/account/maintenance">BACK</button>
+						<button *ngIf="displayApprovalBtn" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+							routerLink="/system/new/notification/allerts">BACK</button>
+				</mat-tab>
+				<mat-tab class="mat-tab" label="NOMINESS" *ngIf="onShowNomineesTab">
+					<br>
+					<form [formGroup]="nomineesForm" *ngIf="onShowNomineesForm">
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								<div class="input-group mb-3 has-validation">
+									<div class="col-md-4 col-sm-12 form-column">
+										<label for="validationServerUsername" class="start">First Name</label>
+									</div>
+									<div class="col-md-8 col-sm-12 ">
+										<input type="name" formControlName="firstName" class="form-control"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="30">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="input-group mb-3">
+									<div class="col-md-4 col-sm-12 form-column">
+										<label class="start">Middle Name</label>
+									</div>
+									<div class="col-md-8 col-sm-12 ">
+										<input type="name" formControlName="middleName" class="form-control"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="30">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="input-group mb-3">
+									<div class="col-md-4 col-sm-12 form-column">
+										<label class="start">Last Name</label>
+									</div>
+									<div class="col-md-8 col-sm-12 ">
+										<input type="name" formControlName="lastName" class="form-control"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="30">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="input-group mb-3">
+									<div class="col-md-4 col-sm-12 form-column">
+										<label class="start">Date of Birth</label>
+									</div>
+									<div class="col-md-8 col-sm-12 form-column">
+										<input [matDatepicker]="dob" formControlName="dob" class="form-control">
+										<span *ngIf="onShowDate" color="primary">
+											<mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+										</span>
+										<mat-datepicker color="primary" #dob></mat-datepicker>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="input-group mb-3">
+									<div class="col-md-4 col-sm-12 form-column">
+										<label class="start">National ID</label>
+									</div>
+									<div class="col-md-8 col-sm-12 ">
+										<input type="number" formControlName="identificationNo" class="form-control"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="14" maxlength="8">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="input-group mb-3">
+									<div class="col-md-4 col-sm-12 form-column">
+										<label class="start">Phone</label>
+									</div>
+									<div class="col-md-8 col-sm-12 ">
+										<input type="number" formControlName="phone" class="form-control"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="10" maxlength="13">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="input-group mb-3">
+									<div class="col-md-4 col-sm-12 form-column">
+										<label class="start">Email Address</label>
+									</div>
+									<div class="col-md-8 col-sm-12 ">
+										<input type="email" formControlName="emailAddress" class="form-control"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="55">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="input-group mb-3">
+									<div class="col-md-4 col-sm-12 form-column">
+										<label class="start">Occupation</label>
+									</div>
+									<div class="col-md-8 col-sm-12 ">
+										<select formControlName="occupation" class="form-control">
+											<option value="" disabled>SELECT OCCUAPTION</option>
+											<option *ngFor="let occupation of occupations" [value]="occupation">
+												{{occupation}}
+											</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="input-group mb-3">
+									<div class="col-md-4 col-sm-12 form-column">
+										<label class="start">Relationship</label>
+									</div>
+									<div class="col-md-8 col-sm-12 ">
+										<select formControlName="relationship" class="form-control">
+											<option value="" disabled>SELECT RELATIONSHIP</option>
+											<option *ngFor="let relationships of relationship"
+												[value]="relationships.description">
+												{{relationships.code}}-{{relationships.description}}
+											</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div *ngIf="showButtons">
+							<button *ngIf="addButton" (click)="addNominee()" class="pull-right btn btn-success btn-sm"
+								[disabled]="!nomineesForm.valid || disableAddButton" mat-raised-button color="primary"
+								type="button">
+								Add Nominee
+							</button>
+							<button *ngIf="editButton" (click)="updateNominee()"
+								class="pull-right btn btn-primary btn-sm"
+								[disabled]="!nomineesForm.valid || disableAddButton" mat-raised-button color="primary"
+								type="button">
+								Update Nominee
+							</button>
+						</div>
+					</form>
+					<div class="row table-action-row">
+						<div class="on-mobile-hide col-md-6 col-sm-12">
+							<strong>Nominees List</strong>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<input class="pull-right search form-control" (keyup)="applyFilter($event)"
+								placeholder="Search..." #input />
+						</div>
+					</div>
+					<div class="table-row">
+						<table mat-table matSort matTableExporter [dataSource]="nomineesDataSource">
+							<ng-container matColumnDef="index">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+								<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+							</ng-container>
+							<ng-container matColumnDef="firstName">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+								<td mat-cell *matCellDef="let row">{{ row.firstName}}</td>
+							</ng-container>
+							<ng-container matColumnDef="middleName">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Middle Name
+								<td mat-cell *matCellDef="let row">{{ row.middleName}}</td>
+							</ng-container>
+							<ng-container matColumnDef="lastName">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+								<td mat-cell *matCellDef="let row">{{ row.lastName }}</td>
+							</ng-container>
+							<ng-container matColumnDef="identificationNo">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>National ID.</th>
+								<td mat-cell *matCellDef="let row">{{ row.identificationNo }}</td>
+							</ng-container>
+							<ng-container matColumnDef="dob">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>D.O.B</th>
+								<td mat-cell *matCellDef="let row">{{ row.dob | date }}</td>
+							</ng-container>
+							<ng-container matColumnDef="phone">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
+								<td mat-cell *matCellDef="let row">{{ row.phone }}</td>
+							</ng-container>
+							<ng-container matColumnDef="emailAddress">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Email Address</th>
+								<td mat-cell *matCellDef="let row">{{ row.emailAddress }}</td>
+							</ng-container>
+							<ng-container matColumnDef="relationship">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Relationship</th>
+								<td mat-cell *matCellDef="let row">{{ row.relationship }}</td>
+							</ng-container>
+							<ng-container matColumnDef="occupation">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Occupation</th>
+								<td mat-cell *matCellDef="let row">{{ row.occupation }}</td>
+							</ng-container>
+							<ng-container matColumnDef="actions">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+								<td mat-cell *matCellDef="let row">
+									<button mat-icon-button [disabled]="disableActions" color="primary"
+										(click)="editItem(row)">
+										<mat-icon>edit</mat-icon>
+									</button>
+									<button mat-icon-button [disabled]="disableActions" (click)="deleteItem(row)"
+										color="warn">
+										<mat-icon>delete</mat-icon>
+									</button>
+								</td>
+							</ng-container>
+							<tr mat-header-row *matHeaderRowDef="nomineesColumns"></tr>
+							<tr mat-row *matRowDef="let row; columns: nomineesColumns;"></tr>
+							<tr class="mat-row" *matNoDataRow>
+								<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+							</tr>
+						</table>
+					</div>
+					<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]"
+						aria-label="Select page"></mat-paginator>
+					<br>
+					<hr>
+					<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+						routerLink="/system/term-deposit/account/maintenance">BACK</button>
+						<button *ngIf="displayApprovalBtn" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+							routerLink="/system/new/notification/allerts">BACK</button>
+				</mat-tab>
+				<mat-tab class="mat-tab" label="TERM DEPOSIT ACCOUNT STATEMENT" *ngIf="onShowAccountStatementTab">
+					<br>
+					<div id="print-section">
+						<div class="row" *ngIf="this.results">
+							<div class="col-md-4 col-sm-12">
+								<h4>Account ID: <strong>{{this.results.acid}}</strong></h4>
+							</div>
+							<div class="col-md-4 col-sm-12">
+								<h4>Account Balance: <strong>{{this.results.accountBalance | currency: 'KES'}}</strong>
+								</h4>
+							</div>
+							<div class="col-md-4 col-sm-12">
+								<h4>Account Status: <strong>{{this.results.accountStatus}}</strong></h4>
+							</div>
+						</div>
+						<div class="row" *ngIf="this.results">
+							<div class="col-md-3 col-sm-12">
+								<h4>Account Type:- <strong>{{this.results.accountType}}</strong> </h4>
+							</div>
+							<div class="col-md-3 col-sm-12">
+								<h4>Membership Code: <strong>{{this.results.customerCode}}</strong></h4>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<h4>Account Name:- <strong>{{this.results.accountName}}</strong></h4>
+							</div>
+						</div>
+						<h4 class="text-center"><strong>SAVINGS ACCOUNT STATEMENT REPORT FOR ACCOUNT
+								{{this.results.acid}}</strong>
+						</h4>
+						<mat-divider *ngIf="this.results"></mat-divider>
+						<br>
+						<div class="row">
+							<div class="col-md-4 col-sm-12">
+								<h4>FROM:- &nbsp;<strong>{{this.fromdate | date: 'yyyy-MM-dd'}}</strong> </h4>
+							</div>
+							<div class="col-md-4 col-sm-12">
+								<h4>TO:- &nbsp; <strong>{{this.todate | date: 'yyyy-MM-dd'}}</strong></h4>
+							</div>
+						</div>
+						<table class="table table-striped table-bordered table-sm row-border hover"
+							style="width: 100%;">
+							<thead>
+								<tr>
+									<th>No.</th>
+									<th>T. TYPE</th>
+									<th>T. CODE</th>
+									<th>T. AMOUNT</th>
+									<th>PART-TRAN</th>
+									<th>DESCRIPTION</th>
+									<th>DATE</th>
+									<th>TIME</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let item of this.account_statement, let i = index">
+									<td>{{i + 1}}</td>
+									<td>{{item.transaction_type}}</td>
+									<td>{{item.transaction_code}}</td>
+									<td>{{item.tran_amount | currency: 'KES'}}</td>
+									<td>{{item.part_tran_type}}</td>
+									<td>{{item.tran_particulars}}</td>
+									<td>{{item.tran_date | date: 'dd-MM-yyyy'}}</td>
+									<td>{{item.tran_date | date: 'hh:mm:ss a'}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<button type="button" class="pull-right btn btn-success btn-sm"
+						(click)="printAccountStatement()">PRINT</button>
+					<button type="button" class="pull-right btn btn-secondary btn-sm"
+						(click)="onExportAccountStatement()">EXPORT</button>
+					<br>
+					<hr>
+					<button *ngIf="displayBackButton" mat-raised-button type="button"
+						class="pull-left bg-secondary text-white"
+						routerLink="/system/term-deposit/account/maintenance">BACK</button>
+						<button *ngIf="displayApprovalBtn" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+							routerLink="/system/new/notification/allerts">BACK</button>
+
+				</mat-tab>
+				<mat-tab class="mat-tab" label="ACCOUNT DOCUMENTS" *ngIf="onShowAccountDocumentsTab">
+					<br>
+					<form [formGroup]="accountDocumentsForm" *ngIf="onShowImagesForm">
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Document Type</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<select formControlName="documentTitle" class="form-control">
+											<option value="" disabled>CHOOSE DOCUMENT</option>
+											<option *ngFor="let image of imageTypeArray" [value]="image">{{image}}
+											</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-3 col-sm-12 form-column">
+										<label class="start">Document</label>
+									</div>
+									<div class="col-md-6 col-sm-12">
+										<div class="form-group">
+											<div class="col-md-12 col-sm-12 form-column">
+												<input class="form-controls" type="file" required
+													(change)="onImageFileChange($event)">
+											</div>
+										</div>
+										<div class="form-group">
+											<mat-hint><small>Only png, jpeg accepted</small></mat-hint>
+										</div>
+										<div class="form-group">
+											<img [src]="imageSrc" *ngIf="imageSrc" class="col-md-6 img-preview">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div *ngIf="showButtons">
+							<button *ngIf="addButton" (click)="addAccountDocuments()"
+								class="pull-right btn btn-success btn-sm"
+								[disabled]="!accountDocumentsForm.valid || disableAddButton" mat-raised-button
+								color="primary" type="button">
+								Add Document File.
+							</button>
+							<button *ngIf="editButton" (click)="updateAccountDocuments()"
+								class="pull-right btn btn-primary btn-sm"
+								[disabled]="!accountDocumentsForm.valid || disableAddButton" mat-raised-button
+								color="primary" type="button">
+								Update Document File.
+							</button>
+						</div>
+					</form>
+					<div class="row table-action-row">
+						<div class="on-mobile-hide col-md-6 col-sm-12">
+							<strong>Account Document List</strong>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<input class="pull-right search form-control" (keyup)="applyAccountDocumentsFilter($event)"
+								placeholder="Search..." #input />
+						</div>
+					</div>
+					<div class="table-row">
+						<table mat-table matSort matTableExporter [dataSource]="accountDocumentsDataSource">
+							<ng-container matColumnDef="index">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+								<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+							</ng-container>
+							<ng-container matColumnDef="documentTitle">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Document Title</th>
+								<td mat-cell *matCellDef="let row">{{ row.documentTitle }}</td>
+							</ng-container>
+							<ng-container matColumnDef="view">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>View Document</th>
+								<td mat-cell *matCellDef="let row">
+									<button mat-icon-button [disabled]="disableActions" color="primary"
+										(click)="onView(row)">
+										<mat-icon>visibility</mat-icon>
+									</button>
+								</td>
+							</ng-container>
+							<ng-container matColumnDef="actions">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+								<td mat-cell *matCellDef="let row">
+									<button mat-icon-button [disabled]="disableActions" color="primary"
+										(click)="editAccountDocuments(row)">
+										<mat-icon>edit</mat-icon>
+									</button>
+									<button mat-icon-button [disabled]="disableActions"
+										(click)="deleteAccountDocuments(row)" color="warn">
+										<mat-icon>delete</mat-icon>
+									</button>
+								</td>
+							</ng-container>
+							<tr mat-header-row *matHeaderRowDef="accountDocumentsColumns"></tr>
+							<tr mat-row *matRowDef="let row; columns: accountDocumentsColumns;"></tr>
+							<tr class="mat-row" *matNoDataRow>
+								<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+							</tr>
+						</table>
+					</div>
+					<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]"
+						aria-label="Select page"></mat-paginator>
+					<br>
+
+					<button *ngIf="displayBackButton" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+						routerLink="/system/term-deposit/account/maintenance">BACK</button>
+					<button *ngIf="displayApprovalBtn" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+						routerLink="/system/new/notification/allerts">BACK</button>
+					<button *ngIf="!hideBtn" class="pull-right approval" mat-raised-button [color]="btnColor" type="submit"
+						(click)="onSubmit()">
+						<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+					</button>
+					<button *ngIf="hideRejectBtn" class="pull-right approval" mat-raised-button [color]="btnRejectColor"
+						(click)="onRejectAccount()">
+						{{rejectBtnText}}
+					</button>
+					<br>
+				</mat-tab>
+			</mat-tab-group>
+		</form>
+	</div>
+</mat-card>

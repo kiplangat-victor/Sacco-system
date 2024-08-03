@@ -1,0 +1,55 @@
+<div *ngIf="loading">
+	<p><small>Loading, please wait...</small></p>
+	<p>
+		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+	</p>
+</div>
+<div class="">
+	<div class="card-header text-center text-white bg-success">
+		<strong>ACCOUNTS APPROVAL</strong>
+	</div>
+	<div class="">
+		<mat-divider></mat-divider>
+		<br>
+		<div class="container-fluid">
+			<form [formGroup]="formData">
+				<div class="row">
+					<div class="col-md-6 col-sm-12">
+						Acid: &nbsp; &nbsp;<strong>{{this.accountsdata.acid}}</strong>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						Account Type: &nbsp; &nbsp;<strong>{{this.accountsdata.accountType}}</strong>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						Status: &nbsp; &nbsp;<strong>{{this.accountsdata.accountStatus}}</strong>
+					</div>
+					<div class="col-md-6 col-sm-12">
+						Verification: &nbsp; &nbsp;<strong>{{this.accountsdata.verifiedFlag}}</strong>
+					</div>
+					<mat-divider></mat-divider>
+					<br>
+					<div class="col-md-12 col-sm-12">
+						<div class="form-group">
+							<div class="col-md-5 form-column ">
+								<label class="start pull-left">Approval Manager<span
+										class="text-danger">*</span></label>
+							</div>
+							<div class="col-md-7 col-sm-12 form-column">
+								<input formControlName="approver" class="form-control"
+									[ngClass]="{ 'is-invalid': submitted && f.approver.errors }">
+								<mat-icon color="primary" (click)="approverCodeLookup()">
+									search</mat-icon>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<mat-divider></mat-divider>
+		<br>
+		<div class="example-button-row">
+			<button type="button" class="btn btn-info btn-sm pull-left" mat-dialog-close>CLOSE</button>
+			<button type="button" class="btn btn-success btn-sm pull-right" (click)="onSubmit()">SUBMIT</button>
+		</div>
+		<br>
+	</div>

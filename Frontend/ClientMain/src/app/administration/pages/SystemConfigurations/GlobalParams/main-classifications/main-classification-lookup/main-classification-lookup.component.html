@@ -1,0 +1,64 @@
+<div *ngIf="loading">
+  <p><small>Loading Assets Data, please wait...</small></p>
+  <p>
+    <mat-progress-bar mode="query"></mat-progress-bar>
+  </p>
+</div>
+<mat-card-header class="breadcrumb">
+  <div>Assets Classification Look-up</div>
+  <div class="col-md-6 col-sm-12 ml-auto">
+    <input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+  </div>
+</mat-card-header>
+<table mat-table [dataSource]="dataSource" matTableExporter matSort>
+  <ng-container matColumnDef="index">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+    <td mat-cell (click)="onSelect(row)" *matCellDef="let element; let i = index">
+      {{ i + 1 }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="assetClassificationCode">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      Ref. Code
+    </th>
+    <td mat-cell (click)="onSelect(row)" *matCellDef="let row">
+      {{ row.assetClassificationCode }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="assetClassificationName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      Name
+    </th>
+    <td mat-cell (click)="onSelect(row)" *matCellDef="let row">
+      {{ row.assetClassificationName }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="assetClassificationDescription">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      Description
+    </th>
+    <td mat-cell (click)="onSelect(row)" *matCellDef="let row">
+      {{ row.assetClassificationDescription }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="postedBy">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Posted BY</th>
+    <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.postedBy}} </td>
+  </ng-container>
+  <ng-container matColumnDef="verifiedFlag">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Verification</th>
+    <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+      <span *ngIf="row.verifiedFlag == 'Y' " class="badge badge-pill badge-primary">Verified</span>
+      <span *ngIf="row.verifiedFlag == 'N' " class="badge badge-pill badge-danger ">Unverified</span>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">
+      No data matches "{{ input.value }}"
+    </td>
+  </tr>
+</table>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" aria-label="Select page">
+</mat-paginator>

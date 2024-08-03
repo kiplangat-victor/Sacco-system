@@ -1,0 +1,58 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="query"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a>Cheque Configuration Maintenance
+		</div>
+	</mat-card-header>
+	<mat-divider></mat-divider>
+	<br>
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Function<span class="text-danger">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column ">
+							<select (change)="onSelectFunction($event)" class="form-control"
+								formControlName="function_type"
+								[ngClass]="{ 'is-invalid': submitted && f.function_type.errors }">
+								<option value="" disabled>-- CHOOSE FUNCTION --</option>
+								<option *ngFor="let flag of functionArray" [value]="flag">{{ flag }}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12" *ngIf="onsShowCode">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Cheque Config. Code<span class="text-danger">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="chargeCode" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.chargeCode.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="8" minlength="1" />
+							<mat-icon color="primary" (click)="chargeCodeLookup()"
+								*ngIf="onShowSearchIcon">search</mat-icon>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<hr>
+			<button mat-raised-button class="pull-left bg-secondary text-white" routerLink="/system/"
+				skipLocationChange="">BACK</button>
+			<button [disabled]="proceed" mat-raised-button type="submit" class="float-right" color="primary"> <span
+					*ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>PROCEED</button>
+			<br>
+		</form>
+	</div>
+</mat-card>

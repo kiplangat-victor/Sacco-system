@@ -1,0 +1,403 @@
+<mat-nav-list>
+  <div class="profile-card">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- <mat-icon style="font-size: 50px !important; height: 50px; width: 50px">account_circle</mat-icon> -->
+        <div class="header">
+          <p>
+            <small><b>Email:</b> {{ this.email }}</small>
+          </p>
+          <p>
+            <small><b>User :</b> {{ this.username }}</small>
+          </p>
+          <p>
+            <small><b>Role :</b>{{ this.role }}</small>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <small>Logged at:</small>
+    <small>IP address:</small> --> 
+
+  <mat-divider></mat-divider>
+  <h2 matSubheader style="color: white !important;" >Pages</h2>
+  <a *ngIf="authorized || forTeller" mat-list-item routerLinkActive="list-item-active" routerLink="/system" skipLocationChange
+    class="nav-title">
+    <mat-icon>dashboard</mat-icon> Dashboard</a>
+  <mat-accordion *ngIf="authorized" class="app-nav-accordion">
+    <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="nav-title">
+          <mat-icon>settings</mat-icon>Configurations
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-nav-list>
+        <!-- Global Params -->
+        <!-- <a mat-list-item routerLinkActive="list-item-active" [ngStyle]="{'background-color': customSidebarBg}"
+          routerLink="/system/configurations/global/linked/organization/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon> Organization
+        </a> -->
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/branches/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon> Branches
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/global/currency/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon> Currency
+        </a>
+        <!-- <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/global/holiday/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Holiday
+        </a> -->
+        <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/global/exceptions-codes/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon> Exceptions
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/configurations-member/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon> Customer Types
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/salary/charges/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Salary Charges
+        </a> 
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/configurations/cheque/charges/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Cheque Charges
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/global/gl-code/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon> GL Code
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/global/gl-subhead/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon> GL Subhead
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/global/mis-sector/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>MIS-Sector
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/global/mis-sub-sector/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>MIS Sub Sector
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/global/segment/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Segmentation
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/global/sub-segment/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Sub-Segmentation
+        </a>
+        <!-- <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/global/main-classification/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Assets Classification
+        </a> -->
+        <!-- <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/configurations/welfare/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Welfare Management
+        </a> -->
+      </mat-nav-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/configurations-employee/maintenance"
+    skipLocationChange>
+    <mat-icon>perm_contact_calendar</mat-icon> Employer
+  </a>
+  <!-- Charge Params -->
+
+  <mat-accordion *ngIf="authorized || forTeller" class="app-nav-accordion">
+    <mat-expansion-panel  class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="nav-title">
+          <mat-icon>settings_input_antenna</mat-icon>Charge Params
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-nav-list>
+        <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/charge/event-type/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Charge Type
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active"
+          routerLink="/system/configurations/charge/event-id/maintenance" skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Charge Definition
+        </a>
+      </mat-nav-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <a *ngIf="authorized" mat-list-item class="nav-title main-link" routerLinkActive="list-item-active"
+    routerLink="/system/interestcode/maintenance" skipLocationChange>
+    <mat-icon>home</mat-icon>
+    Interest Maintenance
+  </a>
+  <!-- Product -->
+  <mat-accordion *ngIf="authorized || forTeller"  class="app-nav-accordion">
+    <mat-expansion-panel  class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="nav-title">
+          <mat-icon>shopping_cart</mat-icon>Products
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-nav-list>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/product/office-product/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon> Office Product
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/product/loans/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon> Loan Product
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/product/savings/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Savings Product
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/product/overdrafts/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Overdraft Product
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/product/current-account/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Current Account
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/product/term-deposit/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Term Deposit
+        </a>
+
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="nav-title">
+              <mat-icon>subdirectory_arrow_right</mat-icon>Atm Product
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/loan-account/maintenance"
+              skipLocationChange>
+              <mat-icon>subdirectory_arrow_right</mat-icon>Card Type
+            </a>
+            <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/loan-disbursement/maintenance"
+              skipLocationChange>
+              <mat-icon>subdirectory_arrow_right</mat-icon>Order Management
+            </a>
+            <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/loans-account/information"
+              skipLocationChange>
+              <mat-icon>subdirectory_arrow_right</mat-icon>Inventory Management
+            </a>
+             </mat-nav-list>
+        </mat-expansion-panel>
+</mat-nav-list>
+  </mat-expansion-panel>
+  </mat-accordion>
+  <mat-accordion *ngIf="authorized || forTeller" class="app-nav-accordion">
+    <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="nav-title">
+          <mat-icon>group</mat-icon>
+          Membership Management
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-nav-list>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/membership/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Membership
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/group-membership/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>
+          Group Management
+        </a>
+      </mat-nav-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <a mat-list-item *ngIf="authorized || forTeller" routerLinkActive="list-item-active" routerLink="/system/configurations-collateral-maintenance"
+    skipLocationChange>
+    <mat-icon>settings_input_component</mat-icon>Collaterals
+  </a>
+  <mat-accordion *ngIf="authorized || forTeller" class="app-nav-accordion">
+    <mat-expansion-panel  class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="nav-title">
+          <mat-icon>account_balance_wallet</mat-icon>
+          Accounts Management
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-nav-list>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/office/account/maintenance"
+          skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>Office Accounts
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/savings-account/maintenance"
+          skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>Savings Accounts
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/term-deposit/account/maintenance"
+          skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>Fixed Deposit Account
+        </a>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="nav-title">
+              <mat-icon>subdirectory_arrow_right</mat-icon>Loan Accounts
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/loan-account/maintenance"
+              skipLocationChange>
+              <mat-icon>subdirectory_arrow_right</mat-icon>Accounts
+            </a>
+            <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/loan-disbursement/maintenance"
+              skipLocationChange>
+              <mat-icon>subdirectory_arrow_right</mat-icon>Disbursment
+            </a>
+            <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/loans-account/information"
+              skipLocationChange>
+              <mat-icon>subdirectory_arrow_right</mat-icon>Information
+            </a>
+            <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/loan-rescheduling"
+              skipLocationChange>
+              <mat-icon>subdirectory_arrow_right</mat-icon>Loan Restructure
+            </a>
+            <a mat-list-item routerLinkActive="list-item-active"
+              routerLink="/system/loans-account-repayment/maintenance" skipLocationChange>
+              <mat-icon>subdirectory_arrow_right</mat-icon>Pay-off Management
+            </a>
+            <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/loan/account/penalties/maintenance"
+              skipLocationChange>
+              <mat-icon>subdirectory_arrow_right</mat-icon>Manual Penalties
+            </a>
+            <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/loans-account/repayment"
+              skipLocationChange>
+              <mat-icon>subdirectory_arrow_right</mat-icon>Loan Repayment
+            </a>
+          </mat-nav-list>
+        </mat-expansion-panel>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="card-maintenance"
+          skipLocationChange="">
+          <mat-icon>credit_card</mat-icon>Card Application
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/liens-account/maintenance"
+          skipLocationChange="">
+          <mat-icon>subscriptions</mat-icon>Liens Management
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/savings-instruction-contribution/maintenance"
+          skipLocationChange="">
+          <mat-icon>shopping_basket</mat-icon>Savings Contribution
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/account-closure/maintenance"
+          skipLocationChange="">
+          <mat-icon color="accent">closed_caption</mat-icon>Account Closure
+        </a>
+      </mat-nav-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <mat-accordion *ngIf="authorized || forTeller" class="app-nav-accordion">
+    <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="nav-title">
+          <mat-icon>account_balance</mat-icon>
+          Transaction Maintenance
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-nav-list>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/transactions/maintenance" skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>Normal Transaction
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/salary-transaction/maintenance" skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon> Salary Transaction
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/batch-salaries-transaction/maintenance" skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon> Batch Transactions
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/transactions/cheques-maintenance" skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>Cheque Processing
+        </a>
+        <a mat-list-item class="nav-title" routerLinkActive="list-item-active"
+          routerLink="/system/transactions/standing/orders/maintenance" skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>
+          Standing Orders
+        </a>
+        <!-- <a mat-list-item class="nav-title" routerLinkActive="list-item-active"
+          routerLink="/system/transactions/bank/kra/list" skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>
+          KRA Tariffs
+        </a> -->
+        <!-- <a mat-list-item class="nav-title" routerLinkActive="list-item-active"
+          routerLink="/system/transactions/bank/exercise/duty/list" skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>
+          Excise duty
+        </a>
+          <a mat-list-item class="nav-title" routerLinkActive="list-item-active" *ngIf="false"
+            routerLink="/system/transactions/exciseduty" skipLocationChange="">
+            <mat-icon>subdirectory_arrow_right</mat-icon>
+            Excise duty
+          </a> -->
+      </mat-nav-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <a *ngIf="authorized && false" mat-list-item class="nav-title" routerLinkActive="list-item-active"
+    routerLink="/system/end-of-day" skipLocationChange="">
+    <mat-icon>date_range</mat-icon>
+    EOD Management
+  </a>
+  <mat-accordion *ngIf="authorized || forTeller" class="app-nav-accordion">
+    <mat-expansion-panel  class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="nav-title">
+          <mat-icon>library_books</mat-icon>Reports
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-nav-list>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/view-report" skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>View Reports
+        </a>
+        <!-- <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/sasra-reports" skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>UMRA Reports
+        </a> -->
+      </mat-nav-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <!-- <a *ngIf="authorized" mat-list-item class="nav-title main-link" routerLinkActive="list-item-active"
+    routerLink="/system/interestcode/maintenance" skipLocationChange>
+    <mat-icon>home</mat-icon>
+    Interest Maintenance
+  </a> -->
+
+    <a *ngIf="authorized" mat-list-item class="nav-title main-link" routerLinkActive="list-item-active"
+      routerLink="/system/new/notification/allerts" skipLocationChange="">
+      <mat-icon>notifications_active</mat-icon>
+      Approvals
+    </a>
+
+  <mat-accordion *ngIf="authorized || forTeller" class="app-nav-accordion">
+    <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="nav-title">
+          <mat-icon>security</mat-icon>
+          Access Management
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-nav-list>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/roles/maintenance" skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>Roles
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/workclass/maintenance"
+          skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>Work Class
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/workclassactions/maintenance"
+          skipLocationChange>
+          <mat-icon>subdirectory_arrow_right</mat-icon>Actions
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/manage/user" skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>Users
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/tellers/maintenance"
+          skipLocationChange="">
+          <mat-icon>subdirectory_arrow_right</mat-icon>Tellers
+        </a>
+      </mat-nav-list>
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-nav-list>

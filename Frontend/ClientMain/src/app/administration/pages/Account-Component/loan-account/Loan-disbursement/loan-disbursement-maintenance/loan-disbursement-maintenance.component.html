@@ -1,0 +1,60 @@
+<mat-card>
+    <mat-card-header class="breadcrumb">
+        <div>
+            <a routerLink="/system">Dashboard / </a>Loans Disbursement Maintenance
+        </div>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <div *ngIf="loading">
+        <p><small>Processing, please wait...</small></p>
+        <p>
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </p>
+    </div>
+    <br>
+    <br>
+    <div class="container-fluid">
+        <form class="form" [formGroup]="formData" #resetRequestsForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column ">
+                            <label class="start pull-left">Function<span class="warning">*</span></label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column ">
+                            <select (change)="onChange($event)" class="form-control" formControlName="function_type"
+                                [ngClass]="{ 'is-invalid': submitted && f.function_type.errors }">
+                                <option value="" disabled>-- CHOOSE FUNCTION --</option>
+                                <option *ngFor="let item of functionArray" [value]="item">{{ item }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12" *ngIf="showDisbursementAccountCode">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label class="start pull-left">Account Code<span class="warning">*</span></label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column ">
+                            <input type="text" formControlName="account_code" class="pull-right form-control"
+
+                                [ngClass]="{ 'is-invalid': submitted && f.account_code.errors }"
+                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                maxlength="30" /> &nbsp; &nbsp;
+                            <mat-icon color="primary" (click)="loansDisbursementAccountLookUp()">search</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="col-md-12 col-sm-12">
+                <button mat-raised-button class="pull-left bg-secondary text-white" routerLink="/system/"
+                    skipLocationChange="">BACK</button>
+                <button mat-raised-button type="submit" *ngIf="onShowSubmitButton" class="float-right" color="primary"
+                    style="margin-bottom:20px ;"> <span *ngIf="loading"
+                        class="spinner-border spinner-border-sm mr-1"></span>PROCEED</button>
+            </div>
+            <br />
+        </form>
+    </div>
+</mat-card>

@@ -1,0 +1,116 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="query"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a>
+			<a routerLink="/system/configurations/salary/charges/maintenance">Salary Charges Maintenenace / </a>Salary
+			Charges
+		</div>
+	</mat-card-header>
+	<div class="row">
+		<div class="col-md-4 col-sm-12">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<h4>Salary Charge Code: <strong>{{this.fmData.salaryChargeCode}}</strong></h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8 col-sm-12 row" *ngIf="onShowResults">
+			<div class="row" *ngIf="this.results">
+				<div class="col-md-3 col-sm-12">
+					<h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Posted ON:- <strong>{{this.results.postedTime | date}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Verified BY:- <strong>{{this.results.verifiedBy}}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<mat-divider></mat-divider>
+	<br>
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label class="start">Salary Charges Name <span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="name" class="form-control"
+							[ngClass]="{ 'is-invalid': submitted && f.name.errors }">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label class="start pull-left">Salary Charges From?
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<mat-radio-group (change)="handleChange($event)" class="pull-right"
+								aria-label="Select an option" formControlName="chargeFrom"
+								[ngClass]="{ 'is-invalid': submitted && f.chargeFrom.errors }">
+								<mat-radio-button value="employer" color="primary">EMPLOYER</mat-radio-button>
+								<mat-radio-button value="employee" color="warn">EMPLOYEE</mat-radio-button>
+							</mat-radio-group>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label class="start pull-left">Collect Charges ?
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<mat-radio-group (change)="handleChange($event)" class="pull-right"
+								aria-label="Select an option" formControlName="collectCharges"
+								[ngClass]="{ 'is-invalid': submitted && f.collectCharges.errors }">
+								<mat-radio-button value="Y" color="primary">YES</mat-radio-button>
+								<mat-radio-button value="N" color="warn">NO</mat-radio-button>
+							</mat-radio-group>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12" *ngIf="showEventId">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label class="start">Event ID. Code</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="eventId" class="form-control">
+							&nbsp; &nbsp;
+							<mat-icon *ngIf="showSearch" color="primary" (click)="eventIdCodeLookup()">
+								search</mat-icon>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<hr>
+			<br>
+			<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+				routerLink="/system/configurations/salary/charges/maintenance">BACK</button>
+			<button *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor" type="submit">
+				<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+			</button>
+			<br>
+		</form>
+	</div>
+</mat-card>

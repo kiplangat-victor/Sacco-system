@@ -1,0 +1,1453 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Loading, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/configurations-collateral-maintenance">Collateral Maintenenace / </a> Collateral
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-5 col-sm-12">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="showCollateralCode">
+          <h4>Collateral Code:- <strong>{{this.fmData.collateral_code}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7 col-sm-12 row" *ngIf="onShowResults">
+      <div class="row" *ngIf="this.results">
+        <div class="col-md-4 col-sm-12">
+          <h4>Verification:- <strong>{{this.results.entity.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <h4>Posted ON:- <strong>{{this.results.entity.postedTime | date}}</strong></h4>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <h4>Posted BY:- <strong>{{this.results.entity.postedBy}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="container-fluid">
+    <form action="" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <mat-tab-group mat-align-tabs="center">
+        <mat-tab class="mat-tab" label="General Details">
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Collateral Type
+                      <span class="text-danger" *ngIf="showWarning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <select (change)="onSelectionType($event)" class="form-control" formControlName="collateralType"
+                    class="form-control" [ngClass]="{'is-invalid':submitted && f.collateralType.errors}">
+                    <option value="" disabled>-- CHOOSE COLLATERAL TYPE --</option>
+                    <option *ngFor="let item of collateralTypeArray" [value]="item.value">
+                      {{item.name}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Collateral Value
+                    <span class="text-danger" *ngIf="showWarning">*</span>
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input type="number" formControlName="collateralValue" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.collateralValue.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="2" />
+                </div>
+
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Collateral Description
+                      <span class="text-danger" *ngIf="showWarning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="description" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.description.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Loan to Value. (UGX)
+                      <span class="text-danger" *ngIf="showWarning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" placeholder="0.00 UGX" formControlName="loanValue" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.loanValue.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="1">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Last Evaluation Date
+                      <span class="text-danger" *ngIf="showWarning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input [matDatepicker]="zpicker" formControlName="lastEvaluationDate" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.lastEvaluationDate.errors}" />
+                  <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="zpicker"></mat-datepicker-toggle>
+                  <mat-datepicker #zpicker></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Drawing Power. (%)
+                      <span class="text-danger" *ngIf="showWarning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" formControlName="percentageDrawingPower" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.percentageDrawingPower.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="2" minlength="1">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="">Withdrawal Fees. (UGX)</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" formControlName="chargeEventForWithdrawal" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="1">&nbsp; &nbsp;
+                  <mat-icon *ngIf="onShowSearchIcon" color="primary" (click)="withdrawalLookup()">search</mat-icon>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Market Value
+                    <span class="text-danger" *ngIf="showWarning">*</span>
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" formControlName="marketValue" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.marketValue.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Margin Percent (%)
+                      <span class="text-danger" *ngIf="showWarning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" formControlName="marginPercent" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.marginPercent.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="2" minlength="1">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Membership Code
+                    <span class="text-danger" *ngIf="showWarning">*</span>
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="customerCode" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.customerCode.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="3">
+                  &nbsp; &nbsp;
+                  <mat-icon *ngIf="onShowSearchIcon" color="primary" (click)="customerLookup()">
+                    search</mat-icon>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Member Name
+                    <span class="text-danger" *ngIf="showWarning">*</span>
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input readonly type="text" formControlName="customerName" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.customerName.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60" minlength="3">
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab *ngIf="onShowParticulars" class="mat-tab" label="PARTICULARS">
+          <br>
+          <div *ngIf="onShowShares">
+            <h4><strong>SHARE PARTICULARS</strong></h4>
+            <br>
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Company Details
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="text" formControlName="companyDetails" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="60" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Shares Capital
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="text" formControlName="sharesCapital" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="60" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Number of Shares Issued
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="text" formControlName="nosharesIsssued" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="12" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Contact Details
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="text" formControlName="contactDetails" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="100" minlength="2">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="onShowStocks">
+            <h4><strong>STOCK PARTICULARS</strong></h4>
+            <br>
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start">Penal Interest
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="applypenalInterest" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="12" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start">Statement Frequency
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <select class="form-control" formControlName="frequencyforSubmission">
+                      <option value="" disabled>-- SELECT FREQUENCY --</option>
+                      <option *ngFor="let flag of submissionFreqArray" [value]="flag">{{ flag }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start">Due Date
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input [matDatepicker]="dueDate1" formControlName="dueDate" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="10" minlength="10" />
+                    <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="dueDate1"></mat-datepicker-toggle>
+                    <mat-datepicker #dueDate1></mat-datepicker>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start">Review Date
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input [matDatepicker]="reviewDate" formControlName="reviewDate" class="form-control" />
+                    <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="reviewDate"></mat-datepicker-toggle>
+                    <mat-datepicker #reviewDate></mat-datepicker>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start">Withdrawn Date
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input [matDatepicker]="withdrawnDate" formControlName="withdrawnDate" class="form-control" />
+                    <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="withdrawnDate"></mat-datepicker-toggle>
+                    <mat-datepicker #withdrawnDate></mat-datepicker>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="onShowImmovable">
+            <h4><strong>IMMOVABLE PARTICULARS</strong></h4>
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Date of Purchase
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input [matDatepicker]="purchaseDate" formControlName="purchaseDate" class="form-control" />
+                    <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="purchaseDate"></mat-datepicker-toggle>
+                    <mat-datepicker #purchaseDate></mat-datepicker>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Property Document No.
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="text" formControlName="propertyDocumentNo" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="15" minlength="3">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Built Area
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="text" formControlName="builtArea" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="60" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Land Area
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="text" formControlName="landArea" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="60" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Unit Measurement
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="number" formControlName="unitMeasurement" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="60" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Property Address
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="text" formControlName="propertyAddress" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="60" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Age Building
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="text" formControlName="ageBuilding" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="100" minlength="1">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Leased
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <mat-radio-group class="pull-right" aria-label="Select an option" formControlName="leased">
+                      <mat-radio-button color="primary" value="Yes">Yes.</mat-radio-button>
+                      <mat-radio-button value="No">No. </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Leased Expiry date
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input [matDatepicker]="leasedExpiryDate" formControlName="leasedExpiryDate" class="form-control" />
+                    <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="leasedExpiryDate"></mat-datepicker-toggle>
+                    <mat-datepicker #leasedExpiryDate></mat-datepicker>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="onShowTermDeposits">
+            <h4><strong>TERM DEPOSIT PARTICULARS</strong></h4>
+            <br>
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Deposit Account No.
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="depositAccountNo" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="16" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Denominations No.
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="denominationsNo" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="16" minlength="1">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Apportioned Value No.
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="apportionedValue" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="15" minlength="1">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Lien Amount
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="lienAmount" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="12" minlength="1">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Full Benefit
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <mat-radio-group class="pull-right" aria-label="Select an option" formControlName="fullBenefit">
+                      <mat-radio-button color="primary" value="Y">Yes</mat-radio-button>
+                      <mat-radio-button value="N">No</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="showVehicleAndMachinaries">
+            <h4><strong>VEHICLES AND MACHINERIES PARTICULARS</strong> </h4>
+            <br>
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Year of Manufacture
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="yearofManufacture" class="date-own form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="4" minlength="4">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Date of Purchase
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input [matDatepicker]="dateofPurchase" formControlName="dateofPurchase" class="form-control" />
+                    <span> <mat-datepicker-toggle *ngIf="isEnabled" matSuffix
+                        [for]="dateofPurchase"></mat-datepicker-toggle></span>
+                    <mat-datepicker #dateofPurchase></mat-datepicker>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Manufacturer
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="text" formControlName="manufacture" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="60" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Model
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="text" formControlName="model" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="20" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Machine No.
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="text" formControlName="machineNo" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="20" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Engine No.
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="text" formControlName="engineNo" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="20" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Registered Owner Name
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="text" formControlName="registeredownerName" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="60" minlength="3">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Chasis No.
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="text" formControlName="chasisNumber" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="20" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start ">Registration No.
+                      <span class="text-danger" *ngIf="showWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column ">
+                    <input type="text" formControlName="registrationNumber" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="20" minlength="2">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button mat-raised-button type="submit" class=" bg-secondary text-white"
+                routerLink="/system/configurations-collateral-maintenance">BACK</button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab class="mat-tab" label="Receipt and Payment">
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Name</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="name" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Receipt Type</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="receipt_type" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Receipt Amount. (UGX)
+                      </label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" placeholder="0.00 UGX" formControlName="receipt_amount" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="1">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Payment Type</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="payment_type" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Payment Amount. (UGX)
+                      </label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" placeholder="0.00 UGX" formControlName="payment_amount" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="1">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Mode of Pay</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input type="text" formControlName="mode_of_pay" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60" minlength="2" />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Due Date</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input [matDatepicker]="due_date_for_rec" formControlName="due_date_for_rec" class="form-control"/>
+                  <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="due_date_for_rec"></mat-datepicker-toggle>
+                  <mat-datepicker #due_date_for_rec></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Paid/Received Date
+                      </label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input [matDatepicker]="paid_received_date" formControlName="paid_received_date" class="form-control" />
+                  <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="paid_received_date"></mat-datepicker-toggle>
+                  <mat-datepicker #paid_received_date></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Start Date</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input [matDatepicker]="date_from" formControlName="date_from" class="form-control" />
+                  <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="date_from"></mat-datepicker-toggle>
+                  <mat-datepicker #date_from></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">End Date</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input [matDatepicker]="to_date" formControlName="to_date" class="form-control"/>
+                  <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="to_date"></mat-datepicker-toggle>
+                  <mat-datepicker #to_date></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Proof Verified Date
+                      </label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input [matDatepicker]="proof_verified_date" formControlName="proof_verified_date"
+                    class="form-control" />
+                  <mat-datepicker-toggle *ngIf="isEnabled" matSuffix
+                    [for]="proof_verified_date"></mat-datepicker-toggle>
+                  <mat-datepicker #proof_verified_date></mat-datepicker>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">City</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="city" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">State</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="state" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Postal Code</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="postal_code" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="10" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Address</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="address" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="55" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Remarks</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input formControlName="remarks" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="120" minlength="2" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button mat-raised-button type="submit" class=" bg-secondary text-white"
+                routerLink="/system/configurations-collateral-maintenance">BACK</button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab class="mat-tab" label="Insurance">
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Insurance Type</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="insuranceType" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="40" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Insurer Details</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input formControlName="insurerDetails" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="120" minlength="2" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Policy No.</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="policyNo" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Policy Amount. (UGX)</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" formControlName="policyAmount" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="1">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Risk Cover Start Date</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input [matDatepicker]="risk_cover_start_date" formControlName="risk_cover_start_date"
+                    class="form-control">
+                  <span>
+                    <mat-datepicker-toggle matSuffix [for]="risk_cover_start_date"></mat-datepicker-toggle>
+                  </span>
+                  <mat-datepicker #risk_cover_start_date></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Risk Cover End Date</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input [matDatepicker]="risk_cover_end_date" formControlName="risk_cover_end_date"
+                    class="form-control">
+                  <span>
+                    <mat-datepicker-toggle matSuffix [for]="risk_cover_end_date"></mat-datepicker-toggle>
+                  </span>
+                  <mat-datepicker #risk_cover_end_date></mat-datepicker>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Last Premium Paid Date</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input [matDatepicker]="last_premium_paid_date" formControlName="last_premium_paid_date"
+                    class="form-control">
+                  <span>
+                    <mat-datepicker-toggle matSuffix [for]="last_premium_paid_date"></mat-datepicker-toggle>
+                  </span>
+                  <mat-datepicker #last_premium_paid_date></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Premium Amount. (UGX)</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input type="number" placeholder="0.00 UGX" formControlName="premiumAmount" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="1">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Frequency</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <select class="form-control" formControlName="frequency">
+                    <option value="" disabled>-- SELETC FREQUENCY --</option>
+                    <option *ngFor="let flag of submissionFreqArray" [value]="flag">{{ flag }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Items Insured</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" formControlName="itemsInsured" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="6" minlength="1" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button mat-raised-button type="submit" class=" bg-secondary text-white"
+                routerLink="/system/configurations-collateral-maintenance">BACK</button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab class="mat-tab" label="Inspection">
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Inspection Type</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="inspection_type" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Inspection Emp ID</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="inspection_emp_id" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">City</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="insp_city" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">State</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="insp_state" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Postal Code</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" placeholder="E.G 00001" formControlName="insp_postal_code" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="3" />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Address</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="insp_address" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="100" minlength="2">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Telephone Number</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" placeholder="254701234567" formControlName="insp_telephone_no"
+                    class="form-control" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="12">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Due Date for Visit</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input [matDatepicker]="visitpicker" formControlName="due_date_for_visit" class="form-control"/>
+                  <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="visitpicker"></mat-datepicker-toggle>
+                  <mat-datepicker #visitpicker></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Date of Visit</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input [matDatepicker]="date_of_visit" formControlName="date_of_visit" class="form-control" />
+                  <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="date_of_visit"></mat-datepicker-toggle>
+                  <mat-datepicker #date_of_visit></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Inspected value. (UGX)</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" placeholder="0.00 UGX" formControlName="inspected_value" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="1">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Remarks</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input rows="10" formControlName="insp_remarks" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="120" minlength="2" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button mat-raised-button type="submit" class=" bg-secondary text-white"
+                routerLink="/system/configurations-collateral-maintenance">BACK</button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab class="mat-tab" label="Sales Notes">
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Broker Name</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" placeholder="JOHN DOE" formControlName="brokerName" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="60" minlength="3">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Sent for sale On</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input [matDatepicker]="sent_for_sale_on" formControlName="sent_for_sale_on" class="form-control" />
+                  <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="sent_for_sale_on"></mat-datepicker-toggle>
+                  <mat-datepicker #sent_for_sale_on></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Review Date</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input [matDatepicker]="sales_review_date" formControlName="sales_review_date" class="form-control"/>
+                  <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="sales_review_date"></mat-datepicker-toggle>
+                  <mat-datepicker #sales_review_date></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Due Date</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input [matDatepicker]="sales_due_date" formControlName="sales_due_date" class="form-control"/>
+                  <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="sales_due_date"></mat-datepicker-toggle>
+                  <mat-datepicker #sales_due_date></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Min Expected Price. (UGX)</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input type="number" placeholder="0.00 UGX" formControlName="expected_min_price" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="2" />
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Proceeds Received On
+                      </label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input [matDatepicker]="proceeds_received_on" formControlName="proceeds_received_on"
+                    class="form-control"  />
+                  <mat-datepicker-toggle *ngIf="isEnabled" matSuffix
+                    [for]="proceeds_received_on"></mat-datepicker-toggle>
+                  <mat-datepicker #proceeds_received_on></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Sales Proceed Received. (UGX)
+                      </label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input type="number" placeholder="0.00 UGX" formControlName="sales_proceed_received"
+                    class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="2" />
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Remarks</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="sales_notes" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="120" minlength="2">
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <mat-divider></mat-divider>
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">
+                    <h4><strong>FEES</strong></h4>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Collected Percentage. (%)
+                      </label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" formControlName="percentage_amount_collected" maxlength="2" class="form-control"
+
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="2" minlength="1">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start ">Collected Amount. (UGX)
+                      </label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" formControlName="collected_amount" class="form-control" placeholder="0.00 UGX"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12" minlength="1">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button mat-raised-button type="submit" class=" bg-secondary text-white"
+                routerLink="/system/configurations-collateral-maintenance">BACK</button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab class="mat-tab" label="DOCUMENTS">
+          <br>
+          <form [formGroup]="documentsForm">
+            <div class="row" *ngIf="onShowDocumentsForm">
+              <div class="col-md-5 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-5 col-sm-12 form-column">
+                    <label class="start ">Document Title</label>
+                  </div>
+                  <div class="col-md-7 col-sm-12 form-column">
+                    <input type="text" formControlName="documentTitle" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="30" minlength="2">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-3 col-sm-12 form-column">
+                    <label class="start ">Document</label>
+                  </div>
+                  <div class="col-md-8 col-sm-12">
+                    <div class="form-group">
+                      <div class="col-md-12 col-sm-12 form-column">
+                        <input class="form-controls" type="file" required (change)="onImageFileChange($event)">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <mat-hint><small>Only png, jpeg accepted</small></mat-hint>
+                    </div>
+                    <div class="form-group">
+                      <img [src]="imageSrc" *ngIf="imageSrc" class="col-md-6 img-preview">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="showButtons">
+              <button type="button" class="pull-right btn btn-success btn-sm" *ngIf="onShowAddButton"
+                (click)="onAddDocuments()">ADD</button>
+              <button type="button" class="pull-right btn btn-success btn-sm" *ngIf="onShowUpdateButton"
+                (click)="onUpdateDocument()">UPDATE</button>
+              <button type="button" class="pull-right btn btn-primary btn-sm" (click)="onInitImagesForm()">RESET
+                FIELDS</button>
+              <button type="button" class="pull-right btn btn-secondary btn-sm" (click)="documnetsClear()">CLEAR
+                ALL</button>
+            </div>
+          </form>
+          <table class="table table-striped table-bordered table-sm row-border hover" style="width: 100%;">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Document Title</th>
+                <th *ngIf="showTableAction">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of this.collateralDocumentsArray, let i = index">
+                <td>{{i + 1}}</td>
+                <td>{{item.documentTitle}}</td>
+                <td>
+                  <mat-icon *ngIf="showTableOperation" color="primary" (click)="onEditDocument(i)">edit</mat-icon>
+                  &nbsp; &nbsp;
+                  <mat-icon *ngIf="showTableOperation" color="accent"
+                    (click)="onDeleteDoument(i)">delete_sweep</mat-icon>
+                  <mat-icon color="primary" *ngIf="onViewDocument" (click)="onViewDoument(i)">visibility</mat-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button mat-raised-button type="submit" class=" bg-secondary text-white"
+                routerLink="/system/configurations-collateral-maintenance">BACK</button>
+              <button mat-raised-button type="submit" *ngIf="onShowSubmitButton" class="float-right" color="primary"
+                style="margin-bottom:20px ;">SUBMIT</button>
+              <button mat-raised-button type="submit" *ngIf="onShowModifyButton" class="float-right" color="primary"
+                style="margin-bottom:20px ;">MODIFY</button>
+              <button mat-raised-button type="submit" *ngIf="onShowVerifyButton" class="float-right" color="primary"
+                style="margin-bottom:20px ;">VERIFY</button>
+              <button mat-raised-button type="submit" *ngIf="onShowDeleteButton" class="float-right" color="accent"
+                style="margin-bottom:20px ;">DELETE</button>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </form>
+  </div>
+</mat-card>

@@ -1,0 +1,99 @@
+
+<mat-card>
+    <div *ngIf="loading">
+      <p><small>Processing, please wait...</small></p>
+      <p>
+        <mat-progress-bar mode="query"></mat-progress-bar>
+      </p>
+    </div>
+      <mat-card-header  class="breadcrumb">
+        <div>Share Capital Params</div>
+    </mat-card-header>
+    <div class="row">
+      <div class="col-md-4 col-sm-12">
+          <h4>Function</h4>
+          <p>{{this.function_type}}</p>
+      </div>
+      <div class="col-md-4 col-sm-12">
+          <h4>Branch Ref Code</h4>
+          <p>{{this.shareCapitalCode}}</p>
+      </div>
+      <div class="col-md-4 col-sm-12">
+        <div class="row">
+          <div class="col-md-4">
+            <h4>Posted By</h4>
+            <p>{{this.postedBy}}</p>
+          </div>
+          <div class="col-md-4">
+          <h4>Verified Flag</h4>
+          <p>{{this.verifiedFlag}}</p>
+          </div>
+          <div class="col-md-4">
+          <h4>Verified By</h4>
+          <p>{{this.verifiedBy}}</p>
+          </div>
+        </div>
+      </div>
+  </div>
+    <mat-divider></mat-divider>
+    <br>
+
+    <div class="container-fluid">
+      <form
+      class="form"
+      [formGroup]="formData"
+      (ngSubmit)="onSubmit()"
+      #resetRequestsForm="ngForm"
+      novalidate
+    >
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+              <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-right">Share Capital unit<span
+                          class="warning">*</span></label>
+              </div>
+              <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" class="form-control" formControlName="share_capital_unit">
+              </div>
+          </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+              <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-right">Shares Capital Amount per unit<span
+                          class="warning">*</span></label>
+              </div>
+              <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" class="form-control" formControlName="share_capital_amount_per_unit">
+              </div>
+          </div>
+      </div>
+  </div>
+  <br>
+  <div class="row">
+      <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+              <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-right">Shares Min Unit<span class="warning">*</span></label>
+              </div>
+              <div class="col-md-6 col-sm-12 form-column">
+                  <input type="number" class="form-control" formControlName="share_min_unit">
+              </div>
+          </div>
+      </div>
+  </div>
+      <br />
+      <button [routerLink]="['../../maintenance']" skipLocationChange class="pull-left"  mat-raised-button color="default">
+        Back
+      </button>
+      <button mat-raised-button color="primary" type="submit" class="pull-right" *ngIf="isEnabled && function_type != 'VERIFY'">SUBMIT</button>
+      <button mat-raised-button color="primary" type="submit" class="pull-right" *ngIf="function_type === 'VERIFY' ">VERIFY</button>
+      <button mat-raised-button color="warn" type="submit" class="pull-right" *ngIf="function_type === 'D-Delete'">Delete</button>
+      <br/>
+    </form>
+      </div>
+    </mat-card>
+
+
+

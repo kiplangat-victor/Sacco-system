@@ -1,0 +1,44 @@
+<div *ngIf="loading">
+  <p><small>Loading Event Type Data, please wait...</small></p>
+  <p>
+    <mat-progress-bar mode="query"></mat-progress-bar>
+  </p>
+</div>
+<mat-card-header class="breadcrumb">
+  <div>Event Types Look-up</div>
+  <div class="col-md-6 col-sm-12 ml-auto">
+    <input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+  </div>
+</mat-card-header>
+  <div class="table-row">
+    <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+      <ng-container matColumnDef="index">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+        <td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+      </ng-container>
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> CODE </th>
+        <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.eventTypeCode}} </td>
+      </ng-container>
+      <ng-container matColumnDef="eventTypeName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.eventTypeName}} </td>
+      </ng-container>
+      <ng-container matColumnDef="postedBy">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Posted BY</th>
+        <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.postedBy}} </td>
+      </ng-container>
+      <ng-container matColumnDef="verifiedFlag">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Verification</th>
+        <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+          <span *ngIf="row.verifiedFlag == 'Y' " class="badge badge-pill badge-primary">Verified</span>
+          <span *ngIf="row.verifiedFlag == 'N' " class="badge badge-pill badge-danger ">Unverified</span> </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+  </div>
+  <mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>

@@ -1,0 +1,141 @@
+<mat-card>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>Charge Preferentials Maintenenace
+    </div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Function<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <select class="form-control" formControlName="function_type"
+                [ngClass]="{ 'is-invalid': submitted && f.function_type.errors }">
+                <option value="" disabled>-- Choose Function --</option>
+                <option *ngFor="let flag of functionArray" [value]="flag">{{ flag }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Charge Preferentials<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <select (change)="onSelectPreferential($event)" class="form-control" formControlName="chrg_preferential"
+                [ngClass]="{ 'is-invalid': submitted && f.chrg_preferential.errors }">
+                <option value="" disabled>-- Choose Function --</option>
+                <option *ngFor="let flag of  chargePreferetialsArrays" [value]="flag">{{ flag }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div *ngIf="this.showAccountInput" class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Account ID<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-5 col-sm-12 form-column ">
+              <input [required]="this.showAccountInput" type="text" [value]="this.account_id"
+                formControlName="account_id" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.account_id.errors }" />
+            </div>
+            <div class="col-md-1 col-sm-12 form-column ">
+              <mat-icon (click)="eventId()">search</mat-icon>
+            </div>
+          </div>
+          <div *ngIf="this.showCifInput" class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">CIF ID<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-5 col-sm-12 form-column ">
+              <input [required]="this.showCifInput" type="text" [value]="this.cif_id" formControlName="cif_id"
+                class="pull-right form-control" [ngClass]="{ 'is-invalid': submitted && f.cif_id.errors }" />
+              &nbsp;
+              <mat-icon (click)="eventId()">search</mat-icon>
+            </div>
+            <!-- <div class="col-md-1 col-sm-12 form-column ">
+                <mat-icon (click)="eventId()">search</mat-icon>
+                </div> -->
+          </div>
+          <div *ngIf="this.showContractInput" class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">OrganizationID<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-5 col-sm-12 form-column ">
+              <input [required]="this.showContractInput" type="text" [value]="this.organization_name"
+                formControlName="organization_id" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.organization_id.errors }" />
+            </div>
+            <div class="col-md-1 col-sm-12 form-column ">
+              <mat-icon (click)="organizationIdLookup()">search</mat-icon>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-6 col-sm-12">
+        </div>
+      </div>
+
+      <div *ngIf="this.showChargeInput" class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Charge Definition<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-5 col-sm-12 form-column ">
+              <input [required]="this.showChargeInput" type="text" [value]="this.event_id" formControlName="event_id"
+                class="pull-right form-control" [ngClass]="{ 'is-invalid': submitted && f.event_id.errors }" />
+
+            </div>
+            <div class="col-md-1 col-sm-12 form-column ">
+              <mat-icon (click)="eventId()">search</mat-icon>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <mat-hint>{{this.event_id_desc}}</mat-hint>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Charge Type<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input type="text" [value]="this.event_type" formControlName="event_type" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.event_type.errors }" />
+              <!-- <mat-icon *ngIf="this.showLokup"  (click)="eventType()">search</mat-icon> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <mat-hint>{{this.event_type_desc}}</mat-hint>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <button class="pull-right" mat-raised-button color="primary" type="submit">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        PROCEED
+      </button>
+      <br />
+    </form>
+  </div>
+</mat-card>

@@ -1,0 +1,152 @@
+<mat-card>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/configurations/charge/preferentials/maintenance">Charge Preferentials Maintenenace / </a>Charge Preferential
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-4 col-sm-12">
+      <h4>Function</h4>
+      <p>{{this.function_type}}</p>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <h4>Event Type</h4>
+      <p>{{this.event_type_description }}</p>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <h4>Event Id</h4>
+      <p>{{this.event_id}}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 col-sm-12">
+      <h4>Charge Preferential</h4>
+      <p>{{this.chrg_preferential}}</p>
+    </div>
+    <div *ngIf="this.cif_id" class="col-md-4 col-sm-12">
+      <h4>CIF Id</h4>
+      <p>{{this.cif_id}}</p>
+    </div>
+    <div *ngIf="this.account_id" class="col-md-4 col-sm-12">
+      <h4>Account Id</h4>
+      <p>{{this.account_id}}</p>
+    </div>
+    <div *ngIf="this.organization_id" class="col-md-4 col-sm-12">
+      <h4>Organization</h4>
+      <p>{{this.organization_name}}</p>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Effective From</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input [matDatepicker]="zpicker" formControlName="start_date" class="form-control" />
+              <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="zpicker"></mat-datepicker-toggle>
+              <mat-datepicker #zpicker></mat-datepicker>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Expiry Date.</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input [matDatepicker]="kpickerm" oninput="this.value=this.value.toUpperCase()" formControlName="end_date"
+                class="form-control" />
+              <mat-datepicker-toggle *ngIf="isEnabled" matSuffix [for]="kpickerm"></mat-datepicker-toggle>
+              <mat-datepicker #kpickerm></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Charge Derivation <span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <select (change)="onSelectAmountDerv($event)" class="form-control" formControlName="chrg_derivation"
+                [ngClass]="{ 'is-invalid': submitted && f.chrg_derivation.errors }">
+                <option value="" disabled>-- Choose Function --</option>
+                <option *ngFor="let flag of  amtDerivationArrays" [value]="flag">{{ flag }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div *ngIf="showPercentageField" class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Percentage <span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input type="text" formControlName="percentage_val" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.percentage_val.errors }" />
+            </div>
+          </div>
+          <div *ngIf="showFixedAmtField" class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Fixed Amount <span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input type="text" formControlName="fixed_amt" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.fixed_amt.errors }" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Min. Charge</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" [value]="this.min_amt_ccy" formControlName="min_amt_ccy"
+                class="currency pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.min_amt_ccy.errors }" />
+              <mat-icon *ngIf="isEnabled" (click)="minAmtCurrencyLookup()">search</mat-icon>
+              <input type="number" formControlName="min_amt" class="currency-value pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.min_amt.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Max Charge<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" [value]="this.max_amt_ccy" formControlName="max_amt_ccy"
+                class="currency pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.max_amt_ccy.errors }" />
+              <mat-icon *ngIf="isEnabled" (click)="maxAmtCurrencyLookup()">search</mat-icon>
+              <input type="number" formControlName="max_amt" class="currency-value pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.max_amt.errors }" />
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <button class="pull-left" routerLink="../../maintenance" mat-raised-button color="default" type="button">
+        BACK
+      </button>
+      <button *ngIf="isEnabled" class="pull-right" mat-raised-button color="primary" type="submit">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        SUBMIT
+      </button>
+      <br />
+    </form>
+  </div>
+</mat-card>

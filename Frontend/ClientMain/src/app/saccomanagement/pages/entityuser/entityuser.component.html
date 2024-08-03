@@ -1,0 +1,200 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/saccomanagement">Dashboard / </a>
+			<a routerLink="/saccomanagement/entity-users/maintenance">Entity User Management / </a> Entity User
+		</div>
+	</mat-card-header>
+	<div class="row">
+		<div class="col-md-4 col-sm-12">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<h4>UserName: <strong>{{this.fmData.username}}</strong></h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8 col-sm-12 row" *ngIf="onShowResults">
+			<div class="row" *ngIf="this.results">
+				<div class="col-md-3 col-sm-12">
+					<h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Posted ON:- <strong>{{this.results.postedTime | date}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Verified BY:- <strong>{{this.results.verifiedBy}}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<mat-divider></mat-divider>
+	<br>
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label class="start pull-left" for="">Entity ID<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input (keyup)="entityIdKeyUp($event)" type="text" class="form-control"
+								formControlName="entityId" maxlength="8"
+								[ngClass]="{ 'is-invalid': submitted && f.entityId.errors }">
+							&nbsp; &nbsp;
+							<mat-icon color="primary" (click)="entityIDLookup()">search
+							</mat-icon>
+						</div>
+					</div>
+				</div>
+				<!-- <div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label class="start pull-left" for="">Membership Code<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input (keyup)="onKeyUp($event)" type="text" class="form-control"
+								formControlName="memberCode" maxlength="8">
+							&nbsp; &nbsp;
+							<mat-icon color="primary" (click)="membershipLookup()">search
+							</mat-icon>
+						</div>
+					</div>
+				</div> -->
+				<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" *ngFor="let item of this.listOfErrors">
+					<div class="alert alert-danger alert-dismissible fade show" role="alert">
+						<strong>{{item.field}}:</strong> {{item.defaultMessage}}.
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"
+							onclick="this.parentElement.style.display='none';" matTooltip="Close the widget">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">First Name<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input required type="text" maxlength="60" formControlName="firstName"
+								class="form-control" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Last Name<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input required type="text" maxlength="60" formControlName="lastName"
+								class="form-control" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">E-Mail Adress<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input maxlength="60" formControlName="email" class="form-control" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Phone Number<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="phoneNo" class="form-control"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								minlength="10" maxlength="12" />
+						</div>
+					</div>
+				</div>
+				<!-- <div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Entity Branch<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input required type="text" formControlName="solCode" class="form-control"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								minlength="3" maxlength="6" /> &nbsp;
+							<mat-icon color="primary" (click)="branchesCodeLookup()">search</mat-icon><br>
+						</div>
+					</div>
+				</div> -->
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">User Role<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column ">
+							<select (change)="onSelect($event)" class="form-control" formControlName="roleFk">
+							  <option value="" disabled>-- CHOOSE ROLE --</option>
+							  <option *ngFor="let item of this.rolesArray" [value]="item.id"> {{ item.name }}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Work Class<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column ">
+							<select class="form-control" formControlName="workclassFk">
+								<option value="" disabled>-- CHOOSE WORK CLASS --</option>
+								<option *ngFor="let item of this.workClassArray" [value]="item.id">{{ item.workClass }}
+								</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label class="start pull-left">Is a teller? <span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<mat-radio-group aria-label="Select an option" formControlName="isTeller">
+								<mat-radio-button [disabled]="disableTeller" value="Yes"
+									color="primary">Yes</mat-radio-button>
+								<mat-radio-button [disabled]="disableTeller" value="No">No</mat-radio-button>
+							</mat-radio-group>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<hr>
+			<br>
+			<br>
+			<br>
+			<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+				routerLink="/saccomanagement/entity-users/maintenance">BACK</button>
+			<button [disabled]="submitting" *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor"
+				type="submit">
+				<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+			</button>
+			<br>
+		</form>
+	</div>
+</mat-card>

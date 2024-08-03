@@ -1,0 +1,75 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$dashboard-master-palette: (
+  50: #E3F2FD,
+  100: #BBDEFB,
+  200: #90CAF9,
+  300: #64B5F6,
+  400: #42A5F5,
+  500: #2196F3,
+  600: #1E88E5,
+  700: #1976D2,
+  800: #1565C0,
+  900: #0D47A1,
+  contrast: (
+        50: rgba(black, 0.87),
+        100: rgba(black, 0.87),
+        200: rgba(black, 0.87),
+        300: rgba(black, 0.87),
+        400: rgba(black, 0.87),
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: rgba(black, 0.87),
+        A200: rgba(black, 0.87),
+        A400: white,
+        A700: white,
+  )
+);
+
+$dashboard-stone-master-palette: (
+  50: #E3F2FD,
+  100: #BBDEFB,
+  200: #90CAF9,
+  300: #64B5F6,
+  400: #42A5F5,
+  500: #2196F3,
+  600: #1E88E5,
+  700: #1976D2,
+  800: #1565C0,
+  900: #0D47A1,
+  contrast: (
+     50: rgba(black, 0.87),
+     100: rgba(black, 0.87),
+     200: rgba(black, 0.87),
+     300: rgba(black, 0.87),
+     400: rgba(black, 0.87),
+     500: white,
+     600: white,
+     700: white,
+     800: white,
+     900: white,
+     A100: rgba(black, 0.87),
+     A200: rgba(black, 0.87),
+     A400: white,
+     A700: white,
+  )
+);
+
+$dashboard-master-primary: mat.define-palette($dashboard-master-palette, 900);
+$dashboard-master-accent: mat.define-palette($dashboard-stone-master-palette, 400);
+
+$dashboard-master-theme: mat.define-light-theme((color: (primary: $dashboard-master-primary,
+        accent: $dashboard-master-accent,
+      ),
+      density: 0,
+    ));
+
+@include mat.core-theme($dashboard-master-theme);
+@include mat.button-theme($dashboard-master-theme);
+@include mat.form-field-theme($dashboard-master-theme);
+@include mat.input-theme($dashboard-master-theme);

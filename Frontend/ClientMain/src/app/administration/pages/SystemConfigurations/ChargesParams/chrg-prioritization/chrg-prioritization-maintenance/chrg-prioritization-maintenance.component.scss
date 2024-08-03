@@ -1,0 +1,148 @@
+mat-card{
+    width: 100%;
+    height: 100%;
+  }
+  th{
+    text-align: left !important;
+  }
+  table{
+    font-weight: 100px;
+    font-size: 12px;
+    font-family: monospace;
+  }
+  
+  .actionButton {
+    min-width: unset!important;
+    height: 25px;
+    line-height: 25px;
+    padding: auto;
+    margin: 2px;
+  
+    .mat-icon {
+      font-size: 25px;
+      height: 25px;
+      line-height: 25px;
+    }
+  }
+  .update{
+    color: rgb(0, 0, 170);
+    font-weight: 800;
+    font-style: bolder;
+    padding: 5px;
+    padding-top:5px;
+    margin: 5px;
+  }
+  .danger{
+    color: rgb(255, 92, 92) !important;
+    font-weight: 900;
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+  }
+  button{
+    margin-top:5px;
+    margin-bottom: 10px;
+  }
+  .grossPay{
+    background-color:darkgreen;
+    color:white;
+    font-style: italic;
+    font-weight: 600;
+    border-radius: 4px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .rowCards{
+    margin-top:4px !important;
+    margin-bottom:4px !important;
+  }
+  .table-data{
+    width: 100% !important;
+    overflow-x:auto !important;
+  }
+  mat-form-field{
+      width: 100%;
+  }
+  // .form-data{
+  //     text-align: justify !important;
+  // }
+  .form-input {
+      width: max-content !important;
+  }
+  .form-group{
+    display: flex !important;
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+    font-size: 12px !important;
+    // flex: end;
+    // justify-content: flex-end !important;
+  }
+  // .start{
+  //   // justify-self: flex-start !important;
+  //   float: left !important;
+  // }
+  // .end{
+  //   float: right !important;
+  //   text-align: right !important;
+  //   // justify-self: flex-start !important;
+  // }
+  .form-column {
+    display: flex;
+  }
+  .form-control{
+    width: 80%;
+    height: 25px !important;
+    font-size: 10px;
+    font-family: monospace;
+    border-radius:  0px;
+  }
+  // .pull-right{
+  //   float: right !important;
+  // }
+  textarea{
+    height: 50px !important;
+  }
+  mat-icon{
+    cursor: pointer;
+    // justify-content: unset !important;
+  }
+  label{
+    padding-left: 20px !important;
+  }
+  .form-data-fixed {
+    width: 57% !important;
+  }
+  .custom{
+    background-color: red;;
+  }
+  .currency{
+    width: 15%;
+  }
+  .currency-value{
+    width: 58%;
+  }
+  .warning{
+    color: rgb(255, 127, 77);;
+  }
+  .block{
+    display: block !important;
+  }
+  .flex{
+    display: flex;
+  }
+  .drop-down{
+    font-size: 8px !important;
+    color: black !important;
+    padding: 0px !important;
+  }
+  .row{
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+  }
+  

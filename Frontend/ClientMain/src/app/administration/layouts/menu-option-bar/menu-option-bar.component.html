@@ -1,0 +1,25 @@
+
+  <mat-toolbar>
+  <span class="example-spacer"></span>
+  
+  <form
+  class="form"
+  [formGroup]="formData"
+  (ngSubmit)="onSubmit()"
+  #resetRequestsForm="ngForm"
+  novalidate
+>  
+    <div class="form-group">
+        <input type="text" [value]="this.event_type" formControlName="event_type" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.event_type.errors }" />
+        <mat-icon>search</mat-icon>
+        <!--        
+        <button class="pull-right btn-sm" mat-raised-button color="primary" type="submit">
+            <span
+              *ngIf="loading"
+              class="spinner-border spinner-border-sm mr-1"
+            ></span>
+            Go
+          </button> -->
+    </div> 
+</form>
+</mat-toolbar>

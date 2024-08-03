@@ -1,0 +1,43 @@
+<div class="card">
+ 
+  <div class="row d-flex justify-content-center mb-5">
+    <h2 class="text-center">REPORT PARAMETERS</h2>
+    
+    <form action="" [formGroup]="downloadReport" #resetRequestsForm="ngForm" novalidate>
+      <h4 class="text-center"> Please provide the following details:</h4>
+     
+  <p>
+      <mat-form-field appearance="outline" required>
+        <mat-label>From Date</mat-label>
+        <input formControlName="fromDate" matInput [matDatepicker]="Apicker" />
+        <mat-datepicker-toggle matSuffix [for]="Apicker"></mat-datepicker-toggle>
+        <mat-datepicker #Apicker></mat-datepicker>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="outline" required>
+        <mat-label>To Date</mat-label>
+        <input formControlName="toDate" matInput [matDatepicker]="Bpicker" />
+        <mat-datepicker-toggle matSuffix [for]="Bpicker"></mat-datepicker-toggle>
+        <mat-datepicker #Bpicker></mat-datepicker>
+    </mat-form-field>
+  </p>
+  <br>
+      <div class=" btn btn-sm btn-block example-button-row" >
+        <button (click)="generateReport()" mat-raised-button color="primary">
+            <mat-icon>cloud_download</mat-icon>
+          Generate Report
+        </button>
+      </div>
+  </form>
+  </div>
+ 
+
+
+  <!-- <div class="container mt-8" *ngIf="reportPresent" >
+    <iframe id="pdfViewer" [src]="sanitizer.bypassSecurityTrustResourceUrl(testurl)" style="width: 100%; height: 450px; margin-top: 30px;"
+            zindex="100" ></iframe>
+  </div> -->
+
+</div>
+

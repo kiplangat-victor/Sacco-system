@@ -1,0 +1,117 @@
+<div *ngIf="loading">
+  <p><small>Loading, please wait...</small></p>
+  <p>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </p>
+</div>
+<div class="breadcrumb">
+  Salary Transactions Look-Up
+  <div class="col-md-9 col-sm-12 ml-auto">
+    <input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+  </div>
+</div>
+<br>
+<div class="filter-form">
+  <form action="" [formGroup]="paramsData" novalidate class="form" #resetRequestsForm="ngForm">
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">Action Status<span class="warning">*</span></label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <select class="form-control" formControlName="action"
+            [ngClass]="{ 'is-invalid': submitted && f.action.errors }">
+              <option value="" [attr.disabled]="true">--SELECT ACTION--</option>
+              <option *ngFor="let item of actions" [value]="item">
+                {{item}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">From Date</label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input [matDatepicker]="fromDate" formControlName="fromDate" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.fromDate.errors }">
+            <span>
+              <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+            </span>
+            <mat-datepicker #fromDate></mat-datepicker>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">To Date</label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input [matDatepicker]="toDate" formControlName="toDate" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.toDate.errors }">
+            <span>
+              <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+            </span>
+            <mat-datepicker #toDate></mat-datepicker>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12">
+        <button type="submit" class="float-right btn btn-primary btn-sm btn" color="primary"
+          style="margin-bottom:20px ;" (click)="getData()">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>SUBMIT</button>
+      </div>
+    </div>
+    <br>
+  </form>
+</div>
+<div class="table-row">
+  <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+      <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+    </ng-container>
+    <ng-container matColumnDef="salaryUploadCode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Salary Code</th>
+      <td mat-cell *matCellDef="let row">{{ row.salaryUploadCode }}</td>
+    </ng-container>
+    <ng-container matColumnDef="tranParticulars">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Particulars</th>
+      <td mat-cell *matCellDef="let row">{{ row.tranParticulars}}</td>
+    </ng-container>
+    <ng-container matColumnDef="debitAccount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Debit Account</th>
+      <td mat-cell *matCellDef="let row">{{ row.debitAccount}}</td>
+    </ng-container><ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+      <td mat-cell *matCellDef="let row">{{ row.amount| currency:'KSH.' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="enteredFlag">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Entered</th>
+      <td mat-cell *matCellDef="let row">{{ row.enteredFlag}}</td>
+    </ng-container>
+    <ng-container matColumnDef="enteredBy">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Entered BY</th>
+      <td mat-cell *matCellDef="let row">{{ row.enteredBy}}</td>
+    </ng-container>
+    <ng-container matColumnDef="enteredTime">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Entered Time</th>
+      <td mat-cell *matCellDef="let row">{{ row.enteredTime| date: 'short'}}</td>
+    </ng-container>
+    <ng-container matColumnDef="verifiedFlag">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Verified</th>
+      <td mat-cell *matCellDef="let row">{{ row.verifiedFlag}}</td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr (click)="onSelect(row)" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+</div>
+<mat-paginator [pageSizeOptions]="[5, 10, 15, 20, 30, 40, 50, 100]" aria-label="Select page of users"></mat-paginator>

@@ -1,0 +1,586 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/configurations/charge/event-id/maintenance">Event ID Maintenenace / </a>Event ID
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-4 col-sm-12">
+      <div class="row">
+        <div class="col-md-5 col-sm-12">
+          <h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-7 col-sm-12">
+          <h4>Event Ref. Code: <strong>{{this.fmData.eventIdCode}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 col-sm-12 row" *ngIf="onShowResults">
+      <div class="row">
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted BY:- <strong>{{this.postedBy}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted ON:- <strong>{{this.postedTime | date}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verification:- <strong>{{this.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verified BY:- <strong>{{this.verifiedBy}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Event Description<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="100" type="text" oninput="this.value=this.value.toUpperCase()"
+                formControlName="event_id_desc" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.event_id_desc.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Charge Type<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <select class="form-control" formControlName="chargeType"
+                [ngClass]="{ 'is-invalid': submitted && f.chargeType.errors }">
+                <option value="" disabled>-- Choose chargeType --</option>
+                <option *ngFor="let flag of chargeTypeArray" [value]="flag">{{ flag }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Charge Coll.A/c<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="20" type="text" oninput="this.value=this.value.toUpperCase()"
+                formControlName="ac_placeholder" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.ac_placeholder.errors }" />
+              <mat-icon *ngIf="isEnabled" (click)="accountLookup()">search</mat-icon>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <mat-hint>{{this.ac_placeholder}}</mat-hint>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Event Type<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="20" type="text" oninput="this.value=this.value.toUpperCase()"
+                formControlName="eventTypeCode" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.eventTypeCode.errors }" />
+              <mat-icon *ngIf="isEnabled" (click)="eventTypeLookup()">search</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Amt.Derivation Type<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <select (change)="onSelectAmtDerivationType()" class="form-control" formControlName="amt_derivation_type"
+                [ngClass]="{ 'is-invalid': submitted && f.amt_derivation_type.errors }">
+                <option value="" disabled>-- Choose Function --</option>
+                <option *ngFor="let flag of amt_derivation_Array" [value]="flag.code">{{ flag.code }}-{{
+                  flag.description }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div *ngIf="showAmtDerivationInput" class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Amt.<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="20" type="number" formControlName="amt" class="pull-right form-control"
+                [ngClass]="{'is-invalid': submitted && f.amt.errors }" />
+            </div>
+          </div>
+          <div *ngIf="showPercentageDerivationInput" class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Percentage %<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="20" type="number" formControlName="percentage" class="pull-right form-control"
+                [ngClass]="{'is-invalid': submitted && f.percentage.errors }" />
+            </div>
+          </div>
+          <div *ngIf="showChargecodeDerivationInput" class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Charge Code<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="20" type="text" oninput="this.value=this.value.toUpperCase()"
+                formControlName="chrg_code" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.chrg_code.errors }" />
+            </div>
+          </div>
+          <div *ngIf="showMrtFilenameDerivationInput" class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">File Name<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="20" type="text" formControlName="file_name"
+                oninput="this.value=this.value.toUpperCase()" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.file_name.errors }" />
+            </div>
+          </div>
+          <div *ngIf="showFilenameDerivationInput" class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">File Name<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="20" type="text" oninput="this.value=this.value.toUpperCase()"
+                formControlName="file_name" oninput="this.value=this.value.toUpperCase()"
+                class="pull-right form-control" [ngClass]="{ 'is-invalid': submitted && f.file_name.errors }" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Chrg. Coll. Crncy</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="20" type="text" oninput="this.value=this.value.toUpperCase()"
+                formControlName="chrg_coll_crncy" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.chrg_coll_crncy.errors }" />
+              <mat-icon *ngIf="isEnabled" (click)="chrgCollCrncyLookup()">search</mat-icon>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <mat-hint> {{this.chrg_coll_crncy_name}}</mat-hint>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Chrg. Calc. Crncy</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input type="text" oninput="this.value=this.value.toUpperCase()" formControlName="chrg_calc_crncy"
+                class="pull-right form-control" [ngClass]="{ 'is-invalid': submitted && f.chrg_calc_crncy.errors }" />
+              <mat-icon *ngIf="isEnabled" (click)="chrgCalcCrncyLookup()">search</mat-icon>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <mat-hint>{{this.chrg_calc_crncy_name}}</mat-hint>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Min.Amt.</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="number" formControlName="min_amt" class=" pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.min_amt.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Max.Amt.<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input maxlength="20" type="number" formControlName="max_amt"
+                class="currency-value pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.max_amt.errors }" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Monthly Fee.</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="number" formControlName="monthlyFee" class=" pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.monthlyFee.errors }" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Tran.Remarks</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <mat-radio-group class="pull-right" aria-label="Select an option" formControlName="tran_remarks_state">
+                <mat-radio-button value="Y" color="primary">Yes.</mat-radio-button>
+                <mat-radio-button value="N">No.</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Tran.Particulars</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <mat-radio-group class="pull-right" aria-label="Select an option"
+                formControlName="tran_particulars_state">
+                <mat-radio-button value="Y" color="primary">Yes.</mat-radio-button>
+                <mat-radio-button value="N">No.</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Tran.Remarks</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <textarea maxlength="100" formControlName="tran_remarks" oninput="this.value=this.value.toUpperCase()"
+                class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.tran_remarks.errors }"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Tran.Particulars.Remarks</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <textarea maxlength="100" formControlName="tran_particulars" oninput="this.value=this.value.toUpperCase()"
+                class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.tran_particulars.errors }"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Round Off Flag .<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <select class="pull-right form-control" formControlName="round_off_flag">
+                <option *ngFor="let flag of flagArray">
+                  {{ flag }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Round Off Value</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input maxlength="20" type="text" formControlName="round_off_value"
+                oninput="this.value=this.value.toUpperCase()" class="pull-right form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Exercise Duty</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <mat-radio-group class="pull-right" aria-label="Select an option" formControlName="has_exercise_duty">
+                <mat-radio-button (change)="onYesExerciseDuty($event)" value="Y" color="primary">Yes.</mat-radio-button>
+                <mat-radio-button (change)="onNoExerciseDuty($event)" value="N">No.</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </div>
+        <!-- /////////////////// -->
+
+
+
+
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Exercise Duty (%)</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input maxlength="20" type="number" formControlName="exercise_duty_percentage"
+                class="pull-right sub-form-control form-control "
+                [ngClass]="{ 'is-invalid': submitted && f.round_off_value.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="showExerciseDutyPercentageInput">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Exercise Duty Account</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input maxlength="20" type="text" formControlName="exciseDutyCollAc"
+                oninput="this.value=this.value.toUpperCase()" class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.exciseDutyCollAc.errors }" />
+              &nbsp; &nbsp;<mat-icon color="primary" (click)="officeAccountLookup()">search</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12" *ngIf="showExerciseDutyDerivation">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Exercise Duty Derivation<span class="text-danger">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <select (change)="onSelectExerciseDutyDerivation()" class="form-control"
+                formControlName="excise_duty_derivation"
+                [ngClass]="{ 'is-invalid': submitted && f.amt_derivation_type.errors }">
+                <option value="" disabled>-- Choose Derivation --</option>
+                <option *ngFor="let flag of exercise_duty_Array" [value]="flag.code">{{ flag.code }}-{{
+                  flag.description }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="showExerciseDutyDerivationInput">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Exercise Duty Fixed Amount</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input type="number" formControlName="exercise_duty_fixed_amt" class="pull-right form-control"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="12" minlength="1">
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div *ngIf="showTCInput">
+        <div [formGroup]="chargesForm">
+          <hr>
+          <H3>Tiered Charges Details</H3>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <label class="start pull-left">Tier Option.</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input type="text" maxlength="15" oninput="this.value=this.value.toUpperCase()"
+                    formControlName="tierOption" class="form-control" />
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label class="start pull-left">Use Percentage.</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <mat-radio-group aria-label="Select an option" formControlName="usePercentage">
+                    <mat-radio-button value="Y">Yes</mat-radio-button>
+                    <mat-radio-button value="N">No</mat-radio-button>
+                  </mat-radio-group>
+                  <!-- <input type="text" maxlength="15" oninput="this.value=this.value.toUpperCase()" formControlName="usePercentage"
+                    class="form-control" /> -->
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <label class="start pull-left">LowerLimit</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input type="number" oninput="this.value=this.value.toUpperCase()" formControlName="lowerLimit"
+                    class="form-control" />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <label class="start pull-left">UpperLimit.</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input type="number" oninput="this.value=this.value.toUpperCase()" formControlName="upperLimit"
+                    class="form-control" />
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <label class="start pull-left">Charge Amount</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input type="number" maxlength="7" oninput="this.value=this.value.toUpperCase()"
+                    formControlName="chargeAmount" class="form-control" />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <label class="start pull-left">Percentage.</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column ">
+                  <input type="number" maxlength="15" oninput="this.value=this.value.toUpperCase()"
+                    formControlName="percentage" class="form-control" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <mat-divider></mat-divider>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <button *ngIf="addButton" (click)="addToArray()" class="pull-right my-3 mx-4"
+                [disabled]="!chargesForm.valid || disableAddButton" mat-raised-button color="primary" type="button">
+                + Add charge details
+              </button>
+              <button *ngIf="editButton" (click)="updateChargeDetails()" class="pull-right my-3 mx-4"
+                [disabled]="!chargesForm.valid || disableAddButton" mat-raised-button color="primary" type="button">
+                + Update charge details
+              </button>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field>
+              <span matPrefix> </span>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Search..." #input>
+              <button matSuffix mat-button>
+                <mat-icon>search</mat-icon>
+              </button>
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="table-row">
+          <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+            <ng-container matColumnDef="index">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+              <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+            </ng-container>
+            <ng-container matColumnDef="tierOption">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>TierOption</th>
+              <td mat-cell *matCellDef="let row">{{ row.tierOption}}</td>
+            </ng-container>
+            <ng-container matColumnDef="lowerLimit">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>LowerLimit</th>
+              <td mat-cell *matCellDef="let row">{{ row.lowerLimit}}</td>
+            </ng-container>
+            <ng-container matColumnDef="upperLimit">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>UpperLimit</th>
+              <td mat-cell *matCellDef="let row">{{ row.upperLimit }}</td>
+            </ng-container>
+            <ng-container matColumnDef="chargeAmount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ChargeAmount</th>
+              <td mat-cell *matCellDef="let row">{{ row.chargeAmount}}</td>
+            </ng-container>
+            <ng-container matColumnDef="percentage">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Percentage</th>
+              <td mat-cell *matCellDef="let row">{{ row.percentage}}</td>
+            </ng-container>
+            <ng-container matColumnDef="usePercentage">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>UsePercentage?</th>
+              <td mat-cell *matCellDef="let row">{{ row.usePercentage}}</td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+              <td mat-cell *matCellDef="let row">
+                <button mat-icon-button matTooltip="Click to Edit" color="primary" (click)="editItem(row)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="Click to Delete" (click)="deleteItem(row)" color="warn">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr (click)="onSelect(row)" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+      </div>
+      <br>
+      <button [routerLink]="['../../maintenance']" skipLocationChange class="pull-left bg-secondary text-white" mat-raised-button>
+        Back
+      </button>
+      <button [disabled]="isDisabled" class="pull-right" mat-raised-button color="primary" type="submit">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        Submit
+      </button>
+      <br />
+    </form>
+  </div>
+
+</mat-card>

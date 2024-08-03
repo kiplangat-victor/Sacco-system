@@ -1,0 +1,43 @@
+<div *ngIf="loading">
+  <p><small>Loading, please wait...</small></p>
+  <p>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </p>
+</div>
+<div class="breadcrumb">
+  Repayment Account Lookup
+  <div class="col-md-8 col-sm-12 ml-auto">
+    <input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+  </div>
+</div>
+<br>
+<div class="table-row">
+  <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+    </ng-container>
+    <ng-container matColumnDef="acid">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Account Code</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.acid}} </td>
+    </ng-container>
+    <ng-container matColumnDef="accountType">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Account Type</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.accountType}} </td>
+    </ng-container>
+    <ng-container matColumnDef="accountStatus">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Account Status</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.accountStatus}} </td>
+    </ng-container>
+    <ng-container matColumnDef="accountName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Account Name</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.accountName}} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+</div>
+<mat-paginator [pageSizeOptions]="[5, 10, 15, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>

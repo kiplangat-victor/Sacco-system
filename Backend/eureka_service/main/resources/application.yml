@@ -1,0 +1,140 @@
+server:
+  port: 2024
+
+# DB Connection
+  organisation:
+    emailRegards: Switch Sacco
+    emailMessage: Find the attached information from our partnership
+    emailOrganizationName: Post Bank Sacco
+
+    image_banner: C:\Users\dell\EMTECH\POST BANK\EMT_MULTITENANT_SACCO\Server\api_gateway_service\src\main\resources\PBlogo.png
+    emailRemarks: Thank You.
+    emailOrganizationLocation: Head Office Plot 4/6 Tatu City Road, Kiambu.
+    emailOrganizationPhone: +256 ** *** ***
+    emailOrganizationWebsite: https://switch.co.ke
+    emailOrganizationMail: kiplavic@gmail.com
+    emailOrganizationAddress: P.O.Box 7189, Kiambu.
+    maxNoOfTellers: 20
+    from_mail: info@kigen-kiplangat.kp.ke
+    company_logo_path: /home/dnyiri/Documents/EMTech-Projects/EMT_MULTITENANT_SACCO/Server/eureka_service/src/main/resources/logo.png
+
+    emailSalutation: Dear Sir/Madam,
+spring:
+  main:
+
+    allow-bean-definition-overriding: true
+
+  # Additional properties using the 'spring.application' prefix
+  application:
+    useOTP: false
+    otpProd: false
+    otpTestMail: kiplavic79@gmail.com
+    username: SACCO
+    name: CHANNEL-SUPPORT-SERVICE #added
+    password: dcv359gif9448g20938g394bv9u9586548647568754gh58g9h
+    authkey: 3rbgvbeuvivurvbp[vpv[\\=3-03b3y98o4038hb92842fwcwndciqn902f
+    security_key: 3rbgvbeuvivur686u4509u3hr4r3498t3yt03htb4t902f
+    E_WALLET_URL: https://pbuwmuat.postbank.co.ug/MFSController.aspx
+    signature: 97162c9c09eba3542f1309dd0208e99ee409b9731261f08d2355fe3cd3973b80
+    logs:
+      user: C:\Users\Francis\Desktop\POST BANK\EMT_009_Sacco_Solution\Server\api_gateway_service\src\main\resources\Userlogs\user.log
+    basicActions: /home/kiplangat/Music/new/EMT_SACCO_SWITCH/Server/channel_support_service/basicactions.json
+
+
+    pbuwals:
+      url: https://pbuwalsuatmw.postbank.co.ug/sms
+      username: SMS_OPENAPI_2023
+      password: A%7928yH5
+      apiKey: 92864983454546346298423423
+
+    client:
+      origin_local: http://localhost:4201/
+      origin_52: http://localhost:4201/
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      use-new-id-generator-mappings: true
+      show-sql: true
+      database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        show_sql: true
+#  datasource:
+#    url: jdbc:mysql://kigen.mysql.database.azure.com:3306/emt_multitenant_sacco?useSSL=true&requireSSL=true
+#    username: Test
+#    password: Kigen@2024
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+  datasource:
+    url: jdbc:mysql://kigen.mysql.database.azure.com:3306/emt_multitenant_sacco?useSSL=true&serverTimezone=UTC
+    username: Test
+    password: "Kigen@2024"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#    username: Test@mysqlsingletest
+#    password: Kigen@2024
+
+  profiles:
+    active: default
+
+  # datasource:
+  #   url: jdbc:mariadb://192.168.89.30:3306/emt_multitenant_sacco
+  #   username: root
+  #   password:
+  #   driverClassName: org.mariadb.jdbc.Driver
+
+users:
+  app:
+    jwtSecret: /buCOEjS/+H7ZwekxyLKLdDeegHUGEytjxuivosdrzjRG4g4E+kA3uXO5lvGBVsl2NwqsgiGUUI5bjgY/6WG/VSIIG+22b1Rvdb59BY0YRod6Dnjnp0REsPn//hshs6ucnOVCBRp0lbVb1kP+EDOM7W7N72/+t+R1d8JQ4pjisoJZI4e0MV3PlZtzXKI0SY2EQUtI
+    jwtExpirationMs: 43200000
+organisation:
+  email: info@francis-mugambi.me.ke
+
+  #  Super User Details
+  superUserEmail: info@francis-mugambi.me.ke
+  superUserFirstName: Superuser
+  superUserLastName: Admin
+  superUserUserName: Superuser
+  superUserPhone: 07xxxxxxxx
+  superUserSolCode: 000
+  superUserPassword: SuPassCode12
+  maxNoOfTellers: 20
+jwt:
+  secret: 'dcv359gif9448g20938g394bv9u9586548647568754gh58g9h'
+
+# Sacco-Wallet Credentials
+username: SACCO
+password: dcv359gif9448g20938g394bv9u9586548647568754gh58g9h
+authkey: 3rbgvbeuvivurvbp[vpv[\=3-03b3y98o4038hb92842fwcwndciqn902f
+security_key: 3rbgvbeuvivur686u4509u3hr4r3498t3yt03htb4t902f
+E_WALLET_URL: https://pbuwmuat.postbank.co.ug/MFSController.aspx
+signature: 97162c9c09eba3542f1309dd0208e99ee409b9731261f08d2355fe3cd3973b80
+
+links:
+  savingdeposit: https://localhost
+  accountbyphone: https://localhost
+
+
+sacco:
+  urls:
+    retail_member_creation: http://3.135.163.235:9005/api/v1/customer/retail/add
+    retrieve_retail_member: http://3.135.163.235:9005/api/v1/customer/retail/find/by/phone/number/
+    account_creation: http://3.135.163.235:9006/accounts/open
+    retrieve_account: http://localhost:9006/accounts/accounts/by/phone?
+    verify_account: http://localhost:9006/accounts/verify?
+    disbursement_verifier: http://3.135.163.235:9002/api/v1/fsi/headers/attach-headers
+logging:
+  level:
+    com.mysql.cj: DEBUG
+
+eureka:
+   client:
+     enabled: true
+     register-with-eureka: true
+     fetch-registry: true
+     service-url:
+       defaultZone: http://localhost:9001/eureka
+
+   instance:
+     hostname: localhost

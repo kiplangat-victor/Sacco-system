@@ -1,0 +1,42 @@
+<div class="card container-fluid">
+  <div class="card-body text-center">
+    <h2 class="card-title">Reports</h2>
+    <div class="d-flex justify-content-between row m-2">
+      <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
+        <div class="card m-1 report-dule"  style="min-height: 360px;">
+          <div class="card-body">
+            <h4 class="card-title">Liquidity reports</h4>
+            <ul class="list-group p-3">
+              <li *ngIf="consolidatedliquidityreport" class="list-group-item d-flex justify-content-between mb-2" (click)="generateConsolidatedDailyLiquidityReport()"><span>CONSOLIDATED LIQUIDITY REPORT</span><mat-icon class="text-primary">cloud_download</mat-icon></li>
+              <li *ngIf="liquiditystatementsreport" class="list-group-item d-flex justify-content-between mb-2" (click)="generateLiquiditystatement()"><span>LIQUIDITY STATEMENTS REPORT</span><mat-icon class="text-primary">cloud_download</mat-icon></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
+        <div  class="card m-1 report-dule" style="min-height: 360px;">
+          <div class="card-body">
+            <h4 class="card-title">.</h4>
+            <ul class="list-group p-3">
+              <li *ngIf="statementscomprehensiveincomereport" class="list-group-item d-flex justify-content-between mb-2" (click)="generateStatementComprehensiveReport()" ><span>STATEMENTS COMPREHENSIVE INCOME REPORT</span><mat-icon class="text-primary">cloud_download</mat-icon></li>
+              <li *ngIf="statementofdepositreturnreport" class="list-group-item d-flex justify-content-between mb-2" (click)="generateStatementofDepositReturn()"><span>STATEMENT OF DEPOSIT RETURN REPORT </span><mat-icon class="text-primary">cloud_download</mat-icon></li>
+              <li *ngIf="statementoffinancialpositionreport" class="list-group-item d-flex justify-content-between mb-2"  (click)="generateStatementofFinancialPositionReport()"><span>STATEMENT OF FINANCIAL POSITION REPORT</span><mat-icon class="text-primary">cloud_download</mat-icon></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12">
+        <div  class="card m-1 report-dule" style="min-height: 360px;">
+          <div class="card-body">
+            <h4 class="card-title">.</h4>
+            <ul class="list-group p-3">
+              <li *ngIf="capitaladequacyreport" class="list-group-item d-flex justify-content-between mb-2" (click)="generateCapitalAdequacyReport()"><span>CAPITAL ADEQUACY REPORT</span><mat-icon class="text-primary">cloud_download</mat-icon></li>
+              <li *ngIf="investementreturnreport" class="list-group-item d-flex justify-content-between mb-2" (click)="generateInvestmentReturnReport()"><span>INVESTMENT RETURN REPORT </span><mat-icon class="text-primary">cloud_download</mat-icon></li>
+              <li *ngIf="riskofclassificationreport" class="list-group-item d-flex justify-content-between mb-2" (click)="generateRiskClassificationReport()"><span>RISK OF CLASSIFICATION REPORT</span><mat-icon class="text-primary">cloud_download</mat-icon></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

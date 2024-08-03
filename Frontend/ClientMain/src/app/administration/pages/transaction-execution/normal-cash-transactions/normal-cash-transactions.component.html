@@ -1,0 +1,259 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Loading, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</p>
+	</div>
+
+	<div class="alert alert-danger" role="alert" *ngIf="isAlert">
+		<strong>{{ this.resMessage }}</strong>
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a>
+			<a routerLink="/system/transactions/maintenance">Transaction Maintenance / </a>Transaction
+		</div>
+	</mat-card-header>
+	<div class="row">
+		<div class="col-md-9 col-sm-12">
+			<div class="row">
+				<div class="col-md-3 col-sm-12">
+					<h4>Function:- <strong>{{this.function_type}}</strong> </h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Transaction Type:- <strong>{{this.transactionType}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12" *ngIf="showtransactionData">
+					<h4>Transaction Code:- <strong>{{this.transactionCode}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12" *ngIf="showtransactionData">
+					<h4>Entered BY:- <strong>{{this.enteredBy}}</strong></h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-12">
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<button type="button" class="btn btn-success btn-sm pull-right mb-3" *ngIf="showRecieptButton" (click)="depositReciept()">
+						Transaction Receipt <i class="far fa-arrow-alt-circle-down"></i>
+					</button>
+				</div>
+				<div class="col-md-12 col-sm-12">
+					<button type="button" class="btn btn-success btn-sm pull-right mb-3" *ngIf="showWithdrawalTranRecieptButton"
+						(click)="withdrawalReciept()">
+						Transaction Receipt <i class="far fa-arrow-alt-circle-down"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<mat-divider></mat-divider>
+	<br />
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData" #resetRequestsForm="ngForm" novalidate *ngIf="showTransactionForm">
+			<div [formGroup]="transactionForm">
+				<h3>Transaction Effect</h3>
+				<br>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label class="start pull-left">Account.</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input type="text" maxlength="40" formControlName="acid" class="form-control"> &nbsp;
+								&nbsp;&nbsp;
+								<mat-icon (click)="accountLookup()" color="primary">search</mat-icon> &nbsp;
+								&nbsp;&nbsp;
+								<mat-icon (click)="accountImagesLookup()" color="primary">camera_enhance</mat-icon>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-4 col-sm-12 form-column">
+								<mat-hint><strong>Name: </strong> {{ this.accountName }} </mat-hint>
+							</div>
+							<div class="col-md-3 col-sm-12 form-column">
+								<mat-hint><strong>Status: </strong> {{ this.accountStatus }}</mat-hint>
+							</div>
+							<div class="col-md-2 col-sm-12 form-column">
+								<mat-hint><strong>CUR: </strong> {{ this.accountCurrency }}</mat-hint>
+							</div>
+							<div class="col-md-3 col-sm-12 form-column">
+								<mat-hint><strong>BAL: </strong> {{ this.accountBalance | currency : "KES "
+									}}</mat-hint>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<br>
+				<hr>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label class="start pull-left">Transaction Particulars.</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input type="text" maxlength="25" formControlName="transactionParticulars"
+									class="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label class="start pull-left">Transaction Dates<span class="warning">*</span></label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input [matDatepicker] formControlName="transactionDate" class="form-control" required
+									readonly>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label class="start pull-left">Transaction Amount</label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input type="number" formControlName="transactionAmount" class="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<div class="col-md-6 col-sm-12 form-column">
+								<label class="start pull-left">Exchange Rate<span class="warning">*</span></label>
+							</div>
+							<div class="col-md-6 col-sm-12 form-column">
+								<input type="text" [value]="this.exchangeRate" maxlength="6"
+									formControlName="exchangeRate" class="form-control" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<br>
+		<div *ngIf="showTransactionList">
+			<div class="row">
+				<div class="col-md-10 col-sm-12 display-block">
+					<div class="row">
+						<div class="col-md-3 col-sm-12">
+							<h4><strong>Transactions List Effect</strong></h4>
+						</div>
+						<div class="col-md-3 col-sm-12" *ngIf="showtransactionData">
+							<h4>First Verification:- <strong>{{this.verifiedFlag}}</strong></h4>
+						</div>
+						<div class="col-md-3 col-sm-12" *ngIf="showtransactionData">
+							<h4>Second Verification:- <strong>{{this.verifiedFlag_2}}</strong></h4>
+						</div>
+						<div class="col-md-3 col-sm-12" *ngIf="showtransactionData">
+							<h4>Verification Completed BY:- <strong>{{this.verifiedBy_2}}</strong></h4>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="row table-action-row">
+					<div class="on-mobile-hide col-md-6 col-sm-12">
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<input class="pull-right search form-control" (keyup)="applyFilter($event)"
+							placeholder="Search..." #input />
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="table-row">
+				<table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+					<ng-container matColumnDef="index">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+						<td mat-cell *matCellDef="let element; let i = index">
+							{{ i + 1 }}
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="acid">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Account</th>
+						<td mat-cell *matCellDef="let row">{{ row.acid }}</td>
+					</ng-container>
+					<ng-container matColumnDef="partTranType">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Part Transaction Type
+						</th>
+						<td mat-cell *matCellDef="let row">{{ row.partTranType }}</td>
+					</ng-container>
+					<ng-container matColumnDef="transactionAmount">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Transaction Amount
+						</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.transactionAmount | currency : "UGX " }}
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="transactionDate">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Transaction Dates
+						</th>
+						<td mat-cell *matCellDef="let row">{{ row.transactionDate | date: 'short' }}</td>
+					</ng-container>
+					<ng-container matColumnDef="transactionParticulars">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Transaction Particulars
+						</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.transactionParticulars }}
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="exchangeRate">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Exchange Rate
+						</th>
+						<td mat-cell *matCellDef="let row">{{ row.exchangeRate }}</td>
+					</ng-container>
+					<ng-container matColumnDef="actions">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+						<td mat-cell *matCellDef="let row; let i = index">
+							<button type="button" mat-icon-button color="primary" [disabled]="row.accountType == 'OAB'"
+								(click)="accountImagesAsParam(row.acid)">
+								<mat-icon *ngIf="!accountReadonly">account_box</mat-icon>
+							</button>
+							<button type="button" mat-icon-button matTooltip="Click to Edit" color="primary"
+								[disabled]="disableActions" (click)="editItem(row)">
+								<mat-icon>edit</mat-icon>
+							</button>
+							<button type="button" mat-icon-button matTooltip="Click to Delete"
+								[disabled]="disableActions || i == 0" (click)="deleteItem(row)" color="warn">
+								<mat-icon>delete</mat-icon>
+							</button>
+						</td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+					<tr class="mat-row" *matNoDataRow>
+						<td class="mat-cell" colspan="4">
+							No data matching the filter "{{ input.value }}"
+						</td>
+					</tr>
+				</table>
+			</div>
+			<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+		</div>
+		<hr>
+		<button mat-raised-button type="button" class="bg-secondary text-white"
+			routerLink="/system/transactions/maintenance" skipLocationChange>
+			Back
+		</button>
+		<button type="button" *ngIf="!hideSubmit" class="pull-right mb-3 ml-2" mat-raised-button color="primary"
+			(click)="onSubmit()">
+			<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+			{{ submitData }}
+		</button>
+	</div>
+</mat-card>

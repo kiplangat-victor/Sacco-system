@@ -1,0 +1,35 @@
+<div *ngIf="loading">
+	<p><small class="text-primary">Verifying OTP Code ...</small></p>
+	<p>
+		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+	</p>
+</div>
+<div class="text-center">
+	<strong>OTP CODE VERIFICATION</strong>
+</div>
+<mat-divider></mat-divider>
+<br>
+<form [formGroup]="formData">
+	<div class="text-center">
+		<mat-form-field appearance="outline">
+			<mat-label>Enter Collateral OTP</mat-label>
+			<input matInput type="number" formControlName="otpCode" placeholder="Enter  OTP" minlength="4"
+				maxlength="4">
+			<mat-error *ngIf=" formData.controls['otpCode'].hasError('required')">
+				OTP Code Required.
+			</mat-error>
+			<mat-error *ngIf="formData.get('otpCode').hasError('minlength' || 'maxLength')">
+				OTP Code Invalid!!
+			</mat-error>
+		</mat-form-field>
+	</div>
+</form>
+<mat-divider></mat-divider>
+<br>
+<div mat-dialog-action [align]="'center'" class="example-button-row">
+	<button class="pull-left" mat-raised-button color="warn" mat-dialog-close>CANCEL</button>
+	<button class="pull-right" mat-raised-button color="primary" (click)="onSubmit()">
+		<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1">
+		</span>VERIFY
+	</button>
+</div>

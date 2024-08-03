@@ -1,0 +1,46 @@
+<div *ngIf="loading">
+	<p><small>Loading, please wait...</small></p>
+	<p>
+		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+	</p>
+</div>
+<div class="">
+	<div class="card-header text-center text-white bg-success">
+		<strong>REJECT TRANSACTION :-&nbsp; &nbsp;{{this.transactiondata.transactionType}} </strong>
+	</div>
+	<div class="">
+		<mat-divider></mat-divider>
+		<br>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					Transaction Code: &nbsp; &nbsp;<strong>{{this.transactiondata.transactionCode}}</strong>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					Status: &nbsp; &nbsp;<strong>{{this.transactiondata.status}}</strong>
+				</div>
+			</div>
+			<br>
+
+			<form class="form" [formGroup]="formData">
+				<div class="row">
+					<div class="col-md-6 col-sm-12">
+						<label>Rejection Reason<span class="text-danger">*</span></label>
+					</div>
+					<div class="col-md-12 col-sm-12">
+						<textarea type="text" class="form-control" formControlName="reason"
+							[ngClass]="{ 'is-invalid': submitted && f.reason.errors }"
+							oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+							maxlength="120" minlength="2"></textarea>
+					</div>
+					</div>
+			</form>
+			</div>
+				<mat-divider></mat-divider>
+				<br>
+				<div class="example-button-row">
+					<button type="button" class="btn btn-info btn-sm pull-left" mat-dialog-close>CLOSE</button>
+					<button type="button" class="btn btn-success btn-sm pull-right" (click)="onSubmit()">REJECT</button>
+				</div>
+				<br>
+		</div>

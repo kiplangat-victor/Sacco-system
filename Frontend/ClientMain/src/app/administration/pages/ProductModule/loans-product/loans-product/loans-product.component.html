@@ -1,0 +1,902 @@
+<mat-card>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a>
+			<a routerLink="/system/product/loans/maintenance">Loan Product Maintenenace / </a>
+			Loan Product
+		</div>
+	</mat-card-header>
+	<div *ngIf="loading">
+		<p><small>Loading, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</p>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-sm-12">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<h4>LAA Code:- <strong>{{this.fmData.productCode}}</strong></h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-12 row" *ngIf="onShowResults">
+			<div class="row" *ngIf="this.results">
+				<div class="col-md-6 col-sm-12">
+					<h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<mat-divider></mat-divider>
+	<br>
+	<div class="container-fluid">
+		<form action="" class="form" [formGroup]="formData" novalidate>
+			<mat-tab-group mat-align-tabs="center">
+				<mat-tab class="mat-tab" label="General Details">
+					<br>
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="input-group mb-3">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Effective From Date</label>
+										<span class="text-danger" *ngIf="onShowWarning">*</span>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input [matDatepicker]="effective_from_date" formControlName="effective_from_date"
+										class="form-control" [ngClass]="{ 'is-invalid': submitted && f.effective_from_date.errors }">
+									<span *ngIf="onShowDate" color="primary">
+										<mat-datepicker-toggle matSuffix
+											[for]="effective_from_date"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker color="primary" #effective_from_date></mat-datepicker>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="input-group mb-3">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Effective To Date</label>
+										<span class="text-danger" *ngIf="onShowWarning">*</span>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input [matDatepicker]="effective_to_date" formControlName="effective_to_date"
+										class="form-control" [ngClass]="{ 'is-invalid': submitted && f.effective_to_date.errors }">
+									<span *ngIf="onShowDate" color="primary">
+										<mat-datepicker-toggle matSuffix
+											[for]="effective_to_date"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker color="primary" #effective_to_date></mat-datepicker>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Number Generation <span class="text-danger"
+											*ngIf="onShowWarning">? *</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<mat-radio-group (change)="handleChange($event)" class="pull-right"
+										aria-label="Select an option" formControlName="acid_generation"
+										[ngClass]="{ 'is-invalid': submitted && f.acid_generation.errors }">
+										<mat-radio-button value="Y" color="primary">YES</mat-radio-button>
+										<mat-radio-button value="N" color="warn">NO</mat-radio-button>
+									</mat-radio-group>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="showAcidStructure">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label>Acid Structure</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="acid_structure" class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="40" minlength="1" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="showAcidStructure">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column ">
+									<label>Increment</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="increment" class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="20" minlength="1" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="showAcidStructure">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Running No. Size<span class="text-danger"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="running_no_size" placeholder="" class="form-control"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="20" minlength="1">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Interest Table Code<span class="text-danger"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="interest_table_code" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.interest_table_code.errors }">
+									&nbsp; &nbsp;
+									<mat-icon color="primary" *ngIf="showSearch"
+										(click)="intTableCodeLookup()">search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Advance Int. Account<span class="text-danger"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="advance_int_ac" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.advance_int_ac.errors }">
+									&nbsp; &nbsp;
+									<mat-icon color="primary" *ngIf="showSearch"
+										(click)="advanceAccountLookup()">search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Int Receivable Account<span class="text-danger"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="int_receivable_ac" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.int_receivable_ac.errors }">
+									&nbsp; &nbsp;
+									<mat-icon color="primary" *ngIf="showSearch"
+										(click)="intAccountLookup()">search</mat-icon>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Penal Int. Receivable Account<span class="text-danger"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="penal_int_receivable_ac" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.penal_int_receivable_ac.errors }">
+									&nbsp; &nbsp;
+									<mat-icon color="primary" *ngIf="showSearch"
+										(click)="penalIntAccountLookup()">search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Penal Receivable Account<span class="text-danger"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="penal_receivable_ac" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.penal_receivable_ac.errors }">
+									&nbsp; &nbsp;
+									<mat-icon color="primary" *ngIf="showSearch"
+										(click)="penalAccountLookup()">search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">P&L. Account<span class="text-danger"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="pl_ac" placeholder="" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.pl_ac.errors }">
+									&nbsp; &nbsp;
+									<mat-icon color="primary" *ngIf="showSearch"
+										(click)="plAccountLookup()">search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Princ Receivable Account<span class="text-danger"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="princ_receivable_ac" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.princ_receivable_ac.errors }">
+									&nbsp; &nbsp;
+									<mat-icon color="primary" *ngIf="showSearch"
+										(click)="princAccountLookup()">search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">P&L. Account CCY<span class="text-danger"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<mat-radio-group class="pull-right" aria-label="Select an option"
+										formControlName="pl_ac_ccy"
+										[ngClass]="{ 'is-invalid': submitted && f.pl_ac_ccy.errors }">
+										<mat-radio-button value="A/c. CCY" color="primary">A/c. CCY</mat-radio-button>
+										<mat-radio-button value="Home CCY" color="warn">Home CCY</mat-radio-button>
+									</mat-radio-group>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Collect Ledger Fee ?</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<mat-radio-group (change)="handleFeeChange($event)" class="pull-right" aria-label="Select an option"
+										formControlName="collectLedgerFee">
+										<mat-radio-button [value]="true" color="primary">YES</mat-radio-button>
+										<mat-radio-button [value]="false">NO</mat-radio-button>
+									</mat-radio-group>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="showledgerFeeEventIdCode">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start">Ledger Fee Code</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="ledgerFeeEventIdCode" class="form-control">
+									&nbsp; &nbsp;
+									<mat-icon *ngIf="showSearch" color="primary" (click)="ledgerFeeEventIdCodeLookup()">
+										search</mat-icon>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+						routerLink="/system/product/loans/maintenance">BACK</button>
+				</mat-tab>
+				<mat-tab class="mat-tab" label="Specific Details">
+					<br>
+					<form [formGroup]="laaDetailsForm">
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Min. Loan Amount</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="loan_amt_min" class="form-control"
+											[ngClass]="{ 'is-invalid': submittedLaa && laa.loan_amt_min.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="12">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Max. Loan Amount </label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="loan_max_amt" class="form-control"
+											[ngClass]="{ 'is-invalid': submittedLaa && laa.loan_max_amt.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="12">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Min. period (MM)</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="loan_period_min_mm" class="form-control"
+											[ngClass]="{ 'is-invalid': submittedLaa && laa.loan_period_min_mm.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="4">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Max. period (MM)</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="loan_period_max_mm" class="form-control"
+											[ngClass]="{ 'is-invalid': submittedLaa && laa.loan_period_max_mm.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="4">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Grace Period (DD)</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="grace_period_for_late_fee_mm"
+											class="form-control"
+											[ngClass]="{ 'is-invalid': submittedLaa && laa.grace_period_for_late_fee_mm.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="4">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Min. Guarantors</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="minGuarantorCount" class="form-control"
+											[ngClass]="{ 'is-invalid': submittedLaa && laa.minGuarantorCount.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="3">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Max. Guarantors</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="maxGuarantorCount" class="form-control"
+											[ngClass]="{ 'is-invalid': submittedLaa && laa.maxGuarantorCount.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="5">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Penal Interest</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="penal_int" class="form-control"
+											[ngClass]="{ 'is-invalid': submittedLaa && laa.penal_int.errors }"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="2" minlength="1">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start pull-left">Fee For Late Payment ?<span class="text-danger"
+												*ngIf="onShowWarning">*</span></label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<mat-radio-group class="pull-right" aria-label="Select an option"
+											formControlName="apply_late_fee_for_delayed_payment"
+											[ngClass]="{ 'is-invalid': submittedLaa && laa.apply_late_fee_for_delayed_payment.errors }">
+											<mat-radio-button value="Y" color="primary">YES</mat-radio-button>
+											<mat-radio-button value="N" color="warn">NO</mat-radio-button>
+										</mat-radio-group>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					<br>
+					<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+						routerLink="/system/product/loans/maintenance">BACK</button>
+				</mat-tab>
+				<mat-tab class="mat-tab" label="Fees">
+					<br>
+					<form [formGroup]="feesForm" *ngIf="showfeesForm">
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Event ID. Code</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="text" formControlName="eventIdCode" class="form-control">
+										&nbsp; &nbsp;
+										<mat-icon *ngIf="showSearch" color="primary" (click)="eventIdCodeLookup()">
+											search</mat-icon>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Event Type Code</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="text" readonly formControlName="eventTypeCode"
+											class="form-control">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div *ngIf="showButtons">
+							<button *ngIf="addButton" (click)="addfees()" class="pull-right btn btn-success btn-sm"
+								[disabled]="!feesForm.valid || disableAddButton" mat-raised-button color="primary"
+								type="button">
+								Add Fee
+							</button>
+							<button *ngIf="editButton" (click)="updatefees()" class="pull-right btn btn-primary btn-sm"
+								[disabled]="!feesForm.valid || disableAddButton" mat-raised-button color="primary"
+								type="button">
+								Update Fee
+							</button>
+						</div>
+					</form>
+					<br>
+					<div class="row table-action-row">
+						<div class="on-mobile-hide col-md-6 col-sm-12">
+							<strong>Fee List</strong>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<input class="pull-right search form-control" (keyup)="applyfeesFilter($event)"
+								placeholder="Search..." #input />
+						</div>
+					</div>
+					<br>
+					<div class="table-row">
+						<table mat-table matSort matTableExporter [dataSource]="feesDataSource">
+							<ng-container matColumnDef="index">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+								<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+							</ng-container>
+							<ng-container matColumnDef="eventIdCode">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Event ID. Code</th>
+								<td mat-cell *matCellDef="let row">{{ row.eventIdCode}}</td>
+							</ng-container>
+							<ng-container matColumnDef="eventTypeCode">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Event Type Code
+								<td mat-cell *matCellDef="let row">{{ row.eventTypeCode}}</td>
+							</ng-container>
+							<ng-container matColumnDef="actions">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+								<td mat-cell *matCellDef="let row">
+									<button mat-icon-button [disabled]="disableActions" color="primary"
+										(click)="editfees(row)">
+										<mat-icon>edit</mat-icon>
+									</button>
+									<button mat-icon-button [disabled]="disableActions" (click)="deletefees(row)"
+										color="warn">
+										<mat-icon>delete</mat-icon>
+									</button>
+								</td>
+							</ng-container>
+							<tr mat-header-row *matHeaderRowDef="feesColumns"></tr>
+							<tr mat-row *matRowDef="let row; columns: feesColumns;"></tr>
+							<tr class="mat-row" *matNoDataRow>
+								<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+							</tr>
+						</table>
+					</div>
+					<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]"
+						aria-label="Select page"></mat-paginator>
+					<br>
+					<hr>
+					<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+						routerLink="/system/product/loans/maintenance">BACK</button>
+					<br>
+				</mat-tab>
+				<mat-tab class="mat-tab" label="Exceptions">
+					<br>
+					<form [formGroup]="exceptionsForm" *ngIf="showexceptionsForm">
+						<div class="row">
+							<div class="col-md-4 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Exception Code</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="text" formControlName="exception_code" class="form-control">
+										&nbsp; &nbsp;
+										<mat-icon *ngIf="showSearch" color="primary" (click)="exceptionLookup()">
+											search</mat-icon>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-5 col-sm-12 form-column">
+										<label class="start">Exception Description</label>
+									</div>
+									<div class="col-md-7 col-sm-12 form-column">
+										<textarea readonly formControlName="exception_description"
+											class="form-control"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div *ngIf="showButtons">
+							<button *ngIf="addButton" (click)="addexceptions()"
+								class="pull-right btn btn-success btn-sm"
+								[disabled]="!exceptionsForm.valid || disableAddButton" mat-raised-button color="primary"
+								type="button">
+								Add Exception
+							</button>
+							<button *ngIf="editButton" (click)="updateexceptions()"
+								class="pull-right btn btn-primary btn-sm"
+								[disabled]="!exceptionsForm.valid || disableAddButton" mat-raised-button color="primary"
+								type="button">
+								Update Exception
+							</button>
+						</div>
+					</form>
+					<br>
+					<div class="row table-action-row">
+						<div class="on-mobile-hide col-md-6 col-sm-12">
+							<strong>Exceptions List</strong>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<input class="pull-right search form-control" (keyup)="applyexceptionsFilter($event)"
+								placeholder="Search..." #input />
+						</div>
+					</div>
+					<br>
+					<div class="table-row">
+						<table mat-table matSort matTableExporter [dataSource]="exceptionsDataSource">
+							<ng-container matColumnDef="index">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+								<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+							</ng-container>
+							<ng-container matColumnDef="exception_code">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Exception Code</th>
+								<td mat-cell *matCellDef="let row">{{ row.exception_code}}</td>
+							</ng-container>
+							<ng-container matColumnDef="exception_description">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Exception Description
+								<td mat-cell *matCellDef="let row">{{ row.exception_description}}</td>
+							</ng-container>
+							<ng-container matColumnDef="actions">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+								<td mat-cell *matCellDef="let row">
+									<button mat-icon-button [disabled]="disableActions" color="primary"
+										(click)="editexceptions(row)">
+										<mat-icon>edit</mat-icon>
+									</button>
+									<button mat-icon-button [disabled]="disableActions" (click)="deleteexceptions(row)"
+										color="warn">
+										<mat-icon>delete</mat-icon>
+									</button>
+								</td>
+							</ng-container>
+							<tr mat-header-row *matHeaderRowDef="exceptionsColumns"></tr>
+							<tr mat-row *matRowDef="let row; columns: exceptionsColumns;"></tr>
+							<tr class="mat-row" *matNoDataRow>
+								<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+							</tr>
+						</table>
+					</div>
+					<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]"
+						aria-label="Select page"></mat-paginator>
+					<br>
+					<hr>
+					<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+						routerLink="/system/product/loans/maintenance">BACK</button>
+					<br>
+				</mat-tab>
+				<mat-tab class="mat-tab" label="Loan Limits">
+					<br>
+					<form action="" class="form" [formGroup]="loanLimitsByProductForm"
+						*ngIf="showLoanLimitsByProductForm">
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column ">
+										<label>Select Condition <span class="text-danger">*</span></label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<mat-radio-group (change)="conditionTypeChange($event)" class="pull-right"
+											aria-label="Select an option" formControlName="conditionType">
+											<mat-radio-button value="accMultiplier" color="primary">Account
+												Multiplier</mat-radio-button>
+											<mat-radio-button value="activeMonths" color="primary">Active Months
+											</mat-radio-button>
+											<mat-radio-button value="historyMultiplier" color="primary">History
+												Multiplier</mat-radio-button>
+										</mat-radio-group>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12" *ngIf="showAccMultiplier">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column ">
+										<label>Account Multiplier</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="accMultiplier" class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12" *ngIf="showActiveMonths">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column ">
+										<label>Active Months</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="activeMonths" class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12" *ngIf="showHistoryMultiplier">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column ">
+										<label>History Multiplier</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="historyMultiplier" class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12" *ngIf="showHistoryMultiplier">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column ">
+										<label>Period Month</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="number" formControlName="privTranPeriodMonth"
+											class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12" *ngIf="onshowLimitProductCode">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column ">
+										<label>Product Code</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="text" formControlName="productCode" class="form-control" />
+										<mat-icon color="primary" (click)="LoanProductCodeLookUp()">search</mat-icon>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column ">
+										<label>Limit Statement In Words</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<textarea type="text" class="form-control"
+											formControlName="limitStatementInWords"
+											oninput="this.value=this.value.toUpperCase()" maxlength="120"
+											minlength="2"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div *ngIf="showButtons">
+							<button *ngIf="addButton" (click)="onAddLoanLimit()"
+								class="pull-right btn btn-success btn-sm"
+								[disabled]="!loanLimitsByProductForm.valid || disableAddButton" mat-raised-button
+								color="primary" type="button">
+								Add Loan Limit
+							</button>
+							<button *ngIf="editButton" class="pull-right btn btn-primary btn-sm"
+								(click)="onUpdateLoanLimit()"
+								[disabled]="!loanLimitsByProductForm.valid || disableAddButton" mat-raised-button
+								color="primary" type="button">
+								Update Loan Limit
+							</button>
+						</div>
+					</form>
+					<div class="row table-action-row">
+						<div class="col-md-6 col-sm-12">
+							<strong> Loan Limit Per Product List</strong>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<input class="pull-right search form-control" (keyup)="loanLimitFilter($event)"
+								placeholder="Search..." #input />
+						</div>
+					</div>
+					<br>
+					<div class="table-row">
+						<table mat-table matSort matTableExporter [dataSource]="loanLimitDataSource">
+							<ng-container matColumnDef="index">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+								<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+							</ng-container>
+							<ng-container matColumnDef="conditionType">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Condition Type</th>
+								<td mat-cell *matCellDef="let row">{{ row.conditionType}}</td>
+							</ng-container>
+							<ng-container matColumnDef="accMultiplier">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Account Multiplier</th>
+								<td mat-cell *matCellDef="let row">{{ row.accMultiplier}}</td>
+							</ng-container>
+							<ng-container matColumnDef="activeMonths">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Active Months</th>
+								<td mat-cell *matCellDef="let row">{{ row.activeMonths}}</td>
+							</ng-container>
+							<ng-container matColumnDef="historyMultiplier">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>History Multiplier</th>
+								<td mat-cell *matCellDef="let row">{{ row.historyMultiplier}}</td>
+							</ng-container>
+							<ng-container matColumnDef="privTranPeriodMonth">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Period Month</th>
+								<td mat-cell *matCellDef="let row">{{ row.privTranPeriodMonth}}</td>
+							</ng-container>
+							<ng-container matColumnDef="productCode">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Product Code</th>
+								<td mat-cell *matCellDef="let row">{{ row.productCode}}</td>
+							</ng-container>
+							<ng-container matColumnDef="actions">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+								<td mat-cell *matCellDef="let row">
+									<button mat-icon-button [disabled]="disableActions" color="primary"
+										(click)="editLoanItem(row)">
+										<mat-icon>edit</mat-icon>
+									</button>
+									<button mat-icon-button [disabled]="disableActions" (click)="deleteLoanItem(row)"
+										color="warn">
+										<mat-icon>delete</mat-icon>
+									</button>
+								</td>
+							</ng-container>
+							<tr mat-header-row *matHeaderRowDef="loanLimitColumns"></tr>
+							<tr mat-row *matRowDef="let row; columns: loanLimitColumns;"></tr>
+							<tr class="mat-row" *matNoDataRow>
+								<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+							</tr>
+						</table>
+					</div>
+					<mat-paginator #loanLimitPaginator="matPaginator" [pageSize]="5"
+						[pageSizeOptions]="[2, 5, 10, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+					<br>
+				</mat-tab>
+				<mat-tab class="mat-tab" label="GL Suheads">
+					<br>
+					<form [formGroup]="glsubheadsForm" *ngIf="showglsubheadsForm">
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">GL Subhead Code</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input type="text" formControlName="gl_subhead" class="form-control"
+											oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+											maxlength="15">
+										&nbsp; &nbsp;
+										<mat-icon *ngIf="showSearch" color="primary" (click)="glSubheadLookup()">
+											search</mat-icon>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">GL Code</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<input readonly type="text" formControlName="gl_code" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="form-group">
+									<div class="col-md-6 col-sm-12 form-column">
+										<label class="start">Gl Subhead Description</label>
+									</div>
+									<div class="col-md-6 col-sm-12 form-column">
+										<textarea readonly formControlName="gl_subhead_description"
+											class="form-control"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div *ngIf="showButtons">
+							<button *ngIf="addButton" (click)="addglsubheads()"
+								class="pull-right btn btn-success btn-sm"
+								[disabled]="!glsubheadsForm.valid || disableAddButton" mat-raised-button color="primary"
+								type="button">
+								Add GL Subhead
+							</button>
+							<button *ngIf="editButton" (click)="updateglsubheads()"
+								class="pull-right btn btn-primary btn-sm"
+								[disabled]="!glsubheadsForm.valid || disableAddButton" mat-raised-button color="primary"
+								type="button">
+								Update GL Subhead
+							</button>
+						</div>
+					</form>
+					<br>
+					<div class="row table-action-row">
+						<div class="on-mobile-hide col-md-6 col-sm-12">
+							<strong>GL Subheads List</strong>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<input class="pull-right search form-control" (keyup)="applyglsubheadsFilter($event)"
+								placeholder="Search..." #input />
+						</div>
+					</div>
+					<br>
+					<div class="table-row">
+						<table mat-table matSort matTableExporter [dataSource]="glsubheadsDataSource">
+							<ng-container matColumnDef="index">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+								<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+							</ng-container>
+							<ng-container matColumnDef="gl_subhead">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>GL Subhead Code</th>
+								<td mat-cell *matCellDef="let row">{{ row.gl_subhead}}</td>
+							</ng-container>
+							<ng-container matColumnDef="gl_code">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>GL Code
+								<td mat-cell *matCellDef="let row">{{ row.gl_code}}</td>
+							</ng-container>
+							<ng-container matColumnDef="gl_subhead_description">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+								<td mat-cell *matCellDef="let row">{{ row.gl_subhead_description }}</td>
+							</ng-container>
+							<ng-container matColumnDef="actions">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+								<td mat-cell *matCellDef="let row">
+									<button mat-icon-button [disabled]="disableActions" color="primary"
+										(click)="editglsubheads(row)">
+										<mat-icon>edit</mat-icon>
+									</button>
+									<button mat-icon-button [disabled]="disableActions" (click)="deleteglsubheads(row)"
+										color="warn">
+										<mat-icon>delete</mat-icon>
+									</button>
+								</td>
+							</ng-container>
+							<tr mat-header-row *matHeaderRowDef="glsubheadsColumns"></tr>
+							<tr mat-row *matRowDef="let row; columns: glsubheadsColumns;"></tr>
+							<tr class="mat-row" *matNoDataRow>
+								<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+							</tr>
+						</table>
+					</div>
+					<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]"
+						aria-label="Select page"></mat-paginator>
+					<br>
+					<hr>
+					<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+						routerLink="/system/product/loans/maintenance">BACK</button>
+					<button *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor" type="submit" (click)="onSubmit()">
+						<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+					</button>
+					<br>
+				</mat-tab>
+			</mat-tab-group>
+		</form>
+	</div>
+</mat-card>

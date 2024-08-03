@@ -1,0 +1,67 @@
+<mat-card>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a> Manual Loan Penalty Maintenance
+		</div>
+	</mat-card-header>
+	<mat-divider></mat-divider>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</p>
+	</div>
+	<br>
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData" #resetRequestsForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label class="start pull-left">Function<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column ">
+							<select (change)="onChange($event)" class="form-control" formControlName="function_type"
+								[ngClass]="{ 'is-invalid': submitted && f.function_type.errors }">
+								<option value="" disabled>-- CHOOSE FUNCTION --</option>
+								<option *ngFor="let flag of functionArray" [value]="flag">{{ flag }}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12" *ngIf="showAccountCode">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Penalty ID.<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="acid" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.acid.errors }"> &nbsp; &nbsp;
+							<mat-icon color="primary" (click)="loansAccountLookUp()">search</mat-icon>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12" *ngIf="showAccountID">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Penalty ID.<span
+									class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input readonly type="number" formControlName="id" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.id.errors }"> &nbsp; &nbsp;
+							<mat-icon color="primary" (click)="loanPenaltyCodeLookUp()">search</mat-icon>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<hr>
+			<button mat-raised-button class="pull-left bg-secondary text-white" routerLink="/system/"
+				skipLocationChange="">BACK</button>
+			<button mat-raised-button type="submit" class="float-right" color="primary"> <span *ngIf="loading"
+					class="spinner-border spinner-border-sm mr-1"></span>PROCEED</button>
+			<br>
+		</form>
+	</div>
+</mat-card>

@@ -1,0 +1,54 @@
+Basic Transaction Rules
+1.Check if transaction is balanced
+2.Check debit account if allows debit & Check if all accounts are active
+2.Check if account has sufficient balance when doing debit (including lient amount)
+    - Only for retail accounts
+4.Check if all accounts are active
+
+
+Teller Rules
+- Cash Withdrawal & Cash Deposit
+- auto verify transaction if
+
+y
+
+Transaction processing
+1.Check if transaction type  incur charges
+ - Withdrawal fee
+ - Processing fee
+
+
+
+
+
+
+
+
+ 2.Check account if allows debit
+             Boolean allDebitAcAllowDebit = false;
+             List<String> debitAc = null;
+             List<PartTran> partTrans = transactionHeader.getPartTrans();
+             for (int i=0; i<partTrans.size(); i++){
+                 PartTran partTran = partTrans.get(i);
+                 if (partTran.getPartTranType().equalsIgnoreCase(CONSTANTS.Debit)){
+                     debitAc.add(partTran.getAcid());
+                 }
+             }
+
+Charges Collection External;
+
+             Types of transactions
+             Cashdeposit debit teller - credit operative
+             Each credit account will receive an email statement
+             Cashwithdrawal -  debit customer op - credit teller
+             Each debit account will receive email statement
+             Transfer
+
+
+Entry
+Accounts validations
+ - Active, has currency,
+Collect Charges for each debit account
+add charges parttrans to the transaction list
+
+2. Check account balance.

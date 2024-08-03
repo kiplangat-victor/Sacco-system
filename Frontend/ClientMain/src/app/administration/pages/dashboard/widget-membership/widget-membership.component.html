@@ -1,0 +1,63 @@
+<form [formGroup]="membershipForm">
+  <div class="row p-3">
+    <div class="col-md-4">
+      <mat-form-field appearance="legacy">
+        <mat-label>Select Chart Period</mat-label>
+        <mat-select (selectionChange)="onSelectPeriod($event)" formControlName="period">
+          <mat-option *ngFor="let item of chartDispType" value="{{ item }}">{{
+            item
+            }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-md-8">
+
+
+      <div class="row" *ngIf="this.needYear">
+        <div class="col-md-6">
+          <mat-form-field appearance="legacy">
+            <mat-label>Select Year</mat-label>
+            <mat-select (selectionChange)="fetchCustomerOnboardingDaywiseStatistics($event)" formControlName="year">
+              <mat-option *ngFor="let item of this.years" value="{{ years }}">{{ item }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <div class="row" *ngIf="this.needMonth">
+        <div class="col-md-6">
+          <mat-form-field appearance="legacy">
+            <mat-label>Select Year</mat-label>
+            <mat-select (selectionChange)="fetchCustomerOnboardingDaywiseStatistics($event)" formControlName="year">
+              <mat-option *ngFor="let item of this.years" value="{{ years }}">{{ item }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+
+        <div class="col-md-6" *ngIf="this.needMonth">
+          <mat-form-field appearance="legacy">
+            <mat-label>Select Month</mat-label>
+            <mat-select (selectionChange)="fetchCustomerOnboardingDaywiseStatistics($event)" formControlName="month">
+              <mat-option *ngFor="let item of monthsArray" value="{{ item }}">{{
+                item
+                }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div *ngIf="isLoading">
+  <p><small>Loading, please wait...</small></p>
+  <p>
+    <mat-progress-bar mode="query"></mat-progress-bar>
+  </p>
+</div>
+<div  class="mat-elevation-z8" id="Overal-Perfomance"></div>
+<!-- <div *ngIf="isLoading">
+  <app-spinner></app-spinner>
+</div> -->

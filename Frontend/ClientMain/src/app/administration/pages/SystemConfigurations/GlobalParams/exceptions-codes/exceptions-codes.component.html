@@ -1,0 +1,115 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/configurations/global/exceptions-codes/maintenance">Exception Maintenance / </a> Exception
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-4 col-sm-12">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h4>Function:- <strong>{{this.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h4>Exception Code: <strong>{{this.exceptionCode}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 col-sm-12 row" *ngIf="onShowResults">
+      <div class="row" *ngIf="this.results">
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted ON:- <strong>{{this.results.postedTime | date}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verified BY:- <strong>{{this.results.verifiedBy}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Code Type<span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <select class="form-control" formControlName="exce_code_type"
+                [ngClass]="{ 'is-invalid': submitted && f.exce_code_type.errors }">
+                <option value="" disabled>-- CHOOSE FUNCTION --</option>
+                <option *ngFor="let flag of excceptionTypeArray" [value]="flag">{{ flag }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Work Class Role <span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <select class="form-control" formControlName="exce_work_class_role">
+                <option value="" disabled>-- CHOOSE ROLE --</option>
+                <option *ngFor="let item of this.rolesArray">{{ item.name }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Ignore Exception in Exception Overriding Events <span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <mat-radio-group class="pull-right" aria-label="Select an option"
+                formControlName="exce_ignore_exce_overriding_events"
+                [ngClass]="{ 'is-invalid': submitted && f.exce_ignore_exce_overriding_events.errors }">
+                <mat-radio-button color="primary" value="Yes">Yes</mat-radio-button>
+                <mat-radio-button color="accent" value="No">No.</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Description<span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <textarea type="text" maxlength="60" formControlName="exce_description"
+                class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.exce_description.errors }"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <hr>
+      <br>
+      <button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+        routerLink="/system/configurations/global/exceptions-codes/maintenance">BACK</button>
+      <button *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor" type="submit">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+      </button>
+      <br>
+    </form>
+  </div>
+</mat-card>

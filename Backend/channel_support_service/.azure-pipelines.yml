@@ -1,0 +1,102 @@
+trigger:
+  branches:
+    include:
+      - main
+      - test
+
+pool:
+  name: 'default'
+
+variables:
+  GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
+  IMAGE_NAME: firsttestcontainer
+  K8S_NAMESPACE_DEVELOPMENT: development
+  K8S_NAMESPACE_PRODUCTION: production
+  DEPLOYMENT_NAME: pod-info-deployment
+
+stages:
+  - stage: Build_And_Test
+    jobs:
+      - job:
+        displayName: 'Build and Test  '
+        steps:
+          - script: |
+              sudo apt-get update
+              sudo apt-get install -y openjdk-11-jdk
+              echo "##vso[task.prependpath]/usr/lib/jvm/java-11-openjdk-amd64/bin"
+              java -version
+            displayName: 'Set up Java'
+          - script: |
+              chmod +x ./Backend/channel_support_service/gradlew
+            displayName: 'Make gradlew executable'
+          - script: |
+              cd Backend/channel_support_service
+              ./gradlew build
+            displayName: 'Build with Gradle'
+            env:
+              GRADLE_USER_HOME: $(GRADLE_USER_HOME)
+          - script: |
+              cd channel_support_service
+              ./gradlew test
+            displayName: 'Run tests with Gradle'
+            env:
+              GRADLE_USER_HOME: $(GRADLE_USER_HOME)
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'testings'
+              repository: '$(IMAGE_NAME)'
+              command: 'buildAndPush'
+              Dockerfile: 'Backend/channel_support_service/Dockerfile'
+              tags: |
+                latest
+                $(Build.BuildId)
+      - job: Build_And_Test_Job
+        displayName: 'Build and Test'
+          # steps:
+        # Steps for building and testing your application
+
+  - stage: Deploy_to_Staging
+    dependsOn: Build_And_Test
+    jobs:
+      - job: Deploy_to_Staging_Job
+        displayName: 'Deploy to Staging'
+        steps:
+          #      - task: Docker@2
+          #        inputs:
+          #          containerRegistry: 'testing'
+          #          repository: '$(IMAGE_NAME)'
+          #          command: 'buildAndPush'
+          #          Dockerfile: '**/Dockerfile'
+          #          tags: |
+          #             $(Build.BuildId)
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'deploy'
+              kubernetesServiceConnection: 'workings'
+              namespace: '$(K8S_NAMESPACE_DEVELOPMENT)'
+              manifests: |
+                $(Build.SourcesDirectory)/Backend/channel_support_service/deployment.yaml
+              containers: |
+                $(IMAGE_NAME):$(Build.BuildId)
+              arguments: '--validate=false'
+
+  - stage: Deploy_to_Production
+    dependsOn: Deploy_to_Staging
+    jobs:
+      - deployment: Deploy_to_Production_Job
+        displayName: 'Deploy to Production'
+        environment: 'new'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: KubernetesManifest@0
+                  inputs:
+                    action: 'deploy'
+                    kubernetesServiceConnection: 'pworkings'
+                    namespace: '$(K8S_NAMESPACE_PRODUCTION)'
+                    manifests: |
+                      $(Build.SourcesDirectory)/Backend/channel_support_service/k8service.yaml
+                    containers: |
+                      $(IMAGE_NAME):$(Build.BuildId)
+                    # arguments: '--validate=false'

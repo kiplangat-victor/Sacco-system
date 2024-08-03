@@ -1,0 +1,58 @@
+
+<mat-card>
+  <mat-card-header class="breadcrumb">
+      <div>
+          <a routerLink="/system">Dashboard / </a>
+          <a routerLink="/system/loans-account-repayment/maintenance"> Loan Fee Repayment Maintenance / </a> Loan Fee Repayment
+      </div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <div *ngIf="loading">
+      <p><small>Processing, please wait...</small></p>
+      <p>
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </p>
+  </div>
+  <br>
+  <div class="container-fluid">
+      <form class="form" [formGroup]="formData" #resetRequestsForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="row">
+              <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                      <div class="col-md-6 col-sm-12 form-column ">
+                          <label class="start pull-left">Loan Account ID<span class="warning">*</span></label>
+                      </div>
+                      <div class="col-md-6 col-sm-12 form-column ">
+                        <input type="text" formControlName="loanAccountAcid" class="pull-right form-control"
+                        readonly/>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                      <div class="col-md-6 col-sm-12 form-column">
+                          <label class="start pull-left">Operative Account<span class="warning">*</span></label>
+                      </div>
+                      <div class="col-md-6 col-sm-12 form-column ">
+                          <input type="text" formControlName="operativeAccountAcid" class="pull-right form-control"
+
+                              [ngClass]="{ 'is-invalid': submitted && f.operativeAccountAcid.errors }"
+                              oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                              maxlength="20" minlength="4"/> &nbsp; &nbsp;
+                          <mat-icon color="primary" (click)="customerSavingCodeLookUp()">search</mat-icon>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <br />
+          <div class="col-md-12 col-sm-12">
+              <button mat-raised-button class="pull-left bg-secondary text-white" routerLink="/system/loans-account-repayment/maintenance"
+                  skipLocationChange="">BACK</button>
+              <button mat-raised-button type="submit" class="float-right" color="primary"
+                  style="margin-bottom:20px ;"> <span *ngIf="loading"
+                      class="spinner-border spinner-border-sm mr-1"></span>SUBMIT</button>
+          </div>
+          <br />
+      </form>
+  </div>
+</mat-card>

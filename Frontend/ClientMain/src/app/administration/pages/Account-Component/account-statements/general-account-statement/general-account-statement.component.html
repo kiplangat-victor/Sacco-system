@@ -1,0 +1,24 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="query"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a>
+			<a routerLink="/system/accounts/statement/maintenance">Accounts Statement Maintenance / </a>
+			Accounts Statement
+		</div>
+	</mat-card-header>
+	<mat-divider></mat-divider>
+	<br>
+	<div class="container-fluid">
+
+		<button mat-raised-button class="pull-left bg-secondary text-white"
+			routerLink="/system/accounts/statement/maintenance" skipLocationChange="">BACK</button>
+		<br>
+	</div>
+	<br>
+</mat-card>

@@ -1,0 +1,108 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Loading, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a> Exercise Duty
+		</div>
+	</mat-card-header>
+	<mat-divider></mat-divider>
+	<br />
+	<div class="container-fluid">
+		<br>
+		<p><b> Exercise Duty List</b></p>
+		<div>
+			<div class="row">
+				<div class="row table-action-row">
+					<div class="on-mobile-hide col-md-6 col-sm-12">
+					</div>
+					<div class="col-md-6 col-sm-12">
+						<input class="pull-right search form-control" (keyup)="applyFilter($event)"
+							placeholder="Search..." #input />
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="table-row">
+				<table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+					<ng-container matColumnDef="index">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+						<td mat-cell *matCellDef="let element; let i = index">
+							{{ i + 1 }}
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="pin">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>Account</th>
+						<td mat-cell *matCellDef="let row">{{ row.pin }}</td>
+					</ng-container>
+					<ng-container matColumnDef="accNo">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Account NO.
+						</th>
+						<td mat-cell *matCellDef="let row">{{ row.accNo }}</td>
+					</ng-container>
+					<ng-container matColumnDef="invId">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Invoice ID
+						</th>
+						<td mat-cell *matCellDef="let row">{{ row.invId }}</td>
+					</ng-container>
+					<ng-container matColumnDef="trnAmt">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Transaction Amount
+						</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.trnAmt | currency : "UGX " }}
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="exRt">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Rate
+						</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.exRt / 100 | percent : '1.2-5' }}
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="exDutyAmt">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Ex. Duty Amount
+						</th>
+						<td mat-cell *matCellDef="let row">
+							{{ row.exDutyAmt | currency : "KES " }}
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="postedTime">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Transaction Date
+						</th>
+						<td mat-cell *matCellDef="let row">{{ row.postedTime | date: 'short' }}</td>
+					</ng-container>
+					<ng-container matColumnDef="status">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Transaction Status
+						</th>
+						<td mat-cell *matCellDef="let row">{{ row.status}}</td>
+					</ng-container>
+					<ng-container matColumnDef="signatureGenerated">
+						<th mat-header-cell *matHeaderCellDef mat-sort-header>
+							Transaction Signature Generated
+						</th>
+						<td mat-cell *matCellDef="let row">{{ row.signatureGenerated}}</td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+					<tr class="mat-row" *matNoDataRow>
+						<td class="mat-cell" colspan="4">
+							No data matching the filter "{{ input.value }}"
+						</td>
+					</tr>
+				</table>
+			</div>
+			<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+		</div>
+	</div>
+</mat-card>

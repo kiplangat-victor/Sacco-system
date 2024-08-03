@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="risk classification of assets" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="97d52823-36a1-47cc-84da-a812b511baed">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="emt_multi_tenat_sacco"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="cs_number" class="java.lang.String"/>
+	<parameter name="report_icon" class="java.lang.String"/>
+	<parameter name="to_date" class="java.lang.String"/>
+	<parameter name="from_date" class="java.lang.String"/>
+	<parameter name="sacco_name" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select "1. Performing" as type, coalesce(sum(account_balance) * -1, 0) as balance, count(*) as size, "0.01" as requiredProvision, (0.01* coalesce(sum(account_balance) * -1, 0)) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where (loan.restructured_flag is null or loan.restructured_flag = 'N') and  loan.asset_classification='PERFORMING' union
+		select "2. Watch" as type, coalesce(sum(account_balance) * -1, 0) as balance, count(*) as size, "0.05" as requiredProvision, (0.05* coalesce(sum(account_balance) * -1, 0)) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where  (loan.restructured_flag is null or loan.restructured_flag = 'N') and loan.asset_classification='WATCH'  union
+		select "3. Substandard" as type, coalesce(sum(account_balance) * -1, 0) as balance, count(*) as size, "0.25" as requiredProvision, (0.25* coalesce(sum(account_balance) * -1, 0)) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where  (loan.restructured_flag is null or loan.restructured_flag = 'N') and loan.asset_classification='SUB_STANDARD' union
+		select "4. Doubtful" as type, coalesce(sum(account_balance) * -1, 0) as balance, count(*) as size, "0.50" as requiredProvision, (0.50* coalesce(sum(account_balance) * -1, 0)) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where  (loan.restructured_flag is null or loan.restructured_flag = 'N') and loan.asset_classification='DOUBTFUL' union
+		select "5. Loss" as type, coalesce(sum(account_balance) * -1, 0) as balance, count(*) as size, "1.00" as requiredProvision, (1.00* coalesce(sum(account_balance) * -1, 0)) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where  (loan.restructured_flag is null or loan.restructured_flag = 'N') and loan.asset_classification='LOSS' union
+		select "Sub Total " as type, coalesce(sum(account_balance)*-1, 0) as balance, count(*) as size, " " as requiredProvision, (((select (0.01* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where (loan.restructured_flag is null or loan.restructured_flag = 'N') and  loan.asset_classification='PERFORMING')) + ((select (0.05* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where (loan.restructured_flag is null or loan.restructured_flag = 'N') and  loan.asset_classification='WATCH')) + ((select (0.25* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where (loan.restructured_flag is null or loan.restructured_flag = 'N') and  loan.asset_classification='SUB_STANDARD')) + ((select (0.50* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where (loan.restructured_flag is null or loan.restructured_flag = 'N') and  loan.asset_classification='DOUBTFUL')) + ((select (1.00* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where (loan.restructured_flag is null or loan.restructured_flag = 'N') and  loan.asset_classification='LOSS'))) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where  (loan.restructured_flag is null or loan.restructured_flag = 'N') and loan.asset_classification IN('PERFORMING','WATCH','SUB_STANDARD','DOUBTFUL','LOSS') union
+		select "Renegotiated Loans/Reshedule" as type, (select 0) as balance, (select 0) as size, "" as requiredProvision, (select 0) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where loan.asset_classification='LOSS' union  
+		select "1. Performing." as type, coalesce(sum(account_balance) * -1, 0) as balance, count(*) as size, "0.01" as requiredProvision, (0.01* coalesce(sum(account_balance) * -1, 0)) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where loan.restructured_flag='Y' and loan.asset_classification='PERFORMING' union
+		select "2. Watch." as type, coalesce(sum(account_balance) * -1, 0) as balance, count(*) as size, "0.05" as requiredProvision, (0.05* coalesce(sum(account_balance) * -1, 0)) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where loan.restructured_flag='Y' and loan.asset_classification='WATCH'  union
+		select "3. Substandard." as type, coalesce(sum(account_balance) * -1, 0) as balance, count(*) as size, "0.25" as requiredProvision, (0.25* coalesce(sum(account_balance) * -1, 0)) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where loan.restructured_flag='Y' and loan.asset_classification='SUB_STANDARD' union
+		select "4. Doubtful." as type, coalesce(sum(account_balance) * -1, 0) as balance, count(*) as size, "0.50" as requiredProvision, (0.50* coalesce(sum(account_balance) * -1, 0)) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where loan.restructured_flag='Y' and loan.asset_classification='DOUBTFUL' union
+		select "5. Loss." as type, coalesce(sum(account_balance) * -1, 0) as balance, count(*) as size, "1.00" as requiredProvision, (1.00* coalesce(sum(account_balance) * -1, 0)) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where loan.restructured_flag='Y' and loan.asset_classification='LOSS' union
+		select "Sub Total " as type, coalesce(sum(account_balance)*-1, 0) as balance, count(*) as size, " " as requiredProvision, (((select (0.01* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where loan.restructured_flag = 'Y' and  loan.asset_classification='PERFORMING')) + ((select (0.05* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where loan.restructured_flag = 'Y' and  loan.asset_classification='WATCH')) + ((select (0.25* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where loan.restructured_flag = 'Y' and  loan.asset_classification='SUB_STANDARD')) + ((select (0.50* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where loan.restructured_flag = 'Y' and  loan.asset_classification='DOUBTFUL')) + ((select (1.00* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where loan.restructured_flag = 'Y' and  loan.asset_classification='LOSS'))) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where loan.restructured_flag='Y' and loan.asset_classification IN('PERFORMING','WATCH','SUB_STANDARD','DOUBTFUL','LOSS') union
+		select " GRAND TOTAL" as type, coalesce(sum(account_balance)*-1, 0) as balance, count(*) as size, " " as requiredProvision, (((select (0.01* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where  loan.asset_classification='PERFORMING')) + ((select (0.05* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where  loan.asset_classification='WATCH')) + ((select (0.25* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where  loan.asset_classification='SUB_STANDARD')) + ((select (0.50* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where  loan.asset_classification='DOUBTFUL')) + ((select (1.00* coalesce(sum(account_balance) * -1, 0)) from loan join accounts a on loan.account_id_fk = a.id
+		where  loan.asset_classification='LOSS'))) as provision from loan join accounts a on loan.account_id_fk = a.id
+		where loan.asset_classification IN('PERFORMING','WATCH','SUB_STANDARD','DOUBTFUL','LOSS');]]>
+	</queryString>
+	<field name="type" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="type"/>
+		<property name="com.jaspersoft.studio.field.label" value="type"/>
+	</field>
+	<field name="balance" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="balance"/>
+		<property name="com.jaspersoft.studio.field.label" value="balance"/>
+	</field>
+	<field name="size" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="size"/>
+		<property name="com.jaspersoft.studio.field.label" value="size"/>
+	</field>
+	<field name="requiredProvision" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="requiredProvision"/>
+		<property name="com.jaspersoft.studio.field.label" value="requiredProvision"/>
+	</field>
+	<field name="provision" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="provision"/>
+		<property name="com.jaspersoft.studio.field.label" value="provision"/>
+	</field>
+	<variable name="tAccounts" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{size}]]></variableExpression>
+	</variable>
+	<variable name="tBalance" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{balance}]]></variableExpression>
+	</variable>
+	<variable name="tProvision" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{provision}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<image hAlign="Right" vAlign="Middle" isUsingCache="true">
+				<reportElement x="0" y="-20" width="81" height="80" uuid="78133b44-1920-4071-8901-51efa374de7c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{report_icon}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Transparent" x="82" y="0" width="487" height="39" forecolor="#030200" uuid="e51ca343-1755-4ebb-809f-b46a2b18d7ba">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box leftPadding="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font size="24" isBold="true"/>
+					<paragraph lineSpacingSize="1.0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{sacco_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="181">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="1" width="555" height="19" uuid="be0c1e89-9ef5-4c41-a384-862dfaccc0a8"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FORM 4 SASRA2/004]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="555" height="20" uuid="4d2ad67f-31f1-460c-98bf-6e4f63d81223"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[RISK CLASSIFICATION OF ASSETS AND PROVISIONING]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="180" height="21" uuid="3956f4ff-4a49-4db6-bfbf-617a1c9f8a05"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SACCO SOCIETY CS NUMBER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="140" width="60" height="41" uuid="06a61333-b7c1-4eac-a03c-0f128e40d553"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NO. OF A/Cs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="81" width="180" height="20" uuid="918e7a60-ad39-423a-aabd-c905419339dd"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[START DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="61" width="180" height="20" uuid="80cc9d56-4792-42f3-929a-ee9bde9a26c6"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FINANCIAL YEAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="140" width="180" height="41" uuid="c53f5388-ecea-4a07-9c71-a2aa1f1a4c4e"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLASSIFICATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="101" width="180" height="19" uuid="8b9aa406-6bd4-49f0-90eb-16ccfce4f01c"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[END DATE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="180" y="61" width="375" height="20" uuid="69883711-7722-4a3e-a459-51c94bc261cd"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date().getYear() + 1900]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="81" width="375" height="20" uuid="da1a9ee6-cec0-4f5a-afa1-1afce94676e4"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy-MM-dd").parse($P{from_date}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="40" width="375" height="21" uuid="fb0b983b-376f-41b7-9291-dfa7a8f775ee"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{cs_number}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="240" y="140" width="100" height="41" uuid="692f1a70-814a-4a62-b4d1-cf041d27c103"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[OUTSTANDING LOAN PORTFOLIO(Kshs)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="140" width="100" height="41" uuid="e13368ba-347b-432f-8804-a402f2427096"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REQUIRED PROVISION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="140" width="115" height="41" uuid="6d622f47-6417-4353-873b-986fa25f5802"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REQUIRED PROVISION(Kshs)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="120" width="555" height="20" uuid="aec243c3-3197-4b61-9a80-9eaa45b840f8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PORTFOLIO AGEING REPORT]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="180" y="101" width="375" height="19" uuid="6c95dace-addd-4cde-b877-151582417e7b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy-MM-dd").parse($P{to_date}))]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="0" y="0" width="180" height="20" uuid="6bdc700c-c589-4d89-be96-bbb14f71f8a9"/>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{type}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="240" y="0" width="100" height="20" uuid="31063e04-f378-4327-93cd-27f4efc144aa"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{balance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="0" width="60" height="20" uuid="39ec8ebd-7b54-4311-aec9-f36285a272c7"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="3">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{size}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="340" y="0" width="100" height="20" uuid="93ab24db-3c49-4214-8dc5-2e189def8fb8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box topPadding="2" leftPadding="6" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{requiredProvision}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="440" y="0" width="115" height="20" uuid="9edd8b66-bb6b-4908-86d2-95b13cae1a29">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box topPadding="2" leftPadding="6" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{provision}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="204" splitType="Stretch">
+			<staticText>
+				<reportElement x="10" y="26" width="170" height="24" uuid="586f8b17-9a65-4962-a180-30007c6ecf3b"/>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AUTHORIZATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="51" width="520" height="24" uuid="ca135dd2-b86b-4867-8399-bbb53bd31b50">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[We declare that this return, to the best of our knowledge and belief is correct.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="78" width="380" height="24" uuid="dfb6d074-31ad-4d5f-b904-11387676fe1b">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Name of the compiling officer: ..........................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="107" width="210" height="24" uuid="1325730b-8b2c-44a1-8ac5-bd702c01750c"/>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Sign ..................................... Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="139" width="380" height="24" uuid="bbfd8122-8baf-44d9-98a1-37a8ccf41ea1"/>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Name of the countersigning officer: ----------------------]]></text>
+			</staticText>
+			<textField pattern="MMM d, yyyy">
+				<reportElement x="222" y="110" width="125" height="24" uuid="672f374f-5b5d-4b96-b414-ccfd0f2750eb"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="171" width="210" height="22" uuid="0aa8cc43-5399-40ef-97c2-71edf3c3a69a"/>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Sign ..................................... Date:]]></text>
+			</staticText>
+			<textField pattern="MMM d, yyyy">
+				<reportElement x="222" y="172" width="125" height="24" uuid="f3943f5a-93bd-4667-a362-211f7dee6873"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

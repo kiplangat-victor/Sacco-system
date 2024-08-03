@@ -1,0 +1,223 @@
+// .container-fluid{
+//     width: 100% !important;
+//     margin: 0px !important;
+// }
+// .row{
+//     width: 100% !important;
+// }
+// /* // .form{
+// //     margin-top: 10px !important;
+// //     margin-bottom: 10px !important;
+// //     padding-top: 10px !important;
+// //     padding-bottom: 10px !important;
+// // } */
+// .mat-tab-group {
+//     margin-top: 10px;
+//     margin-bottom: 10px;
+//   }
+//   .mat-tab{
+//     width: 100% !important;
+//     padding-top: 10px !important;
+//     padding-bottom: 10px !important;
+//   }
+//   mat-card{
+//     width: 100%;
+//     height: 100%;
+//   }
+
+//   th{
+//     text-align: left !important;
+//   }
+//   table{
+//     font-weight: 100px;
+//     font-size: 12px;
+//     /* // font-family: monospace; */
+//   }
+  
+//   .actionButton {
+//     min-width: unset!important;
+//     height: 25px;
+//     line-height: 25px;
+//     padding: auto;
+//     margin: 2px;
+
+//   }
+//   .mat-icon {
+//     font-size: 25px;
+//     height: 25px;
+//     line-height: 25px;
+//   }
+ 
+//   mat-form-field{
+//       width: 100%;
+//   }
+//   /* // .form-data{
+//   //     text-align: justify !important;
+//   // } */
+//   .form-input {
+//       width: max-content !important;
+//   }
+//   .form-group{
+//     display: flex !important;
+//     padding-bottom: 0px !important;
+//     padding-top: 0px !important;
+//     margin-bottom: 2px !important;
+//     margin-top: 0px !important;
+//     font-size: 12px !important;
+//   }
+//   .form-group-block{
+//     display: block !important;
+//     padding-bottom: 0px !important;
+//     padding-top: 0px !important;
+//     margin-bottom: 2px !important;
+//     margin-top: 0px !important;
+//     font-size: 12px !important;
+//   }
+//   .row{
+//     padding-bottom: 0px !important;
+//     padding-top: 0px !important;
+//     margin-bottom: 0px !important;
+//     margin-top: 0px !important;
+//     font-size: 12px !important;
+//   }
+
+//   .form-column {
+//     display: flex;
+//     padding-bottom: 0px !important;
+//     padding-top: 0px !important;
+//     margin-bottom: 0px !important;
+//     margin-top: 0px !important;
+//     font-size: 12px !important;
+//   }
+//   .form-column-block{
+//     display: block !important;
+//     padding-bottom: 0px !important;
+//     padding-top: 0px !important;
+//     margin-bottom: 0px !important;
+//     margin-top: 0px !important;
+//     font-size: 12px !important;
+//   }
+//   .form-control{
+//     width: 80%;
+//     height: 25px;
+//     font-size: 10px;
+//     /* // font-family: Arial, Helvetica, sans-serif; */
+//     font-weight: 400;
+//     border-radius:  0px;
+//   }
+//   .form-column-dates{
+//     display: flex !important;
+//     width: 80% !important;
+//     height: 24px;
+//     font-size: 10px;
+//  /* font-family: Arial, Helvetica, sans-serif; */
+//     font-weight: 400;
+//     border-radius:  0px;
+//   }
+//   .sub-form-control{
+//     width: 26%;
+//     height: 25px;
+//     font-size: 10px;
+//     /* // font-family: Arial, Helvetica, sans-serif; */
+//     font-weight: 400;
+//     border-radius:  0px;
+//   }
+//   .dates{
+//     width: 40% !important;
+//   }
+//   .pull-right-dates{
+//     width: 40% !important;
+//   }
+//   .pull-right-dates-3{
+//     width: 26.7% !important;
+//   }
+  
+//   textarea{
+//     height: 50px !important;
+//   }
+//   mat-icon{
+//     cursor: pointer;
+//    /* justify-content: unset !important; */
+//   }
+//   label{
+//     font-weight: 500;
+//     padding-left: 20px !important;
+//   }
+ 
+//   .form-data-fixed {
+//     width: 57% !important;
+//   }
+//   .custom{
+//     background-color: red;;
+//   }
+//   .currency{
+//     width: 15%;
+//   }
+//   .currency-value{
+//     width: 58%;
+//   }
+//   .warning{
+//     color: rgb(255, 127, 77);;
+//   }
+//   .drop-down{
+//     font-size: 8px !important;
+//     color: black !important;
+//     padding: 0px !important;
+//   }
+//   p{
+//     color: rgb(145, 181, 252);
+//     font-family: sans-serif;
+//     font-weight: 600;
+// }
+// .block{
+//   display: block !important;
+//   padding-bottom: 0px !important;
+//   padding-top: 0px !important;
+//   margin-bottom: 0px !important;
+//   margin-top: 0px !important;
+//   font-size: 12px !important;
+// }
+
+
+// /* Styles for tab labels */
+// .mat-tab-label {
+//     min-width: 1px !important;
+//     background-color: transparent;
+//     font-weight: 700;
+// }
+// .child{
+//   background-color: transparent;
+//   width: 3px !important;
+//   margin: 0px;
+//   padding: 0px;
+//   font-weight: 700;
+// }
+
+// /* Styles for the active tab label */
+// .mat-tab-label.mat-tab-label-active {
+//     min-width: 1px !important;
+//     background-color: transparent;
+//     font-weight: 700;
+// }
+
+// /* Styles for the ink bar */
+// .mat-ink-bar {
+//     background-color: green;
+// }
+// h3{
+//   color: rgb(15, 133, 230);
+//   font-weight: 500;
+// }
+// .col-md-4{
+//   margin: 0px !important;
+//   padding: 0px !important;
+//   width: 10px !important;
+// }
+
+// .display-block{
+//   display: block !important;
+//   flex-direction: column;
+// }
+// button{
+//     margin-bottom: 10px;
+// }

@@ -1,0 +1,52 @@
+<div class="container">
+  <mat-card>
+    <div class="row">
+      <div class="left-info col-md-6 col-sm-12">
+        <div class="loginImage">
+          <img src="../../../assets/authimage.png" class="img-responsive">
+        </div>
+      </div>
+      <div class="right-info col-md-6 col-sm-12">
+        <span *ngIf="loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></span>
+        <!-- <div class="profile-card">
+            <img src="{{logolink}}">
+          </div> -->
+        <div class="text-center">
+            <img src="../../../assets/PBlogo.png" width="220px" height="110px" class="px-1 mx-2" alt="" />
+        </div>
+        <h2 class="welcome-msg text-center">Welcome to Sacco Management System</h2>
+        <p class="text-muted text-center">Enter Credentials Below:</p>
+        
+        <div class="card-body">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Enter your username</mat-label>
+              <input type="text" formControlName="username" matInput placeholder="e.g john">
+              <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Enter your password</mat-label>
+              <input formControlName="password" matInput [type]="hide ? 'password' : 'text'">
+              <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+            </mat-form-field>
+
+            <button [disabled]="loading" class="btn btn-block btn-primary" style="background-color: #004d99;" type="submit">
+              Login
+            </button>
+            <br>
+            <br>
+            <a class="pull-left" routerLink="/sso/reset_password" style="color: #004d99;" skipLocationChange>Forgot Password?</a>
+          </form>
+        </div>
+      </div>
+      <small class="brand">
+        <a href="https://emtechhouse.co.ke" style="color: #004d99;" target="_blank">SSO - From E&M Technology House</a></small>
+    </div>
+  </mat-card>
+</div>
+

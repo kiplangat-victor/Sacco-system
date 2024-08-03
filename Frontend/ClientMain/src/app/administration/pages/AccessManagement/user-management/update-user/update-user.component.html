@@ -1,0 +1,169 @@
+
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+</div>
+  <mat-card-header class="breadcrumb">
+      <div>
+          <a routerLink="/system">Dashboard / </a>
+          <a routerLink="/system/manage/user">User Management / </a> Update User
+      </div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12" *ngFor="let item of this.listOfErrors">
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>{{item.field}}:</strong> {{item.defaultMessage}}.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+              onclick="this.parentElement.style.display='none';" matTooltip="Close the widget">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left" for="">Membership Code<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input (keyup)="onKeyUp($event)" type="text" class="form-control" formControlName="memberCode" maxlength="30">
+              &nbsp; &nbsp;
+              <mat-icon color="primary" (click)="membershipLookup()">search
+              </mat-icon>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">First Name<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input required type="text" maxlength="60" oninput="this.value=this.value.toUpperCase()"
+                formControlName="firstName" class="form-control" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Last Name<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input required type="text" maxlength="60" oninput="this.value=this.value.toUpperCase()"
+                formControlName="lastName" class="form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">E-Mail Adress<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input maxlength="60" oninput="this.value=this.value.toUpperCase()" formControlName="email"
+                class="form-control" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Username<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input required type="text" maxlength="60" oninput="this.value=this.value.toUpperCase()"
+                formControlName="username" class="form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Phone Number<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="number" required formControlName="phoneNo" class="form-control" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Branch<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input required type="text" maxlength="60" oninput="this.value=this.value.toUpperCase()"
+                formControlName="solCode" class="form-control" /> &nbsp;
+              <mat-icon color="primary" (click)="branchesCodeLookup()">search</mat-icon><br>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">User Role<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <select (change)="onSelect($event)" class="form-control" formControlName="roleFk">
+                <option value="{{this.fmData.roles[0].name}}">-- CHOOSE ROLE --</option>
+                <option *ngFor="let item of this.rolesArray" [value]="item.id">{{ item.name }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Work Class<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <select class="form-control" formControlName="workclassFk">
+                <option value="">-- CHOOSE WORK CLASS --</option>
+                <option *ngFor="let item of this.workClassArray" [value]="item.id">{{ item.workClass }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Is a teller? <span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <mat-radio-group aria-label="Select an option" formControlName="isTeller">
+                <mat-radio-button [disabled]="disableTeller" value="Yes">Yes</mat-radio-button>
+                <mat-radio-button [disabled]="disableTeller" value="No">No</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <hr>
+      <br>
+      <button mat-raised-button type="button" class="bg-secondary text-white" routerLink="/system/manage/user">
+        BACK
+      </button>
+      <button class="pull-right" mat-raised-button color="primary">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        SUBMIT
+      </button>
+      <br />
+    </form>
+  </div>
+</mat-card>

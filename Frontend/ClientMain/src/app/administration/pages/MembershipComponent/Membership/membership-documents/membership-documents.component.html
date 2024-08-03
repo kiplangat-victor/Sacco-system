@@ -1,0 +1,24 @@
+<div *ngIf="loading">
+  <p><small class="text-info">Loading Member Document ...</small></p>
+  <p>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </p>
+</div>
+<div class="card">
+  <div class="card-header text-center text-white bg-info">
+    <strong>MEMBERSHIP DOCUMENT</strong>
+  </div>
+  <div class="card-body text-center" *ngIf="this.results">
+    <h4 class="text-info">Document Title: &nbsp;  &nbsp;{{this.results.image_name}}</h4>
+    <mat-divider></mat-divider>
+    <br>
+    <img [src]="this.results.image" class="col-md-8 img-preview">
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <div [align]="'center'" class="example-button-row">
+      <button type="button" class="btn btn-info btn-sm" mat-dialog-close>CLOSE</button>
+  </div>
+  <br>
+  </div>
+

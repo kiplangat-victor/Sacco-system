@@ -1,0 +1,415 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="query"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/saccomanagement">Dashboard / </a>
+			<a routerLink="/saccomanagement/sacco-entity/maintenance">Entity ID Maintenenace / </a>Entity
+		</div>
+	</mat-card-header>
+	<div class="row">
+		<div class="col-md-4 col-sm-12">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<h4>
+						Function:- <strong>{{ this.fmData.function_type }}</strong>
+					</h4>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<h4>
+						Entity ID: <strong>{{ this.fmData.entityId }}</strong>
+					</h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8 col-sm-12 row" *ngIf="onShowResults">
+			<div class="row" *ngIf="this.results">
+				<div class="col-md-3 col-sm-12">
+					<h4>
+						Posted BY:- <strong>{{ this.results.postedBy }}</strong>
+					</h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>
+						Posted ON:- <strong>{{ this.results.postedTime | date }}</strong>
+					</h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>
+						Verification:- <strong>{{ this.results.verifiedFlag }}</strong>
+					</h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>
+						Verified BY:- <strong>{{ this.results.verifiedBy }}</strong>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<mat-divider></mat-divider>
+	<br />
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<h4>
+						<strong>General Details: </strong>
+					</h4>
+				</div>
+
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label>Entity Name
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="entityName" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.entityName.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="100" minlength="2" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label>Entity Phone
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="number" class="form-control" formControlName="entityPhoneNumber" [ngClass]="{
+                  'is-invalid': submitted && f.entityPhoneNumber.errors
+                }" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="12" minlength="10" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label>Entity Location
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" class="form-control" formControlName="entityLocation" [ngClass]="{
+                  'is-invalid': submitted && f.entityLocation.errors
+                }" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="120" minlength="2" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label>Entity Address
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" class="form-control" formControlName="entityAddress" [ngClass]="{
+                  'is-invalid': submitted && f.entityAddress.errors
+                }" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="120" minlength="2" />
+						</div>
+					</div>
+				</div>
+
+				<!-- "entityAddress": "",
+				"entityWebsite": "", -->
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label>Entity Website
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<textarea type="text" class="form-control" formControlName="entityWebsite" [ngClass]="{
+                  'is-invalid': submitted && f.entityWebsite.errors
+                }" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="120" minlength="2"></textarea>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label>Entity Description
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<textarea type="text" class="form-control" formControlName="entityDescription" [ngClass]="{
+                  'is-invalid': submitted && f.entityDescription.errors
+                }" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="120" minlength="2"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<h4>
+						<strong>Theme Colors:</strong>
+					</h4>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="customTitlebarBg">Custom Titlebar Bg
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="customTitlebarBg" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.customTitlebarBg.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="100" minlength="2" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="customSidebarBg">Custom Sidebar Bg
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="customSidebarBg" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.customSidebarBg.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="100" minlength="2" />
+						</div>
+					</div>
+				</div>
+
+				
+
+				<!-- Theme Details -->
+				
+				<!-- <div class="col-md-6 col-sm-12">
+					<color-sketch class="color-sketch-ui" (onChange)="handleTitleBarChange($event)"></color-sketch>
+					<br />
+					<code>
+            Color Object: {{ colorTitleBar | json }} <br /><br />
+            Hexa Color: {{ hexColorTitleBar }} <br /><br />
+            RGBA Color: {{ rgbaColorTitleBar | json }}
+          </code>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<color-sketch class="color-sketch-ui" (onChange)="handleSideBarChange($event)"></color-sketch>
+					<br />
+					<code>
+            Color Object: {{ colorSideBar | json }} <br /><br />
+            Hexa Color: {{ hexColorSideBar }} <br /><br />
+            RGBA Color: {{ rgbaColorSideBar | json }}
+          </code>
+				</div> -->
+			</div>
+			
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<h4>
+						<strong>Email Configurations:</strong>
+					</h4>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label>Entity Email Address
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="email" class="form-control" formControlName="entityEmail"
+								[ngClass]="{ 'is-invalid': submitted && f.entityEmail.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="55" minlength="10" />
+						</div>
+					</div>
+				</div>
+
+				<!-- Email Details -->
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="emailMessage">Email Message
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="emailMessage" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.emailMessage.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="100" minlength="2" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="emailRegards">Email Regards
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="emailRegards" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.emailRegards.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="100" minlength="2" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="emailRemarks">Email Remarks
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="emailRemarks" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.emailRemarks.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="100" minlength="2" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="port">Port
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="number" formControlName="port" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.port.errors }" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="host">Host
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="host" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.host.errors }" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="protocol">Protocol
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="protocol" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.protocol.errors }" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="smtpPassword">SMTP Password
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="smtpPassword" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.smtpPassword.errors }" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="smtpUsername">SMTP Username
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="smtpUsername" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.smtpUsername.errors }" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="sslTrust">SSL Trust
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="sslTrust" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.sslTrust.errors }" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="entityImageBanner">Entity Email Banner
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="file" (change)="onBannerSelected($event)" accept="image/*"
+								class="form-control-file" formControlName="entityImageBanner" />
+							<img *ngIf="formData.get('entityImageBanner').value"
+								[src]="formData.get('entityImageBanner').value" alt="Selected Banner Image"
+								style="max-width: 20px; max-height: 20px" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="entityImageLogo">Entity Image Logo
+								<span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="file" (change)="onLogoSelected($event)" accept="image/*"
+								class="form-control-file" formControlName="entityImageLogo" />
+							<img *ngIf="formData.get('entityImageLogo').value"
+								[src]="formData.get('entityImageLogo').value" alt="Selected Logo Image"
+								style="max-width: 20px; max-height: 20px" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			
+			<br />
+			<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+				routerLink="/saccomanagement/sacco-entity/maintenance">
+				BACK
+			</button>
+			<button [disabled]="submitting" *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor"
+				type="submit">
+				<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{ btnText }}
+			</button>
+			<br />
+		</form>
+	</div>
+</mat-card>

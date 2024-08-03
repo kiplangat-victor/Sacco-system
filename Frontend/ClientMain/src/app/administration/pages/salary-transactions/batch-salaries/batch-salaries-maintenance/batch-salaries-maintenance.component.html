@@ -1,0 +1,58 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="query"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a> Batch Transactions Maintenance
+		</div>
+	</mat-card-header>
+	<br>
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Function<span class="text-danger">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column ">
+							<select (change)="onSelectFunction($event)" class="form-control"
+								formControlName="function_type"
+								[ngClass]="{ 'is-invalid': submitted && f.function_type.errors }">
+								<option value="" disabled>-- CHOOSE FUNCTION --</option>
+								<option *ngFor="let flag of functionArray" [value]="flag">{{ flag }}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div *ngIf="existingData" class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Batch Transaction Code<span
+									class="text-danger">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" [value]="this.batchUploadCode" maxlength="40" minlength="1"
+								formControlName="batchUploadCode" class="form-control" /> &nbsp; &nbsp;
+							<mat-icon color="primary" *ngIf="existingData" (click)="batchUploadCodeLookup()">search</mat-icon>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<hr>
+			<button mat-raised-button type="button" class="bg-secondary text-white" routerLink="/system"
+				skipLocationChange>
+				BACK
+			</button>
+			<button [disabled]="proceeding" class="pull-right mb-3" mat-raised-button color="primary" type="sumbit">
+				<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+				PROCEED
+			</button>
+		</form>
+	</div>
+</mat-card>

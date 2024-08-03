@@ -1,0 +1,57 @@
+<div *ngIf="loading">
+	<p><small>Loading Entity Teller Data, please wait...</small></p>
+	<p>
+		<mat-progress-bar mode="query"></mat-progress-bar>
+	</p>
+</div>
+<mat-card-header class="breadcrumb">
+	<div>Entity Teller Account Look-up</div>
+	<div class="col-md-6 col-sm-12 ml-auto">
+		<input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+	</div>
+</mat-card-header>
+<div class="table-row">
+	<table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+		<ng-container matColumnDef="index">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row">{{row.id}}</td>
+		</ng-container>
+		<ng-container matColumnDef="tellerId">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header> Teller ID </th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row">{{row.tellerId}}</td>
+		</ng-container>
+		<ng-container matColumnDef="entityId">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Entity</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.entityId}} </td>
+		</ng-container>
+		<ng-container matColumnDef="tellerUserName">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.tellerUserName}} </td>
+		</ng-container>
+		<ng-container matColumnDef="tellerAc">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Teller Account</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.tellerAc}} </td>
+		</ng-container>
+		<ng-container matColumnDef="shortageAc">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Shortage Account</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.shortageAc}} </td>
+		</ng-container>
+		<ng-container matColumnDef="excessAc">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Excess Account</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.excessAc}} </td>
+		</ng-container>
+		<ng-container matColumnDef="verifiedFlag">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Verified</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+				<span *ngIf="row.verifiedFlag == 'Y' " class="badge badge-pill badge-primary">Verified</span>
+				<span *ngIf="row.verifiedFlag == 'N' " class="badge badge-pill badge-danger ">Unverified</span>
+			</td>
+		</ng-container>
+		<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+		<tr class="mat-row" *matNoDataRow>
+			<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+		</tr>
+	</table>
+</div>
+<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>

@@ -1,0 +1,3223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Capital adequacy report" pageWidth="595" pageHeight="2300" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="2c6d079c-cbe4-4a0c-a997-abbc9458cb6b">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="emt_multi_tenat_sacco"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="from_date" class="java.lang.String"/>
+	<parameter name="to_date" class="java.lang.String"/>
+	<parameter name="sc_number" class="java.lang.String"/>
+	<parameter name="report_icon" class="java.lang.String"/>
+	<parameter name="sacco_name" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select 
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1110" or a.product_code in('MAJ','MIN','BONUS') and opening_date between $P{from_date} and $P{to_date}) as a_1110_earnings, 
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1120" or a.product_code in('KAH','KOD') and opening_date between $P{from_date} and $P{to_date}) as a_1120_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1130" and opening_date between $P{from_date} and $P{to_date}) as a_1130_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1140" and opening_date between $P{from_date} and $P{to_date}) as a_1140_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1150" and opening_date between $P{from_date} and $P{to_date}) as a_1150_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1160" and opening_date between $P{from_date} and $P{to_date}) as a_1160_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1170" and opening_date between $P{from_date} and $P{to_date}) as a_1170_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1180" and opening_date between $P{from_date} and $P{to_date}) as a_1180_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1210" or a.product_code in('NGO') and opening_date between $P{from_date} and $P{to_date}) as a_1210_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1220" and opening_date between $P{from_date} and $P{to_date}) as a_1220_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1230" and opening_date between $P{from_date} and $P{to_date}) as a_1230_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1240" and opening_date between $P{from_date} and $P{to_date}) as a_1240_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1250" and opening_date between $P{from_date} and $P{to_date}) as a_1250_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1260" and opening_date between $P{from_date} and $P{to_date}) as a_1260_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1270" and opening_date between $P{from_date} and $P{to_date}) as a_1270_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1280" and opening_date between $P{from_date} and $P{to_date}) as a_1280_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1310" and opening_date between $P{from_date} and $P{to_date}) as a_1310_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1320" and opening_date between $P{from_date} and $P{to_date}) as a_1320_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1330" and opening_date between $P{from_date} and $P{to_date}) as a_1330_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1410" and opening_date between $P{from_date} and $P{to_date}) as a_1410_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1420" and opening_date between $P{from_date} and $P{to_date}) as a_1420_earnings, 
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1430" and opening_date between $P{from_date} and $P{to_date}) as a_1430_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB1510" and opening_date between $P{from_date} and $P{to_date}) as a_1510_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB2110" and opening_date between $P{from_date} and $P{to_date}) as a_2110_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB2120" or a.product_code in('IBA') and opening_date between $P{from_date} and $P{to_date}) as a_2120_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB2210" and opening_date between $P{from_date} and $P{to_date}) as a_2210_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB2220" and opening_date between $P{from_date} and $P{to_date}) as a_2220_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB2230" and opening_date between $P{from_date} and $P{to_date}) as a_2230_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB2310" and opening_date between $P{from_date} and $P{to_date}) as a_2310_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB2320"  or a.product_code = 'ADV' and opening_date between $P{from_date} and $P{to_date}) as a_2320_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB2330" and opening_date between $P{from_date} and $P{to_date}) as a_2330_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB2410" and opening_date between $P{from_date} and $P{to_date}) as a_2410_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB2420" and opening_date between $P{from_date} and $P{to_date}) as a_2420_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB3110" or a.product_code = 'OKO' and opening_date between $P{from_date} and $P{to_date}) as a_3110_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB3120" or a.product_code in('NSG') and opening_date between $P{from_date} and $P{to_date}) as a_3120_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB3130" and opening_date between $P{from_date} and $P{to_date}) as a_3130_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB3140" and opening_date between $P{from_date} and $P{to_date}) as a_3140_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB3150" and opening_date between $P{from_date} and $P{to_date}) as a_3150_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB3210" and opening_date between $P{from_date} and $P{to_date}) as a_3210_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB3220" and opening_date between $P{from_date} and $P{to_date}) as a_3220_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB3230" or a.product_code in ('SEC','ALF','SOD') and opening_date between $P{from_date} and $P{to_date}) as a_3230_earnings, 
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB3240" and opening_date between $P{from_date} and $P{to_date}) as a_3240_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB3310" and opening_date between $P{from_date} and $P{to_date}) as a_3310_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB3320" and opening_date between $P{from_date} and $P{to_date}) as a_3320_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB3330" and opening_date between $P{from_date} and $P{to_date}) as a_3330_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB4110" or a.product_code = 'L03' and opening_date between $P{from_date} and $P{to_date}) as a_4110_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB4120" and opening_date between $P{from_date} and $P{to_date}) as a_4120_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB4130" and opening_date between $P{from_date} and $P{to_date}) as a_4130_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB5110" or a.product_code in('EM') and opening_date between $P{from_date} and $P{to_date}) as a_5110_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB5120" and opening_date between $P{from_date} and $P{to_date}) as a_5120_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB6110" and opening_date between $P{from_date} and $P{to_date}) as a_6110_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB6120" and opening_date between $P{from_date} and $P{to_date}) as a_6120_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB6210" and opening_date between $P{from_date} and $P{to_date}) as a_6210_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB6220" or a.product_code in('MDVP','DE','DP') and opening_date between $P{from_date} and $P{to_date}) as a_6220_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB6230" and opening_date between $P{from_date} and $P{to_date}) as a_6230_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB6240" and opening_date between $P{from_date} and $P{to_date}) as a_6240_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB7110" and opening_date between $P{from_date} and $P{to_date}) as a_7110_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB7210" and opening_date between $P{from_date} and $P{to_date}) as a_7210_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB7310" and opening_date between $P{from_date} and $P{to_date}) as a_7310_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB7410" or a.product_code in('INS') and opening_date between $P{from_date} and $P{to_date}) as a_7410_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB7510" or a.product_code in('INU') and opening_date between $P{from_date} and $P{to_date}) as a_7510_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB7520" and opening_date between $P{from_date} and $P{to_date}) as a_7520_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB7530" and opening_date between $P{from_date} and $P{to_date}) as a_7530_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB8110" and opening_date between $P{from_date} and $P{to_date}) as a_8110_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB8210" or a.product_code in('XM','OD') and opening_date between $P{from_date}  and $P{to_date}) as a_8210_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB8310" or a.product_code in('ST','NL','NLP','SL') and opening_date between $P{from_date} and $P{to_date}) as a_8310_earnings,
+		(select coalesce(sum(principal_amount),0) from loan l join accounts a on a.id=l.account_id_fk where a.mis_sub_sector_code = "MSB8410" and opening_date between $P{from_date} and $P{to_date}) as a_8410_earnings;]]>
+	</queryString>
+	<field name="a_1110_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1110_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1110_earnings"/>
+	</field>
+	<field name="a_1120_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1120_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1120_earnings"/>
+	</field>
+	<field name="a_1130_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1130_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1130_earnings"/>
+	</field>
+	<field name="a_1140_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1140_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1140_earnings"/>
+	</field>
+	<field name="a_1150_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1150_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1150_earnings"/>
+	</field>
+	<field name="a_1160_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1160_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1160_earnings"/>
+	</field>
+	<field name="a_1170_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1170_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1170_earnings"/>
+	</field>
+	<field name="a_1180_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1180_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1180_earnings"/>
+	</field>
+	<field name="a_1210_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1210_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1210_earnings"/>
+	</field>
+	<field name="a_1220_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1220_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1220_earnings"/>
+	</field>
+	<field name="a_1230_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1230_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1230_earnings"/>
+	</field>
+	<field name="a_1240_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1240_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1240_earnings"/>
+	</field>
+	<field name="a_1250_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1250_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1250_earnings"/>
+	</field>
+	<field name="a_1260_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1260_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1260_earnings"/>
+	</field>
+	<field name="a_1270_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1270_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1270_earnings"/>
+	</field>
+	<field name="a_1280_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1280_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1280_earnings"/>
+	</field>
+	<field name="a_1310_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1310_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1310_earnings"/>
+	</field>
+	<field name="a_1320_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1320_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1320_earnings"/>
+	</field>
+	<field name="a_1330_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1330_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1330_earnings"/>
+	</field>
+	<field name="a_1410_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1410_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1410_earnings"/>
+	</field>
+	<field name="a_1420_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1420_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1420_earnings"/>
+	</field>
+	<field name="a_1430_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1430_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1430_earnings"/>
+	</field>
+	<field name="a_1510_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_1510_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_1510_earnings"/>
+	</field>
+	<field name="a_2110_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_2110_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_2110_earnings"/>
+	</field>
+	<field name="a_2120_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_2120_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_2120_earnings"/>
+	</field>
+	<field name="a_2210_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_2210_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_2210_earnings"/>
+	</field>
+	<field name="a_2220_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_2220_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_2220_earnings"/>
+	</field>
+	<field name="a_2230_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_2230_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_2230_earnings"/>
+	</field>
+	<field name="a_2310_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_2310_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_2310_earnings"/>
+	</field>
+	<field name="a_2320_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_2320_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_2320_earnings"/>
+	</field>
+	<field name="a_2330_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_2330_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_2330_earnings"/>
+	</field>
+	<field name="a_2410_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_2410_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_2410_earnings"/>
+	</field>
+	<field name="a_2420_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_2420_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_2420_earnings"/>
+	</field>
+	<field name="a_3110_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_3110_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_3110_earnings"/>
+	</field>
+	<field name="a_3120_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_3120_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_3120_earnings"/>
+	</field>
+	<field name="a_3130_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_3130_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_3130_earnings"/>
+	</field>
+	<field name="a_3140_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_3140_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_3140_earnings"/>
+	</field>
+	<field name="a_3150_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_3150_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_3150_earnings"/>
+	</field>
+	<field name="a_3210_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_3210_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_3210_earnings"/>
+	</field>
+	<field name="a_3220_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_3220_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_3220_earnings"/>
+	</field>
+	<field name="a_3230_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_3230_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_3230_earnings"/>
+	</field>
+	<field name="a_3240_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_3240_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_3240_earnings"/>
+	</field>
+	<field name="a_3310_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_3310_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_3310_earnings"/>
+	</field>
+	<field name="a_3320_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_3320_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_3320_earnings"/>
+	</field>
+	<field name="a_3330_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_3330_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_3330_earnings"/>
+	</field>
+	<field name="a_4110_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_4110_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_4110_earnings"/>
+	</field>
+	<field name="a_4120_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_4120_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_4120_earnings"/>
+	</field>
+	<field name="a_4130_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_4130_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_4130_earnings"/>
+	</field>
+	<field name="a_5110_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_5110_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_5110_earnings"/>
+	</field>
+	<field name="a_5120_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_5120_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_5120_earnings"/>
+	</field>
+	<field name="a_6110_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_6110_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_6110_earnings"/>
+	</field>
+	<field name="a_6120_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_6120_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_6120_earnings"/>
+	</field>
+	<field name="a_6210_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_6210_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_6210_earnings"/>
+	</field>
+	<field name="a_6220_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_6220_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_6220_earnings"/>
+	</field>
+	<field name="a_6230_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_6230_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_6230_earnings"/>
+	</field>
+	<field name="a_6240_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_6240_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_6240_earnings"/>
+	</field>
+	<field name="a_7110_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_7110_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_7110_earnings"/>
+	</field>
+	<field name="a_7210_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_7210_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_7210_earnings"/>
+	</field>
+	<field name="a_7310_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_7310_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_7310_earnings"/>
+	</field>
+	<field name="a_7410_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_7410_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_7410_earnings"/>
+	</field>
+	<field name="a_7510_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_7510_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_7510_earnings"/>
+	</field>
+	<field name="a_7520_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_7520_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_7520_earnings"/>
+	</field>
+	<field name="a_7530_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_7530_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_7530_earnings"/>
+	</field>
+	<field name="a_8110_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_8110_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_8110_earnings"/>
+	</field>
+	<field name="a_8210_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_8210_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_8210_earnings"/>
+	</field>
+	<field name="a_8310_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_8310_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_8310_earnings"/>
+	</field>
+	<field name="a_8410_earnings" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="a_8410_earnings"/>
+		<property name="com.jaspersoft.studio.field.label" value="a_8410_earnings"/>
+	</field>
+	<variable name="T_1100" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_1110_earnings} + $F{a_1120_earnings} + $F{a_1130_earnings} + $F{a_1140_earnings} +   $F{a_1150_earnings} + $F{a_1160_earnings} + $F{a_1170_earnings} + $F{a_1180_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_1200" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_1210_earnings} + $F{a_1220_earnings} + $F{a_1230_earnings}+$F{a_1240_earnings}  +$F{a_1250_earnings} + $F{a_1260_earnings} + $F{a_1270_earnings} + $F{a_1280_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_1300" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_1310_earnings}+$F{a_1320_earnings}+$F{a_1330_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_1400" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_1410_earnings}+$F{a_1420_earnings}+$F{a_1430_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_1500" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_1510_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_2100" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_2110_earnings} + $F{a_2120_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_2200" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_2210_earnings} + $F{a_2220_earnings} + $F{a_2230_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_2300" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_2310_earnings} + $F{a_2320_earnings} + $F{a_2330_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_2400" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_2410_earnings} + $F{a_2420_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_5100" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_5110_earnings} + $F{a_5120_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_4100" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_4110_earnings} + $F{a_4120_earnings} + $F{a_4130_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_3300" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_3310_earnings} + $F{a_3320_earnings} + $F{a_3330_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_3200" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_3210_earnings} + $F{a_3220_earnings} + $F{a_3230_earnings} + $F{a_3240_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_3100" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_3110_earnings} + $F{a_3120_earnings} + $F{a_3130_earnings} + $F{a_3140_earnings} + $F{a_3150_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_6100" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_6110_earnings} + $F{a_6120_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_6200" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_6210_earnings} + $F{a_6220_earnings} + $F{a_6230_earnings} + $F{a_6240_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_7100" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_7110_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_7200" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_7210_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_7300" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_7310_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_7400" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_7410_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_7500" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_7510_earnings} + $F{a_7520_earnings} + $F{a_7530_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_8100" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_8110_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_8200" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_8210_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_8300" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_8310_earnings}]]></variableExpression>
+	</variable>
+	<variable name="T_8400" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{a_8410_earnings}]]></variableExpression>
+	</variable>
+	<variable name="TT_1000" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{T_1100} + $V{T_1200} + $V{T_1300} + $V{T_1400} + $V{T_1500}]]></variableExpression>
+	</variable>
+	<variable name="TT_2000" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{T_2100} + $V{T_2200} + $V{T_2300} + $V{T_2400}]]></variableExpression>
+	</variable>
+	<variable name="TT_3000" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{T_3100} + $V{T_3200} + $V{T_3300}]]></variableExpression>
+	</variable>
+	<variable name="TT_4000" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{T_4100}]]></variableExpression>
+	</variable>
+	<variable name="TT_5000" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{T_5100}]]></variableExpression>
+	</variable>
+	<variable name="TT_6000" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{T_6100} + $V{T_6200}]]></variableExpression>
+	</variable>
+	<variable name="TT_7000" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{T_7100} + $V{T_7200} + $V{T_7300} + $V{T_7400} + $V{T_7500}]]></variableExpression>
+	</variable>
+	<variable name="TT_8000" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{T_8100} + $V{T_8200} + $V{T_8300} + $V{T_8400}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{TT_1000} + $V{TT_2000} + $V{TT_3000} + $V{TT_4000} + $V{TT_5000} + $V{TT_6000} + $V{TT_7000} + $V{TT_8000}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="2239">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="204" width="380" height="20" uuid="cf492f32-b80c-4a25-aaff-0af9a27db4ce"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="224" width="380" height="19" uuid="e451c807-d4c4-4875-85a5-36e226ede41c"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CODE | ECONOMIC SECTORS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="243" width="380" height="21" uuid="e81c1b11-47a1-4d71-bbb3-10a1d9cafdb6"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[1000 AGRICULTURE (sum 1100,1200,1300,1400 &1500)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="264" width="380" height="19" uuid="2139d958-bdbb-4ca1-92bb-55d283315dc5"/>
+				<box padding="3">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[1100   Crop Farming (sum 1110 to 1180) ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="283" width="380" height="19" uuid="e97ce9c2-6cdc-4cda-a2fd-3e21787d1440"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1110  Tea]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="162" width="380" height="21" uuid="c8edea80-4625-4722-b3b6-4340bb78da6a"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="302" width="380" height="22" uuid="d384607f-f963-4927-9bf3-fd2ddb15545c"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1120   Coffee]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="324" width="380" height="20" uuid="131a4358-d913-410b-b032-1dd2c6a3e6b4"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1130   Sugarcane]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="344" width="380" height="19" uuid="3e020fb6-be7a-4ca5-a2fd-d9e73bdbf47b"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1140   Others, cotton, sisal etc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="363" width="380" height="20" uuid="df2f1106-8292-469d-8c62-a89faef499ee"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1150   Cereals such as maize, wheat, sorghum. Millet etc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="383" width="380" height="19" uuid="1b6e5905-5b14-4e3d-82ec-fb0ee821049f"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[          1160   Legumes such as beans, peas, snow peas, cow peas, french beans etc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="402" width="380" height="19" uuid="afc8dedc-8389-4b38-b92f-afb197c9a93f"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1170   Horticulture crops such as vegetables, fruits, flowers]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="421" width="380" height="19" uuid="8f994904-f882-471c-a4a3-9308e22aef4b"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1180   Roots & tubers such as Irish potatoes, sweet potatoes and cassava]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="440" width="380" height="20" uuid="d1c073aa-6a76-4f3d-b2ae-ededb5614564"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[1200   Animal Production (sum 1210 to 1280)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="460" width="380" height="20" uuid="517ebc8c-0a51-4dbd-951d-b43e268ae704"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1210   Dairy farming]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="480" width="380" height="19" forecolor="#050505" uuid="fe0fee97-5692-455d-8c7a-6641e273404b"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1220   Beef Production]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="499" width="380" height="20" uuid="0b4ebfac-1805-4b24-a39b-3a85be6d6a43"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1230   Poultry Farming]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="519" width="380" height="19" uuid="bde9bf0f-401b-4243-99e5-0d6ed9bc6833"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1240   Bee keeping]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="538" width="380" height="20" uuid="a2b76067-a174-43c9-8842-755191e3f110"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1250   Rabbit Farming]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="597" width="380" height="19" uuid="984ca4e2-5c05-4e14-8f1f-32be314b03a1"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1280   Others]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="558" width="380" height="19" uuid="02b5d68c-82f2-4777-be5f-969607ecb82c"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1260   Sheep and Goat Rearing]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="577" width="380" height="20" uuid="3648c099-4ee5-4256-9618-7cae10c3add0"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1270   Pig Farming]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="653" width="380" height="19" uuid="004787f5-e80c-4308-b85d-3f843c80670d"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1320   Water, Irrigation and supporting services]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="616" width="380" height="17" uuid="cfb856bb-f0a6-4c14-a9cd-3d727a718238"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[1300   Agricultural supporting services (sum 1310 to 1330)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="633" width="380" height="20" uuid="7be23cfc-6f95-4b7e-8c51-2fe2cf2ebc82"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1310   Agricultural machinery such as truck, tractors and other farm tools]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="672" width="380" height="19" uuid="05d2aaa1-a111-4ef8-b9ba-786c01d9b1f1"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1330   Veterinary and related services]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="691" width="380" height="20" uuid="832090a6-3330-4adf-8e25-0d45cc3ed7f1"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[1400   Agribusiness (sum 1410 to 1430)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="162" width="175" height="21" uuid="8933cdb9-d815-4179-b0d6-4f063a91fbd0"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="183" width="175" height="21" uuid="1ecf8cd4-db0e-4df4-bc18-bc6e42296a2b"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="380" y="224" width="175" height="19" uuid="1c772a4d-8ae6-4837-a8b1-09b07a2dd262"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["."]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="243" width="175" height="21" uuid="144d6f08-8113-49d5-8afe-a38948ab115f"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{TT_1000}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="264" width="175" height="19" uuid="b82baeb1-3ad6-440b-8db2-9b10722d7a2b"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_1100}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="283" width="175" height="19" uuid="3973ecbb-3005-43e6-b5ff-84dd965d5a70"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1110_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="302" width="175" height="22" uuid="db29ab96-a43d-432e-a75c-833258e5c5e5"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1120_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="324" width="175" height="20" uuid="2b47b932-3619-4b62-b307-7f94b13e19ff"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1130_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="344" width="175" height="19" uuid="2991279c-9b0a-45ba-b7b9-0a182b7e04d6"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1140_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="363" width="175" height="20" uuid="243a6e52-586a-45a7-ada3-341623ea14b9"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1150_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="402" width="175" height="19" uuid="f3b7f21e-7e58-4348-920d-38916aecbe8b"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1170_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="421" width="175" height="19" uuid="38c0f8f2-7fc5-4551-afbd-135899fe049c"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1180_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="440" width="175" height="20" uuid="f195146a-8de7-4129-868f-dc03b58e5005"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_1200}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="460" width="175" height="20" uuid="6c5bccc8-8edc-470f-a3e1-9b2399fe085a"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1210_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="480" width="175" height="19" uuid="07eb96bd-86fb-4335-b521-75d04fd9ec10"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1220_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="519" width="175" height="19" uuid="7d8c90f4-aa28-45e1-9b4f-66a7a883791a"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1240_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="538" width="175" height="20" uuid="9168d01a-57a4-4e83-afbe-2e650237692d"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1250_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="577" width="175" height="20" uuid="e2de7191-1e12-44bf-bf4c-dbf495fd59b5"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1270_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="558" width="175" height="19" uuid="9a9ce9c7-e998-4243-8942-de81e3a9dc16"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1260_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="616" width="175" height="17" uuid="04649ee8-6f6c-4ecf-9ea3-c7a1bbef75dd"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_1300}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="597" width="175" height="19" uuid="109ae2a8-1a1e-4509-8494-8bd7f64bbc0b"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1280_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="633" width="175" height="20" uuid="e2eab38f-6567-48b5-b5d7-69cc245c7b8d"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1310_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="653" width="175" height="19" uuid="14c8f151-f554-4d5f-964b-61916d691200"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1320_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="691" width="175" height="20" uuid="baaf128a-99a6-4e9f-b604-5f8c356f35e9"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_1400}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="672" width="175" height="19" uuid="b4f5c84d-53ab-4e06-a69d-060a0424f28c"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1330_earnings}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="124" width="380" height="19" uuid="522547ed-0c92-4857-a908-e0a5087a01ac"/>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[START DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="103" width="380" height="20" uuid="1bdaf92e-f651-40aa-950a-6888eefce08e"/>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[FINANCIAL YEAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="84" width="380" height="19" uuid="dc0b5319-2400-4c0f-bea0-632a34dbcf66"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[SACCO SOCIETY CS NUMBER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="143" width="380" height="19" uuid="a17d6422-4e9e-4736-89b8-11bf53f262a3"/>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[END DATE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="380" y="84" width="174" height="19" uuid="5d1daefd-caa3-4303-ab04-bfa555c499b3"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{sc_number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="103" width="174" height="20" uuid="df8d7b49-599a-40de-99b4-391648b2c5b9"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[(new java.util.Date()).getYear() + 1900]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMM d, yyyy">
+				<reportElement x="380" y="123" width="174" height="20" uuid="c5834eb6-400f-4c14-9610-a6d5b0a2e32b"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy-MM-dd").parse($P{from_date}))]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMM d, yyyy">
+				<reportElement x="380" y="143" width="174" height="19" uuid="cf80d35b-8f13-4dbe-9472-1f363203b57d"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy-MM-dd").parse($P{to_date}))]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="65" width="380" height="19" uuid="d62eb4c0-f95c-4d2b-9064-17ef8f9c4f69"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ SECTORAL LENDING RETURN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="46" width="380" height="19" uuid="979045e4-c0c7-4a2b-baa9-44c020f19de5"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FORM 4B:   SASRA/GG/2/2019  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="65" width="174" height="19" uuid="af576b83-6cdf-426b-922c-f04808ceeabe"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="46" width="174" height="19" uuid="f7bbf673-f870-4fab-a30b-f587dc4a41f2"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="183" width="555" height="21" uuid="03cb3c57-9f45-449d-b67d-fc4ed9daf026"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SECTORAL CLASSIFICATION OF CREDIT FINANCING BY DT-SACCOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="204" width="175" height="20" uuid="b3971f38-ec55-4256-845b-f6f712a2a492"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[LOANS & ADVANCES]]></text>
+			</staticText>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="383" width="175" height="19" uuid="af5c5c19-43e5-49e8-82bc-bed6877fe8e5"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{a_1160_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="499" width="175" height="20" uuid="ab0cfd67-c96b-42bb-ba22-f30d4c8e900f"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{a_1230_earnings}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="711" width="380" height="20" uuid="ca28b5c2-9a92-4e4e-a6b4-a9f8daf0d9ce"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1410   Agricultural equipment and accessories]]></text>
+			</staticText>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="711" width="175" height="20" uuid="ce40ca7e-aaf5-4634-8344-023ed526199e"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1410_earnings}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="731" width="380" height="19" uuid="f60d35df-59a6-4126-bd54-ce7eb230ae7e"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1420   Dealers in agro-chemicals, seeds and other farm inputs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="750" width="380" height="20" uuid="2edac51a-adf4-4197-9725-aaa30a937a28"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1430   Distribution of farm produce]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="809" width="380" height="19" uuid="0149d9d2-c506-4085-b639-72483d9d7280"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[2000 TRADE (sum 2100,2200,2300 & 2400)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="770" width="380" height="19" uuid="1a802a5c-2daa-4eff-a189-9bf86b7da996"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[1500   Forestry and Logging (1510)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="789" width="380" height="20" uuid="b7bcac3f-cb6f-4025-948e-52ae9f8d6d7c"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           1510   Agro-forestry]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="865" width="380" height="19" uuid="6c80f25a-8921-48ed-9782-51c9353f26ff"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           2120   Retail]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="828" width="380" height="17" uuid="0cbf99e7-02e8-4d95-9069-7790ce469e6d"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[2100   Wholesale and Retail (sum 2110 & 2120)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="845" width="380" height="20" uuid="da077225-6230-4471-b0fd-de48bc070c6c"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           2110   Wholesale]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="884" width="380" height="19" uuid="3020f054-dcbb-4c12-a30c-0229457861da"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[2200   Transport (sum 2210 to 2230)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="903" width="380" height="20" uuid="002fd8e4-7df4-4b91-8356-b06ab147a081"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           2210   Public service transport ]]></text>
+			</staticText>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="789" width="175" height="20" uuid="3b7e88fe-df61-41f9-82b8-a29afdb28ef3"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1510_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="770" width="175" height="19" uuid="7e77c318-2f48-40ce-936e-2a4fbe873013"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_1500}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="828" width="175" height="17" uuid="94aec7e6-9909-479a-bb85-fd77a91d73ba"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_2100}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="809" width="175" height="19" uuid="e813e8db-35e6-4fbd-b5ca-86c8419c918e"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{TT_2000}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="845" width="175" height="20" uuid="ae9425d3-7465-4356-bc48-8d4606ab3a7e"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_2110_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="903" width="175" height="20" uuid="896d8241-b50c-4fac-bf86-bd953a4ef5a8"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{a_2210_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="884" width="175" height="19" uuid="442da168-956e-44c7-867c-73096bed4afd"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_2200}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="923" width="380" height="20" uuid="0317e751-8370-4c80-b058-9f54ed9ae695"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           2220   Purchase of motorvehicle accessories]]></text>
+			</staticText>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="923" width="175" height="20" uuid="bce20cda-bc02-4c11-8641-3dd787cc0180"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_2220_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="750" width="175" height="20" uuid="4cbc4a5b-8402-47ce-8545-c2321c0c23e4"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{a_1430_earnings}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="943" width="380" height="19" uuid="d2e55fa2-f608-4526-aca7-55b45388d84d"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           2230   Transportation of goods]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="962" width="380" height="19" uuid="18073205-9b7f-4718-88d9-ac2bc4641e9c"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[2300   Hospitality (sum 2310 to 2330)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="981" width="380" height="20" uuid="d4a6e4d6-ed28-46ce-becb-138aebd8b1b6"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           2310   Accomodation, restaurants, conference facilities, event planning & outside   catering, theme parks (wedding and others)]]></text>
+			</staticText>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="943" width="175" height="19" uuid="ab783777-05cb-4577-b460-daa77f5507cd"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_2230_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="981" width="175" height="20" uuid="c4fd6fd6-0151-4eec-8539-3f368b0bc2fd"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_2310_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="962" width="175" height="19" uuid="4947e5e3-80ee-4a50-be85-c001efeb9438"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_2300}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="1001" width="380" height="20" uuid="e0f893c5-4df1-484e-b6f9-a9d5a3312b4a"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           2320   Schools and kindergartens]]></text>
+			</staticText>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1001" width="175" height="20" uuid="359efbdc-8dd5-41a2-b0a1-e5f56f060c66"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_2320_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="865" width="175" height="19" uuid="745bc792-fa2e-4ab2-a26d-74308a888791"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{a_2120_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="731" width="175" height="19" uuid="17e69d4a-b101-483e-8ac5-4a82d092f71a"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_1420_earnings}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Right" vAlign="Middle" isUsingCache="true">
+				<reportElement x="2" y="-9" width="80" height="48" uuid="9ca50cd2-0311-4878-8697-afc946eaa046">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{report_icon}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="1021" width="380" height="19" uuid="bd23c867-02b6-40ab-8541-0664e3d41ad0"/>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           2330   Medical clinics and equipment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1040" width="380" height="21" uuid="abf6dc94-605d-455a-86ce-e1f7d239359f"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[2400   Foreign Trade (sum 2410 & 2420)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1061" width="380" height="19" uuid="c59934d8-03f3-479d-a184-ea45e2d5e37d"/>
+				<box padding="3">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           2410   Import]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1080" width="380" height="19" uuid="cae0dcaf-e0e6-4311-a3da-117055e368e8"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           2420   Export]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1099" width="380" height="22" uuid="c21ba61d-372a-440d-b040-c6553199eacc"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[3000 MANUFACTURING AND SERVICING INDUSTRIES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1121" width="380" height="20" uuid="85153822-ddc8-4c14-aa49-7b6a2c96f7fc"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[3100   Cottage Industry (sum 3110 to 3150)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1141" width="380" height="19" uuid="1a402141-984a-4fee-8871-bbef82165bc3"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           3110   Jua kali Industry]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1160" width="380" height="20" uuid="04565274-5b90-4c17-93ae-84d45cc9e78d"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           3120   Small scale Agricultural Produce processing]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1180" width="380" height="19" uuid="f970c7d0-4254-473a-b2d6-6a701ddcca36"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           3130   Dressmaking Industry]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1199" width="380" height="19" uuid="b0738639-dca3-42cd-ba21-348ff2cc3395"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           3140   Leather tanning]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1218" width="380" height="19" uuid="8db628df-ccf0-4a4f-bf60-529ed3e9ad60"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           3150   Carving and handcrafts]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1237" width="380" height="20" uuid="74a81162-078f-427a-8fb8-e5cd24d53344"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[3200   Servicing Industry (sum 3210 to 3240)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1257" width="380" height="20" uuid="f42ba4ef-bf07-4db1-b3da-7e5a47c9e0cd"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           3210   Motorvehicle repairs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1277" width="380" height="19" forecolor="#050505" uuid="fd429753-1b08-457a-ba0b-8c582bfb9cc3"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           3220   Professional services such as Barber shops]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1296" width="380" height="20" uuid="a22298d0-2f6f-4cb6-a615-bf42698e70ad"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           3230   Working capital for learning institutions, churches & business enterprises]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1316" width="380" height="19" uuid="8d11ea00-e575-43bc-8bb2-c192e1943c13"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           3240   Promotion of local tourism]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1335" width="380" height="20" uuid="53212358-451a-446a-81ca-cf3ad41ce326"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[3300   Information, Communication and Technology (sum 3310 to 3330)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1355" width="380" height="19" uuid="adfd2d04-7388-4477-bbcc-6ad72c8886b7"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           3310   Computer services and Internet]]></text>
+			</staticText>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1021" width="175" height="19" uuid="862a028b-fb1d-457f-82c8-d5d75210b7c8"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_2330_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1040" width="175" height="21" uuid="f8184d17-01b5-4b1b-842b-899dd0b7ec47"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_2400}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1061" width="175" height="19" uuid="59931fb9-75b5-4047-9940-9f550825e444"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_2410_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1080" width="175" height="19" uuid="a6788a66-5249-4726-ac26-061bc73c7196"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_2420_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1099" width="175" height="22" uuid="adac1d01-3634-4c90-a591-4046e9cff631"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{TT_3000}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1121" width="175" height="20" uuid="6f254f17-47b4-4c85-8dab-e58eb5d6c889"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_3100}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1141" width="175" height="19" uuid="f933efcc-c2df-4a7a-b77e-1ccea0162964"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_3110_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1160" width="175" height="20" uuid="e1d7b272-f916-441a-99d5-5b5aa78b2eae"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_3120_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1199" width="175" height="19" uuid="116b1435-4573-42bf-b340-644c69460442"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_3140_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.000;(#,##0.000-)">
+				<reportElement x="380" y="1218" width="175" height="19" uuid="ed1b6718-b240-49ca-b3fc-b67e97bc7aff"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_3150_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1237" width="175" height="20" uuid="65dfef84-64bb-4ed6-ac22-a7602f9a2336"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_3200}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1257" width="175" height="20" uuid="d701ac6d-9a2a-4241-bd1f-702091fdd7b1"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_3210_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1277" width="175" height="19" uuid="251e7aab-33a4-4bcd-8643-cb81f0002de9"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_3220_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1316" width="175" height="19" uuid="5fee677c-95d5-4b8a-99c6-7a03371cc054"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_3240_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1335" width="175" height="20" uuid="3bdf2620-42ed-4580-b039-bd4969cb0483"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_3300}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1355" width="175" height="19" uuid="20afbcfc-b4e5-4aff-9a7c-6b1a60f3f592"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_3310_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1180" width="175" height="19" uuid="6981a281-fd57-4a66-846f-161ed36d97cc"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{a_3130_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1296" width="175" height="20" uuid="6078f1d0-c135-49a0-bc5f-474f137d44ba"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{a_3230_earnings}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="1375" width="380" height="22" uuid="de81f821-ab42-448a-a386-07722a90bcd2"/>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           3320   Computer software and hardware]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1397" width="380" height="20" uuid="52da5d07-fe5c-4268-811e-1ed14fc4052c"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           3330   Telecommunication Equipment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1417" width="380" height="19" uuid="6859d6cd-6e7c-4836-9699-c01061deac3c"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[4000 EDUCATION (4100)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1436" width="380" height="20" uuid="00b6f107-8ea2-4572-b4da-d5f68f7cd5f4"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[4100   Education and related services (sum 4110 to 4130)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1456" width="380" height="19" uuid="0df23b43-07a8-4c70-947f-08f1a4734c3a"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[            4110   School fees for primary and secondary schools including shopping and accomodation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1475" width="380" height="19" uuid="1f587580-4a40-4d78-8e43-93afbae8db5d"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[            4120   College fees, University fees, training fees, seminar fees]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1494" width="380" height="19" uuid="a641d68f-7c8c-428c-8458-3aa8d78779c5"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[            4130   Research and scientific activities etc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1513" width="380" height="20" uuid="96c54974-a85b-4144-b87d-d553e13c6672"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[5000 HUMAN HEALTH (5100)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1533" width="380" height="20" uuid="98a7eea0-fdad-45c9-b815-18d0c7a61503"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[5100   Human health and related services (sum 5110  & 5120)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1553" width="380" height="19" forecolor="#050505" uuid="f93c2078-b0d5-4d68-b3cc-995f5e2b9495"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           5110   Medical Bills, purchase of medicine]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1572" width="380" height="20" uuid="544637de-7d67-46d4-ae94-5816a004737e"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           5120   Maternity Bills and expenses]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1592" width="380" height="19" uuid="9ef3ffa4-2a0a-4422-96bb-86d8c55ae04c"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[6000 LAND AND HOUSING (sum 6100 & 6200)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1611" width="380" height="20" uuid="c2ff31b0-854d-4c3d-ad75-d2754ee62842"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[6100   Land (sum 6110 & 6120)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1631" width="380" height="19" uuid="0bf16311-ca27-4165-aa0a-a9994f52a85e"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           6110   Purchase of plots]]></text>
+			</staticText>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1375" width="175" height="22" uuid="161f1533-9ca3-422b-8f62-fe554c071260"/>
+				<box rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_3320_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1397" width="175" height="20" uuid="d8071eb3-d13c-4698-a5cd-784ba2c79485"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_3330_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1417" width="175" height="19" uuid="4524eefe-4dfc-4718-9cbd-776d716ec545"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{TT_4000}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1436" width="175" height="20" uuid="92001b85-ae0e-45e7-bcb1-5a378b8c1772"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_4100}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1475" width="175" height="19" uuid="68e9936f-1ba7-4fdb-b957-b61f80f3ca74"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_4120_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1494" width="175" height="19" uuid="e9488437-c4ac-48a9-be7a-22d7c6d2dcf0"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_4130_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1513" width="175" height="20" uuid="fcacc30e-a852-4c1b-9c63-99d9da6f689f"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{TT_5000}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1533" width="175" height="20" uuid="30341502-caca-4ca7-9586-81c0b15c8d29"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_5100}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1553" width="175" height="19" uuid="c2eb6d63-4bb7-4519-bcda-15e59005bb9e"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_5110_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1592" width="175" height="19" uuid="06ad98a1-98cc-4127-836e-0f0c7eaf8a15"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{TT_6000}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1611" width="175" height="20" uuid="6d318109-1949-448c-8b69-d0ed6b52e714"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_6100}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1631" width="175" height="19" uuid="6c007cb1-03cb-4e94-aa6f-f127d46d7a30"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_6110_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1456" width="175" height="19" uuid="c1da4a5e-361b-4918-8f5b-410e3371a528"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{a_4110_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1572" width="175" height="20" uuid="0300b698-36d0-4774-a97b-53fe97e1a007"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{a_5120_earnings}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="1650" width="380" height="20" uuid="b614d3a7-7028-468f-8503-ff8b4aa25fcf"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           6120   Land purchase services such as surveying and valuation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1670" width="380" height="19" uuid="9a750de5-6262-4294-b6e3-e57712db3e4b"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[6200   Housing (sum 6210 to 6240)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1689" width="380" height="19" uuid="181e2649-41e8-454b-b3c1-fde37ccc466c"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           6210   Construction of multiple residential buildings]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1708" width="380" height="19" uuid="42682ede-7cb8-4d78-a65c-bf1ba1f8d33d"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           6220   Construction of commercial buildings]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1727" width="380" height="20" uuid="9e2e1bce-273a-416c-990d-6f693164337d"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           6230   Construction of single residential dwelling units]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1747" width="380" height="20" uuid="0bbe3db8-c40d-4acd-a17e-6a42ae1bf33c"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           6240   Renoivations of the buildings]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1767" width="380" height="19" forecolor="#050505" uuid="8d0fde31-c12e-4388-aed7-777e91b28c37"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="9.8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[7000 FINANCE, INVESTMENTS AND INSURANCE (sum 7100 to 7500)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1786" width="380" height="20" uuid="fbdbda15-3117-488c-ada7-24129324f52e"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[7100   Microfinance (7110)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1806" width="380" height="19" uuid="96f561a0-442a-43f7-954b-ee17433dd238"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           7110   Payment to microfinance loans]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1825" width="380" height="20" uuid="00403429-0f0a-44b9-840e-2850e572dc39"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[7200   Commercial Banks (7210)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1845" width="380" height="19" uuid="b9d21ffc-a52d-490d-86b0-169da4476c4b"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           7210   Payment to Commercial bank loans]]></text>
+			</staticText>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1650" width="175" height="20" uuid="82dea6ca-bab5-4cc0-be86-382e4ec0121a"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_6120_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1689" width="175" height="19" uuid="54675d43-4444-408c-9964-929201e208dc"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_6210_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1708" width="175" height="19" uuid="6fab3606-d99c-4414-a0e9-9af05466efd6"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_6220_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1727" width="175" height="20" uuid="b73f0e74-f633-4eeb-8c58-a286dd73d26a"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_6230_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1747" width="175" height="20" uuid="cb763986-6ee8-4edd-ac75-bef1a4b88c00"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_6240_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1767" width="175" height="19" uuid="94cdc569-fbad-4d9b-92db-bcac4eeeb1eb"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{TT_7000}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1806" width="175" height="19" uuid="bab1944d-db27-45ee-a357-320a248144d6"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_7110_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1825" width="175" height="20" uuid="16c7b532-0b1d-4639-9adf-64cdeab21016"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_7200}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1845" width="175" height="19" uuid="d3aefadd-197d-4720-a3b1-559bfd055ae8"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_7210_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
+				<reportElement x="380" y="1670" width="175" height="19" uuid="39bad90f-9402-442d-a26f-1fae848b68dd"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{T_6200}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1786" width="175" height="20" uuid="554d0206-0c74-4f24-9867-c2b994aa8eca"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{T_7100}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="1865" width="380" height="22" uuid="3a0bdbbb-286c-4193-b361-e226a77a8ae0"/>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[7300   Mortgage Finance (7310)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1887" width="380" height="20" uuid="51d1f5f7-3843-4bf1-a6d8-9cd2a7e5d57f"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           7310   Purchase of residential property/payments to mortgage loans in other financial institutions]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1907" width="380" height="19" uuid="d885db60-6353-46d8-be90-5fbbebbf5138"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[7400   Insurance (7410)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1926" width="380" height="20" uuid="bf166351-6096-46eb-955f-1f5f95ae7e38"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           7410   Payment to insurance policies]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1946" width="380" height="19" uuid="9f35c563-e784-4a29-904a-f77f38cfdb01"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[7500   Investments (sum 7510 to 7530)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1965" width="380" height="19" uuid="c631e3b4-1689-43b7-a322-f7c8afd2ae19"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           7510   Buying of Sacco shares]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1984" width="380" height="19" uuid="bb09b52d-70af-45ad-9eb2-08dcd1812264"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           7520   purchase of quote shares, unquoted shares, treasury bills & bonds, commercial papers, unit trusts and other quoted public funds]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2003" width="380" height="20" uuid="f0a8d33b-7660-4316-b100-f3cb5a1e45a8"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           7530   Paying personal debtsto non-registered institutions]]></text>
+			</staticText>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1865" width="175" height="22" uuid="6c7c2881-11fc-461d-a8b3-78e549f66324"/>
+				<box rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_7300}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1887" width="175" height="20" uuid="579999a1-5680-4ff0-8e16-1c6fab90e491"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_7310_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1907" width="175" height="19" uuid="d5e88643-7a36-4dde-be00-8cf5b8d4e64d"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_7400}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1926" width="175" height="20" uuid="1f760181-0a71-43d4-9dba-0fe21ca86313"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_7410_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1965" width="175" height="19" uuid="88c37314-9554-4210-ae94-e7bbaa4d667c"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_7510_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1984" width="175" height="19" uuid="95bd5cd4-41cb-4b71-a2cc-9835024beb9b"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_7520_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="2003" width="175" height="20" uuid="7fb9d4e4-a9c4-4801-a3e5-f82954e1bfe2"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_7530_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="1946" width="175" height="19" uuid="9871488b-0ed4-410c-acde-a98e4f8cd0e6"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{T_7500}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="2023" width="380" height="19" uuid="22df5bdd-6d02-4af1-a11c-fcd6d07cb7e5"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[8000 CONSUMPTION AND SOCIAL SERVICES (sum 8100 to 8400)]]></text>
+			</staticText>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="2023" width="175" height="19" uuid="883183d6-cad3-4e99-97b5-ac2ccf3b5c04"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{TT_8000}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="2043" width="380" height="22" uuid="ecbcb8ab-e10c-4a8b-bb1d-ff825c022bd3"/>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[8100   Utilities (8110)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2065" width="380" height="20" uuid="c78d04c5-cf3c-4fd3-ab49-3286a96bc9a6"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           8110   Expenses incurred relating to car and electronic repairs, bills like electricity, sewer, water, telephone, decoder, personal debts to family members and friends etc.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2085" width="380" height="19" uuid="cb5bf558-05bb-43b7-98d5-40a969b643a4"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[8200   Utilities (8210)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2104" width="380" height="20" uuid="31bf513f-a00e-4556-84ba-ab8015684b8b"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           8210   Household necessities like food, beverages and basic household products.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2124" width="380" height="19" uuid="e1847340-327f-4b45-82ba-aeb1e1928ca6"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[8300   Consumer Durables (8310)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2143" width="380" height="19" uuid="19c8a8e6-c1f0-4603-a682-8d9e2c758da4"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           8310   Goods that do not wear out quickly like automobiles(cars), books, household(home appliances, consumer electronics, furniture, tools etc) sports equipment, jewellery, toys etc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2162" width="380" height="19" uuid="6896fc3b-84d5-4465-aae9-1a1b8b635a4d"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[8400   Social and communal expenses (8410)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2181" width="380" height="20" uuid="56e739bf-c7f8-4a47-8b1a-5776885df53c"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[           8410   Burial expenses, wedding expenses, rites of passage expenses.]]></text>
+			</staticText>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="2043" width="175" height="22" uuid="4fff44da-0a7c-45c1-b56b-54b6a33b66f9"/>
+				<box rightPadding="5">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_8100}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="2065" width="175" height="20" uuid="c037d5dd-bec1-4f0a-9e08-23e2f6e6dc8f"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_8110_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="2085" width="175" height="19" uuid="e818a2fc-fdc8-4fd9-a691-a8fc2b8ca502"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_8200}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="2104" width="175" height="20" uuid="c50b11d2-7efb-4810-9da4-ef65780bea94"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_8210_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="2143" width="175" height="19" uuid="580c94db-beff-4c4c-9096-8a7a8de2c614"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_8310_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="2162" width="175" height="19" uuid="523eca1a-7a15-44db-ab6f-606aed787ee2"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{T_8400}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="2181" width="175" height="20" uuid="b3ed23c5-c373-4ebf-9925-3416d6fa5980"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a_8410_earnings}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="2124" width="175" height="19" uuid="0220566e-c1a5-4f51-9127-9d51527e14f5"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{T_8300}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="2202" width="380" height="20" uuid="aed8ccc6-f21b-424b-9ef1-fe2331bda0ce"/>
+				<box padding="2">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<textField pattern="#,##0.###;(#,##0.###-)">
+				<reportElement x="380" y="2202" width="175" height="20" uuid="22a77a1a-d360-44a2-88c3-8bcc45634a48"/>
+				<box rightPadding="5">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="94" y="2" width="448" height="28" forecolor="#030200" uuid="cc472a45-a8bd-480c-aa61-a7ee9d1386fd">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font size="22" isBold="true"/>
+					<paragraph lineSpacingSize="1.0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{sacco_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="153">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField pattern="MMM d, yyyy">
+				<reportElement x="186" y="78" width="180" height="20" uuid="3c0a03de-3f46-491d-9db7-34ca23b66818">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="30" y="8" width="140" height="24" uuid="406a92cd-fe5a-4639-995d-3d6b6665cf4e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[AUTHORIZATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="36" width="524" height="21" uuid="4bbb41c7-95c0-4c69-bf31-7886425cdf8f"/>
+				<text><![CDATA[We declare that this return, to the best of our knowledge and belief is correct.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="61" width="150" height="18" uuid="3b1efcb8-2962-4701-aa76-2a614809d490"/>
+				<text><![CDATA[Name of the authorizing officer:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="84" width="210" height="16" uuid="d7783216-b24a-4f0c-8aab-9b2aa738ec1b"/>
+				<text><![CDATA[Sign ..................................... Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="117" width="157" height="19" uuid="1dc62479-2ecc-421d-b51a-11d6f6b1fa31"/>
+				<text><![CDATA[Name of the countersigning officer:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="193" y="122" width="240" height="17" uuid="759ae37d-37e6-4a38-bfe6-5c24d7b57480"/>
+				<text><![CDATA[------------------------------------------]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="175" y="66" width="230" height="22" uuid="acda451a-b698-4c70-a344-dce4a7eb12c1"/>
+				<textFieldExpression><![CDATA["----------------------------------------------------------------"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,110 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/configurations/global/currency/maintenance">Currency Maintenenace / </a>Currency
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-4 col-sm-12">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h4>Function:- <strong>{{this.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h4>Currency Code: <strong>{{this.fmData.currencyCode}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 col-sm-12 row" *ngIf="onShowResults">
+      <div class="row">
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted ON:- <strong>{{this.results.postedTime | date}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verified BY:- <strong>{{this.results.verifiedBy}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">CCY <span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" maxlength="3" formControlName="ccy"
+                class="pull-right form-control" [ngClass]="{ 'is-invalid': submitted && f.ccy.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Country <span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <select class="form-control" formControlName="country">
+                <option value="" disabled>-- SELECT COUNTRY --</option>
+                <option *ngFor="let country of  countries" [value]="country.name">{{ country.name }} -- {{ country.code
+                  }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">CCY Name <span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" maxlength="30" formControlName="ccyName"
+                class="pull-right form-control" [ngClass]="{ 'is-invalid': submitted && f.ccyName.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Decimal Precision</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="number" maxlength="30" formControlName="decimalprecision"
+                class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.decimalprecision.errors }" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <hr>
+      <div class="col-md-12 col-sm-12">
+        <button mat-raised-button class="pull-left bg-secondary text-white"
+          routerLink="/system/configurations/global/currency/maintenance" skipLocationChange="">BACK</button>
+        <button *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor" type="submit">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+        </button>
+      </div>
+      <br>
+    </form>
+  </div>
+</mat-card>

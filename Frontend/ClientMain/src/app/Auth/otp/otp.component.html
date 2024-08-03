@@ -1,0 +1,43 @@
+<div class="container">
+  <mat-card>
+    <div class="row">
+      <div class="left-info col-md-6 col-sm-12">
+        <div class="loginImage">
+          <img src="../../../../assets/authimage.png" class="
+                        img-responsive">
+        </div>
+      </div>
+      <div class="right-info col-md-6 col-sm-12">
+        <span *ngIf="loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></span>
+        <div class="card-header">
+          <div class="">
+            <span>
+              <h1>Verify Your OTP</h1>
+            </span>
+          </div>
+          <div class="profile-card">
+            <img src="{{logolink}}">
+          </div>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="otp">OTP CODE</label>
+              <input maxlength="4" type="number" formControlName="otpCode" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.otpCode.errors }" />
+              <div *ngIf="submitted && f.otpCode.errors" class="invalid-feedback">
+                <div *ngIf="f.otpCode.errors.required">OTP Code</div>
+              </div>
+            </div>
+            <button [disabled]="loading" class="btn btn-primary" type="submit">
+              Verify
+            </button>
+            <br>
+            <br>
+            <a class="pull-left" routerLink="/sso">Login</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

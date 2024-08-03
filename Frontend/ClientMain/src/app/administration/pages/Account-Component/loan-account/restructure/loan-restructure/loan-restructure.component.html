@@ -1,0 +1,132 @@
+<mat-card>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/loan-rescheduling">Loans Restructure Maintenance / </a>Loans Restructure
+    </div>
+  </mat-card-header>
+  <div *ngIf="loading">
+      <p><small>Processing, please wait...</small></p>
+      <p>
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </p>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h4>Loan Account ID: <strong>{{this.fmData.account_code}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-md-6 col-sm-12 row">
+      <div class="row" *ngIf="this.results">
+        <div class="col-md-6 col-sm-12">
+          <h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+        </div>
+      </div>
+    </div> -->
+  </div>
+  <hr>
+  <div class="container-fluid">
+      <mat-tab-group mat-align-tabs="center">
+          <mat-tab class="mat-tab container-fluid" label="LOAN RESTRUCTURE">
+            <h4><strong>Loan Restructuring Form</strong></h4>
+            <form action="" [formGroup]="formData" novalidate (ngSubmit)="onSubmit()" class="form">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-12 form-column">
+                      <label for="" class="start pull-left">Loan Account ID</label>
+                    </div>
+                    <div class="col-md-6 col-sm-12 form-column">
+                    <input readonly type="text" formControlName="acid" value="{{this.fmData.account_code}}" class="form-control"
+
+                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        maxlength="20">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-12 form-column">
+                      <label for="" class="start pull-left">No. of Installlment<span class="warning"
+                          *ngIf="onShowWarning">*</span></label>
+                    </div>
+                    <div class="col-md-6 col-sm-12 form-column">
+                      <input type="number" formControlName="installmentsNumber" class="form-control"
+
+                        [ngClass]="{ 'is-invalid': submitted && f.installmentsNumber.errors}"
+                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        maxlength="4">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-12 form-column">
+                      <label for="" class="start pull-left">Frequency<span class="warning"
+                          *ngIf="onShowWarning">*</span></label>
+                    </div>
+                    <div class="col-md-6 col-sm-12 form-column">
+                      <select formControlName="" form-control formControlName="installmentFreq" class="form-control"
+
+                        [ngClass]="{ 'is-invalid': submitted && f.installmentFreq.errors}">
+                        <option value="" disabled>-SELECT FREQUENCY-</option>
+                        <option *ngFor="let item of loanFrequency" [value]="item">{{item}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-12 form-column">
+                      <label for="" class="start pull-left">Frequency Peripod<span class="warning"
+                          *ngIf="onShowWarning">*</span></label>
+                    </div>
+                    <div class="col-md-6 col-sm-12 form-column">
+                      <input type="number" formControlName="freqPeriod" class="form-control"
+
+                        [ngClass]="{ 'is-invalid': submitted && f.freqPeriod.errors}"
+                        oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        maxlength="4">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <div class="col-md-6 col-sm-12 form-column">
+                      <label for="" class="start pull-left">Start Date<span class="warning"
+                          *ngIf="onShowWarning">*</span></label>
+                    </div>
+                    <div class="col-md-6 col-sm-12 form-column">
+                      <input [matDatepicker]="installmentStartDate" formControlName="installmentStartDate" class="form-control">
+                      <span>
+                        <mat-datepicker-toggle matSuffix [for]="installmentStartDate"></mat-datepicker-toggle>
+                      </span>
+                      <mat-datepicker #installmentStartDate></mat-datepicker>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <mat-divider></mat-divider>
+              <br>
+              <div class="col-md-12 col-sm-12">
+                <button mat-raised-button class="pull-left bg-secondary text-white" routerLink="/system/loan-rescheduling"
+                  skipLocationChange="">BACK</button>
+                <button mat-raised-button type="submit" class="float-right" color="primary" style="margin-bottom:20px ;">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>SUBMIT</button>
+              </div>
+            </form>
+          </mat-tab>
+      </mat-tab-group>
+  </div>
+</mat-card>

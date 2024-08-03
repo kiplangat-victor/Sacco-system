@@ -1,0 +1,91 @@
+server:
+  port: 9009
+  tomcat:
+    access-log-enabled: true
+
+spring:
+  application:
+    name: UNIVERSAL-NODE-BROKER
+  kafka:
+    consumer:
+      group-id: group_id
+      auto-offset-reset: earliest
+      bootstrap-servers: 127.0.0.1:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: 'true'
+    h2:
+      console:
+        enabled: true
+        path: /h2
+    datasource:
+      url: jdbc:h2:file:~/test
+      username: sa
+      password:
+      driverClassName: org.h2.Driver
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+
+  mail:
+    organization_mail: no-reply@emtechhouse.co.ke
+    protocol: smtps
+    host: mail.emtechhouse.co.ke
+    port: 465
+    username: no-reply@emtechhouse.co.ke
+    password: p?SuEmtech123
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: mail.emtechhouse.co.ke
+
+auto:
+  create:
+    topics:
+      enable: 'true'
+topic:
+  name:
+    consumer: application.mails
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://52.15.152.26:9001/eureka
+
+  instance:
+    hostname: 52.15.152.26
+
+
+company_logo_path: src/main/resources/e&m-logo.png
+
+
+emailOrganizationMail: info@emtechhouse.co.ke
+reports_absolute_path: src/main/resources/
+emailRegards: Regards CTO ~ E&M Tech
+emailOrganizationAddress: P.O. BOX 11001-00100
+emailRemarks: Thank You.
+emailOrganizationName: E&M Tech
+emailOrganizationWebsite: https://emtechhouse.co.ke
+emailSalutation: Dear Sir/Madam,
+from_mail: no-reply@emtechhouse.co.ke
+backup_absolute_path: src/main/resources/backup/
+emailOrganizationPhone: +254 722 582 328
+emailMessage: Find the attached information from our partnership.
+image_banner: src/main/resources/e&m_banner.jpg
+file:
+  upload-dir: src/main/resources/Uploads
+emailOrganizationLocation: Muthaiga Square, 3rd Floor, Thika Super Highway, exit  3

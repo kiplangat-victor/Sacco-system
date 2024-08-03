@@ -1,0 +1,120 @@
+<div class="container">
+  <mat-card-header class="breadcrumb">
+    <div>{{ reportTitle }}</div>
+  </mat-card-header>
+  <div *ngIf="loading">
+    <mat-progress-bar color="primary" mode="indeterminate">
+    </mat-progress-bar>
+  </div>
+  <div mat-dialog-content>
+    <form [formGroup]="arrearsRepotForm" class="register-form m-4">
+      <div class="row mb-3" *ngIf="branchSelected">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left"
+                >Branch Code<span class="warning">*</span></label
+              >
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input
+                maxlength="6"
+                type="text"
+                oninput="this.value=this.value.toUpperCase()"
+                formControlName="branchCode"
+                class="pull-right form-control"
+              />
+              <mat-icon class="pull-left" (click)="solCodeLookup()"
+                >search</mat-icon
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="disbursedBySelected">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left"
+                >Manager name<span class="warning">*</span></label
+              >
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <select class="form-control" formControlName="username">
+                <option value="" disabled>-- Select --</option>
+                <option
+                  *ngFor="let user of users"
+                  [value]="user.username"
+                >
+                  {{ user.username }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left"
+                >From Date<span class="warning">*</span></label
+              >
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input
+                [matDatepicker]="fpicker"
+                formControlName="fromdate"
+                class="form-control"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="fpicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #fpicker></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left"
+                >To Date<span class="warning">*</span></label
+              >
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input
+                [matDatepicker]="tpicker"
+                formControlName="todate"
+                class="form-control"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="tpicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #tpicker></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row" align="end">
+            <button
+              (click)="submit()"
+              [disabled]="!arrearsRepotForm.valid"
+              mat-raised-button
+              color="primary"
+              class="mr-2"
+            >
+              Generate Report
+            </button>
+            <button (click)="cancel()" mat-raised-button color="warn">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

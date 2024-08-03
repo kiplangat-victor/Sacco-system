@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="withdrawal_receipt" pageWidth="510" pageHeight="520" columnWidth="290" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="7373104e-3065-4d72-a170-5d962ce46a88">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Uat"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="report_icon" class="java.lang.String"/>
+	<parameter name="amount_in_words" class="java.lang.String"/>
+	<parameter name="transaction_code" class="java.lang.String"/>
+	<parameter name="receipt_type" class="java.lang.String"/>
+	<parameter name="served_by" class="java.lang.String"/>
+	<parameter name="sacco_name" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select "Customer No" as col_key, coalesce(ac.customer_code, '') as col_value from accounts ac join part_tran pt on ac.acid=pt.acid join dtd dtd where pt.transaction_header_id=dtd.sn and pt.part_tran_type='Credit' and dtd.transaction_code=$P{transaction_code} union select "Account No" as col_key, coalesce(pt.acid, '') as col_value from part_tran pt join accounts ac on pt.acid=ac.acid join dtd dtd where pt.transaction_header_id=dtd.sn and pt.part_tran_type='Credit' and dtd.transaction_code=$P{transaction_code} union select "Account Name" as col_key, coalesce(ac.account_name, '') as col_value from part_tran pt join accounts ac on pt.acid=ac.acid  join dtd dtd where pt.transaction_header_id=dtd.sn and pt.part_tran_type='Credit' and dtd.transaction_code=$P{transaction_code} union select "Account Type" as col_key, coalesce(ac.account_type, '') as col_value from part_tran pt join accounts ac on pt.acid=ac.acid  join dtd dtd where pt.transaction_header_id=dtd.sn and pt.part_tran_type='Credit'  and dtd.transaction_code=$P{transaction_code} union select "Transaction Date" as col_key, pt.tran_date as tran_date from part_tran pt join accounts ac on pt.acid=ac.acid join dtd dtd where pt.transaction_header_id=dtd.sn and pt.part_tran_type='Credit' and dtd.transaction_code=$P{transaction_code} union
+select "Transaction code" as col_key, $P{transaction_code} as col_value union
+select "Amount" as col_key, coalesce(pt.tran_amount, 0.0) as col_value from part_tran pt join accounts ac on pt.acid=ac.acid join dtd dtd where pt.transaction_header_id=dtd.sn and pt.part_tran_type='Credit' and dtd.transaction_code=$P{transaction_code} union
+select "Amount in Words" as col_key,coalesce($P{amount_in_words}, '') as col_value union
+select "Transaction Charges" as col_key, cpt.tran_amount as col_value from charge_partran cpt join dtd dtd where cpt.transaction_header_id=dtd.sn and dtd.transaction_code=$P{transaction_code} union
+select "Remarks" as col_key, coalesce(pt.tran_particulars, '') as col_value from part_tran pt join dtd dtd where pt.transaction_header_id=dtd.sn and pt.part_tran_type='Credit' and dtd.transaction_code=$P{transaction_code} union
+select "Transaction Charges" as col_key, coalesce(cpt.tran_amount, '0') from charge_partran cpt join dtd dtd on dtd.sn=cpt.transaction_header_id where dtd.transaction_code=$P{transaction_code} union
+select "Branch" as col_key, coalesce(concat(br.branch_code,'-',br.branch_description), '') as col_value from branch br join accounts ac on br.branch_code=ac.sol_code join part_tran pt on ac.acid=pt.acid join dtd dtd on pt.transaction_header_id=dtd.sn and dtd.transaction_code=$P{transaction_code} group by dtd.transaction_code]]>
+	</queryString>
+	<field name="col_key" class="java.lang.String"/>
+	<field name="col_value" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="-5" y="-4" width="97" height="83" uuid="56929f6b-4545-483e-acf1-ebac850e1978">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{report_icon}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Transparent" x="70" y="0" width="420" height="41" forecolor="#030200" uuid="7c05dd0b-cdb6-4194-84ed-e189b5b2debb">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font size="16" isBold="true"/>
+					<paragraph lineSpacingSize="1.0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{sacco_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="39" width="410" height="28" uuid="a3572b32-b543-421a-b807-ea2735d4f985">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{receipt_type} + " Receipt"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="59">
+			<line direction="BottomUp">
+				<reportElement x="1" y="0" width="489" height="3" uuid="9159a7a4-1634-4491-b06a-5ad87cea9d34">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="19" splitType="Immediate">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField textAdjust="StretchHeight">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="-54" width="140" height="30" uuid="3e7719e0-576b-4712-ab2b-b2572fffec1d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="10" bottomPadding="3" rightPadding="10">
+					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{col_key}+" :"]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="140" y="-54" width="350" height="30" uuid="5cb7b24a-aeca-423d-933f-588cacaff801"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="3" rightPadding="10">
+					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{col_value}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</columnFooter>
+	<summary>
+		<band height="95">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="2" y="-45" width="286" height="20" uuid="439294d6-9081-4de4-adf8-c43ad63444c0">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[I acknowledge receipt of the above amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="-22" width="67" height="25" uuid="f8e7c635-4453-4e49-a22d-3fb42fa93198">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="7" width="68" height="20" uuid="448d71d4-69e3-4f9a-824f-b2e590cbfeb9">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Signature:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="27" width="120" height="20" uuid="879336b7-4b2d-464e-933d-7b514a39a692">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[You were served by: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="2" width="220" height="20" uuid="4e6181e7-01a9-4883-bf5d-e5007d356fab"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[............................................................................... ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="122" y="28" width="169" height="20" uuid="bc888568-e408-40cd-a588-92ddfc38130f"/>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[........................................................  ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="123" y="28" width="168" height="20" uuid="f0df756f-e655-4ef3-86d1-5543965504bb">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box bottomPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{served_by}]]></textFieldExpression>
+			</textField>
+			<textField pattern="M/d/yy h:mm a">
+				<reportElement x="69" y="-22" width="184" height="25" uuid="54b62845-a098-440f-a5f3-24593de8339e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="69" y="-22" width="220" height="25" uuid="2c29ff39-ba82-4978-9e3e-76de9775c720">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Bottom"/>
+				<text><![CDATA[................................................................... ]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

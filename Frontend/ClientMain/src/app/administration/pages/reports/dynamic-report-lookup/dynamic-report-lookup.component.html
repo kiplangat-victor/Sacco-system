@@ -1,0 +1,432 @@
+<div class="container">
+  <mat-card-header class="breadcrumb">
+    <div>{{ reportTitle }}</div>
+  </mat-card-header>
+  <div *ngIf="loading">
+    <mat-progress-bar color="primary" mode="indeterminate">
+    </mat-progress-bar>
+  </div>
+  <div mat-dialog-content>
+    <form [formGroup]="accountStatementForm" class="register-form m-4">
+      <div class="row mb-3">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <div class="form-group">
+          <div class="col-md-6 col-sm-12 form-column ">
+            <label class="start pull-left">Document<span class="warning">*</span></label>
+           </div>
+           <div class="col-md-6 col-sm-12 form-column ">
+          <select
+            class="form-control"
+            formControlName="doctype"
+          >
+            <option value="" disabled>-- Select --</option>
+            <option
+              *ngFor="let doctype of doctypes"
+              [value]="doctype.code"
+            >
+              {{ doctype.description }}
+            </option>
+          </select>
+           </div>
+        </div>
+      </div>
+      </div>
+      <div  *ngIf="report.requiredFields.includes('charge')" class="row mb-3">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <div class="form-group">
+          <div class="col-md-6 col-sm-12 form-column ">
+            <label class="start pull-left">Printing Charges<span class="warning">*</span></label>
+           </div>
+           <div class="col-md-6 col-sm-12 form-column ">
+          <select
+            class="form-control"
+            formControlName="charge"
+          >
+            <option value="" disabled>-- Select --</option>
+            <option
+              *ngFor="let c of chargeYN"
+              [value]="c.code"
+            >
+              {{ c.description }}
+            </option>
+          </select>
+           </div>
+        </div>
+      </div>
+      </div>
+      <div  *ngIf="report.requiredFields.includes('transactionType')" class="row mb-3">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <div class="form-group">
+          <div class="col-md-6 col-sm-12 form-column ">
+            <label class="start pull-left">Transaction Type<span class="warning">*</span></label>
+           </div>
+           <div class="col-md-6 col-sm-12 form-column ">
+          <select
+            class="form-control"
+            formControlName="transactionType"
+          >
+            <option value="" disabled>-- Select --</option>
+            <option
+              *ngFor="let c of transactionTypesArray"
+              [value]="c"
+            >
+              {{ c }}
+            </option>
+          </select>
+           </div>
+        </div>
+      </div>
+      </div>
+      <div *ngIf="report.requiredFields.includes('type')" class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Report scope<span class="warning">*</span></label>
+             </div>
+             <div class="col-md-6 col-sm-12 form-column ">
+              <select
+              (change)="specifyReportScope($event)"
+              class="form-control"
+              formControlName="type"
+            >
+              <option value="" disabled>-- Select --</option>
+              <option
+                *ngFor="let s of scope"
+                [value]="s"
+              >
+                {{ s }}
+              </option>
+            </select>
+             </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="report.requiredFields.includes('accountType')" class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Scheme codes<span class="warning">*</span></label>
+             </div>
+             <div class="col-md-6 col-sm-12 form-column ">
+            <select
+              class="form-control"
+              formControlName="accountType"
+            >
+              <option value="" disabled>-- Select --</option>
+              <option
+                *ngFor="let scheme of schemeTypes"
+                [value]="scheme.code"
+              >
+                {{ scheme.description }}
+              </option>
+            </select>
+             </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="report.requiredFields.includes('welfareCode')">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left"
+                >Welfare <span class="warning">*</span></label
+              >
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              
+                <select name="" class="form-control"
+                    formControlName="welfareCode">
+                    <option value="" [attr.disabled]="true">--NOT SELECTED--</option>
+                    <option *ngFor="let item of welfareTypeArray" [value]="item.welfareCode">
+                        {{item.welfareName}}</option>
+                </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="report.requiredFields.includes('memberType')">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left"
+                >Member Category <span class="warning">*</span></label
+              >
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              
+                <select name="" class="form-control"
+                    formControlName="memberType">
+                    <option value="" [attr.disabled]="true">--NOT SELECTED--</option>
+                    <option *ngFor="let item of membershipTypeArray" [value]="item.customerType">{{item.description}}</option>
+                </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="report.requiredFields.includes('solCode')">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left"
+                >Branch Code<span class="warning">*</span></label
+              >
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input
+                type="text"
+                oninput="this.value=this.value.toUpperCase()"
+                formControlName="solCode"
+                class="pull-right form-control"
+              />
+              <mat-icon class="pull-left" (click)="solCodeLookup()"
+                >search</mat-icon
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="report.requiredFields.includes('employerCode')">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left"
+                >Employer Code<span class="warning">*</span></label
+              >
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input
+                type="text"
+                oninput="this.value=this.value.toUpperCase()"
+                formControlName="employerCode"
+                class="pull-right form-control"
+              />
+              <mat-icon class="pull-left" (click)="employerCodeLookup()"
+                >search</mat-icon
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mb-3" *ngIf="report.requiredFields.includes('glCode')">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left"
+                >Gl Code<span class="warning">*</span></label
+              >
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input
+                type="text"
+                oninput="this.value=this.value.toUpperCase()"
+                formControlName="glCode"
+                class="pull-right form-control"
+              />
+              <mat-icon class="pull-left" (click)="glCodeLookup()"
+                >search</mat-icon
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="report.requiredFields.includes('glSubheadCode')">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left"
+                >Sub GL Code<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input
+                type="text"
+                oninput="this.value=this.value.toUpperCase()"
+                formControlName="glSubheadCode"
+                class="pull-right form-control"
+              />
+              <mat-icon class="pull-left" (click)="glSubheadCodeLookup()"
+                >search</mat-icon
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="report.requiredFields.includes('accountStatus')" class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Account status<span class="warning">*</span></label>
+             </div>
+             <div class="col-md-6 col-sm-12 form-column ">
+            <select
+              class="form-control"
+              formControlName="accountStatus"
+            >
+              <option value="" disabled>-- Select --</option>
+              <option
+                *ngFor="let status of statuses"
+                [value]="status"
+              >
+                {{ status }}
+              </option>
+            </select>
+             </div>
+          </div>
+        </div>
+      </div>
+      <div  *ngIf="report.requiredFields.includes('acid')" class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+             <label class="start pull-left">Account Id<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="30" type="text" oninput ="this.value=this.value.toUpperCase()" formControlName="acid" class="pull-right form-control" />
+              <mat-icon (click)="accountLookup()">search</mat-icon>
+            </div>
+         </div>
+        </div>
+      </div>
+      <div *ngIf="report.requiredFields.includes('customerCode')" class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Member Code<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="30" type="text" formControlName="customerCode" class="pull-right form-control"/>
+              &nbsp; &nbsp;
+              <mat-icon color="primary" (click)="customerLookup()">
+                search</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="report.requiredFields.includes('productCode')" class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <div class="form-group">
+              <div class="col-md-6 col-sm-12 form-column ">
+               <label class="start pull-left">Product Code<span class="warning">*</span></label>
+              </div>
+              <div class="col-md-6 col-sm-12 form-column ">
+                <input maxlength="15" type="text" oninput ="this.value=this.value.toUpperCase()" formControlName="productCode" class="pull-right form-control" />
+                <mat-icon (click)="schemeCodeLookup()">search</mat-icon>
+              </div>
+           </div>
+          </div>
+
+        </div>
+      </div>
+      <div *ngIf="report.requiredFields.includes('classification')" class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <div class="form-group">
+              <div class="col-md-6 col-sm-12 form-column ">
+               <label class="start pull-left">Asset Classification<span class="warning">*</span></label>
+              </div>
+              <div class="col-md-6 col-sm-12 form-column ">
+                <input maxlength="15" type="text" oninput ="this.value=this.value.toUpperCase()" formControlName="classification" class="pull-right form-control" />
+                <mat-icon (click)="classificationLookup()">search</mat-icon>
+              </div>
+           </div>
+          </div>
+
+        </div>
+      </div>
+      <div *ngIf="report.requiredFields.includes('groupCode')" class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Group Code<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="8" type="text" formControlName="groupCode" class="pull-right form-control"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3"  *ngIf="report.requiredFields.includes('username')" c>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">System User<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" oninput="this.value=this.value.toUpperCase()"
+                formControlName="username" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.tellerUserName.errors }" /> &nbsp; &nbsp;
+              <mat-icon color="primary" (click)="userLookup()">search</mat-icon><br>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="report.requiredFields.includes('showReversals')" class="row mb-3">
+        <div class="form-group">
+          <div class="col-md-6 col-sm-12 form-column">
+            <label class="start pull-left">Show reversals</label>
+          </div>
+          <div class="col-md-6 col-sm-12 form-column">
+            <mat-radio-group 
+              aria-label="Select an option" formControlName="showReversals"
+              [ngClass]="{ 'is-invalid': submitted && f.showReversals.errors }">
+              <mat-radio-button value="Y" color="primary">YES</mat-radio-button>
+              <mat-radio-button value="N" color="warn">NO</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="report.requiredFields.includes('fromdate')" class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">From Date<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input [matDatepicker]="fpicker" formControlName="fromdate" class="form-control" />
+              <mat-datepicker-toggle  matSuffix [for]="fpicker"></mat-datepicker-toggle>
+              <mat-datepicker #fpicker></mat-datepicker>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="report.requiredFields.includes('todate')" class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">To Date<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input [matDatepicker]="tpicker" formControlName="todate" class="form-control" />
+              <mat-datepicker-toggle matSuffix [for]="tpicker"></mat-datepicker-toggle>
+              <mat-datepicker #tpicker></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="report.requiredFields.includes('todaydate')" class="row mb-3">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Date<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input [matDatepicker]="tpicker" formControlName="todaydate" class="form-control" />
+              <mat-datepicker-toggle matSuffix [for]="tpicker"></mat-datepicker-toggle>
+              <mat-datepicker #tpicker></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row" align="end">
+            <button [disabled]="!accountStatementForm.valid" (click)="submit()" mat-raised-button color="primary" class="mr-2">Generate Report</button>
+            <button (click)="cancel()" mat-raised-button color="warn">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

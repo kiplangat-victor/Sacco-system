@@ -1,0 +1,138 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+</div>
+  <mat-card-header class="breadcrumb">
+      <div>
+        <a routerLink="/system">Dashboard / </a>
+        <a routerLink="/system/manage/user"> User Management / </a> User Profile Information
+      </div>
+      <div class="ml-auto">
+        <button  class="table-main-action-btn " color="primary" mat-raised-button (click)="onResetPass(this.currentUser.email)"> &nbsp; UPDATE / RESET PASSWORD &nbsp;
+      </button>
+      </div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData"  #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left" for="">Membership Code<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input readonly type="text" class="form-control" formControlName="memberCode" maxlength="30">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">First Name<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input readonly type="text" maxlength="60"
+                formControlName="firstName" class="form-control" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Last Name<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input readonly type="text" maxlength="60"
+                formControlName="lastName" class="form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">E-Mail Address<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input readonly type="text" maxlength="60"
+                formControlName="email" class="form-control" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Username<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input readonly type="text" maxlength="60"
+                formControlName="username" class="form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Phone Number<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input readonly type="text" maxlength="60"
+                formControlName="phoneNo" class="form-control" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Branch<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input readonly type="text" maxlength="60"
+                formControlName="solCode" class="form-control"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">User Role<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input readonly type="text" maxlength="60"
+                formControlName="role" class="form-control" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Is a teller? <span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <mat-radio-group aria-label="Select an option" formControlName="isTeller">
+                <mat-radio-button [disabled]="disableTeller" value="Yes">Yes</mat-radio-button>
+                <mat-radio-button [disabled]="disableTeller" value="No">No</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <hr>
+      <br>
+      <button mat-raised-button type="button" class="bg-secondary text-white" routerLink="/system/manage/user">
+      BACK
+    </button>
+    </form>
+  </div>
+</mat-card>

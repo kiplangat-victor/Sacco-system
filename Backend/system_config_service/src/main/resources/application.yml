@@ -1,0 +1,42 @@
+server:
+  port: 9003
+
+spring:
+  application:
+    name: SYSTEM-CONFIG-SERVICE
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+#        dialect: org.hibernate.dialect.MariaDB53Dialect
+  datasource:
+    url: jdbc:mysql://kigen.mysql.database.azure.com:3306/ayact_africa?useSSL=true&requireSSL=true
+    username: Test
+    password: Kigen@2024
+    driverClassName: org.mariadb.jdbc.Driver
+
+    dbname: ayact_africa
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:9001/eureka
+
+  instance:
+    hostname: localhost
+
+users:
+  app:
+    jwtSecret: /buCOEjS/+H7ZwekxyLKLdDeegHUGEytjxuivosdrzjRG4g4E+kA3uXO5lvGBVsl2NwqsgiGUUI5bjgY/6WG/VSIIG+22b1Rvdb59BY0YRod6Dnjnp0REsPn//hshs6ucnOVCBRp0lbVb1kP+EDOM7W7N72/+t+R1d8JQ4pjisoJZI4e0MV3PlZtzXKI0SY2EQUtI
+    jwtExpirationMs: 43200000
+

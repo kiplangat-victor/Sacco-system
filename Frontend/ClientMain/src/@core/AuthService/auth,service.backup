@@ -1,0 +1,248 @@
+
+
+import { environment } from '../../environments/environment';
+
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { User } from 'src/@core/Models/user/user.model';
+
+
+const baseUrl = `${environment.userAPI}`;
+
+const AUTH_API = `${environment.userAPI}/api/auth/`;
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  static getToken() {
+      throw new Error("Method not implemented.");
+  }
+  private currentUserSubject: BehaviorSubject<User>;
+  public currentUser: Observable<User>;
+  endpoint: string = 'http://localhost:3000';
+  headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+
+  constructor(private http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser') || '{}'));
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
+
+
+  public get currentUserValue(): User {
+    return this.currentUserSubject.value;
+
+  }
+
+  createAccount(data: User): Observable<any> {
+    let API_URL = `${environment.userAPI}/api/auth/signup/`;
+    console.log("front", data)
+    return this.http.post(API_URL, data, { headers: this.headers, withCredentials: false }).pipe(map(res => {
+        return res || {}
+      }),
+      catchError(this.errorMgmt)
+    )
+  }
+
+  activate(token: string) {
+    console.log("got called to activate");
+    console.log("The backend", token);
+    return this.http.post<any>(`http://localhost:4000/accounts/verify-email`, { token })
+      .pipe(map(res => {
+        return res;
+      }));
+  }
+
+login(username: string, password: string): Observable<any> {
+  return this.http.post(AUTH_API + 'signin', {
+    username,
+    password
+  }, httpOptions);
+}
+  // Get all accounts
+  GetAllAccounts(): Observable<any> {
+    let API_URL = `${environment.userAPI}/api/auth/all/employees/accounts`;
+    return this.http.get(API_URL, { headers: this.headers, withCredentials: false })
+      .pipe(
+        map((res) => {
+          return res || {}
+        }),
+        catchError(this.errorMgmt)
+      )
+  }
+    // Get all accounts
+    GetAllPendingAccounts(): Observable<any> {
+      let API_URL = `${environment.userAPI}/api/auth/all/pending/employees/accounts`;
+      return this.http.get(API_URL, { headers: this.headers, withCredentials: false })
+        .pipe(
+          map((res) => {
+            console.log("hey data", res)
+            return res || {}
+          }),
+          catchError(this.errorMgmt)
+        )
+    }
+    // 
+    GetAllApprovedAccounts(): Observable<any> {
+      let API_URL = `${environment.userAPI}/api/auth/all/approved/employees/accounts`;
+      return this.http.get(API_URL, { headers: this.headers, withCredentials: false })
+        .pipe(
+          map((res) => {
+            console.log("hey data", res)
+            return res || {}
+          }),
+          catchError(this.errorMgmt)
+        )
+    }
+    GetAllRevokedAccounts(): Observable<any> {
+      let API_URL = `${environment.userAPI}/api/auth/all/revoked/employees/accounts`;
+      return this.http.get(API_URL, { headers: this.headers, withCredentials: false })
+        .pipe(
+          map((res) => {
+            console.log("hey data", res)
+            return res || {}
+          }),
+          catchError(this.errorMgmt)
+        )
+    }
+  // Get account by id
+  GetAccountsByEmail(email:any): Observable<any> {
+    console.log("called email",email)
+    let API_URL = `${environment.userAPI}/api/auth/find/accounts/${email}`;
+    return this.http.get(API_URL, { headers: this.headers, withCredentials: false })
+      .pipe(
+        map((res) => {
+          return res || {}
+        }),
+        catchError(this.errorMgmt)
+      )
+  }
+
+
+  getToken(){
+return localStorage.getItem('jwtToken');
+
+  }
+
+  forgotPassword(email: string) {
+    return this.http.post<any>(`${environment.userAPI}/accounts/forgot-password`, {email})
+    .pipe(map(res => {
+      console.log("the res", res);
+      return res;
+    }));
+  }
+
+
+  resetPassword(token: string, password: string, confirmPassword: string) {
+    return this.http.post<any>(`${environment.userAPI}/accounts/reset-password`, {token, password, confirmPassword })
+    .pipe(map(res => {
+      return res;
+    }));
+  }
+
+    // Get all AUthenticated users
+  GetAuthenticatedUsers() {
+    let API_URL = `${environment.userAPI}/accounts/authenticated`;
+    return this.http.get(API_URL,  { withCredentials: true }).pipe(
+        map((res) => {
+          return res || {}
+        }),
+        catchError(this.errorMgmt)
+      )
+  }
+
+  // Get Staff by ID
+  GetUserId(id: any): Observable<any> {
+    let API_URL = `${environment.userAPI}/accounts/${id}`;
+    return this.http.get(API_URL, { headers: this.headers, withCredentials: true })
+      .pipe(
+        map((res) => {
+          return res || {}
+        }),
+        catchError(this.errorMgmt)
+      )
+  }
+
+    // Get Staff by ID
+    GetStaff(): Observable<any> {
+      let API_URL = `${environment.userAPI}/accounts/staffs`;
+      return this.http.get(API_URL, { headers: this.headers, withCredentials: true })
+        .pipe(
+          map((res) => {
+            return res || {}
+          }),
+          catchError(this.errorMgmt)
+        )
+    }
+
+        // Get Staff by ID
+        countStaff(): Observable<any> {
+          let API_URL = `${environment.userAPI}/accounts/staffs/count`;
+          return this.http.get(API_URL, { headers: this.headers, withCredentials: true })
+            .pipe(
+              map((res) => {
+                return res || {}
+              }),
+              catchError(this.errorMgmt)
+            )
+        }
+
+
+  // Update Order by Id
+  updateUser(id: any, data: any): Observable<any> {
+    console.log("user id", id);
+  console.log("data", data);
+    let API_URL = `${environment.userAPI}/accounts/${id}`;
+    return this.http.put(API_URL, data, { headers: this.headers, withCredentials: true })
+      .pipe(
+        catchError(this.errorMgmt)
+      )
+  }
+
+  logout() {
+    // remove user from local storage to log user out
+    localStorage.removeItem('currentUser');
+    // this.currentUserSubject.next(null);
+  }
+    // Update Order by Id
+    // let currentURL = /api/auth/update/role;
+    updateRole(params: any): Observable<any> {
+      let API_URL = `${environment.userAPI}/api/auth/update/role/`;
+      return this.http.put(API_URL, {}, { params: params, headers: this.headers, withCredentials: false })
+        .pipe(
+          catchError(this.errorMgmt)
+        )
+    }
+    approveEmployee(params: any): Observable<any> {
+      let API_URL = `${environment.userAPI}/api/auth/approve/account/by/employee/`;
+      return this.http.put(API_URL, {}, { params: params, headers: this.headers, withCredentials: false })
+        .pipe(
+          catchError(this.errorMgmt)
+        )
+    }
+    revokeEmployee(params: any): Observable<any> {
+      let API_URL = `${environment.userAPI}/api/auth/revoke/account/by/employee/`;
+      return this.http.put(API_URL, {}, { params: params, headers: this.headers, withCredentials: false })
+        .pipe(
+          catchError(this.errorMgmt)
+        )
+    }
+    
+  // Error handling
+  errorMgmt(error: HttpErrorResponse) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      // Get client-side error
+      errorMessage = error.error.message;
+    } else {
+      // Get server-side error
+      errorMessage = `${error.error.message}`;
+    }
+    return throwError(errorMessage);
+  }
+}

@@ -1,0 +1,162 @@
+<div *ngIf="loading">
+  <p><small>Loading, please wait...</small></p>
+  <p>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </p>
+</div>
+<div class="breadcrumb">
+  General Accounts Lookup
+  <div class="col-md-6 col-sm-12 ml-auto">
+    <input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+  </div>
+</div>
+<br>
+<div class="filter-form">
+  <form action="" [formGroup]="formData" novalidate class="form" #resetRequestsForm="ngForm">
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">Account ID</label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input type="text" formControlName="acid" class="form-control"
+              oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+              maxlength="30" minlength="4">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">Account Name</label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input type="text" formControlName="accountName" class="form-control">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">National ID</label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input type="text" formControlName="nationalId" class="form-control"
+              oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+              maxlength="14" minlength="4">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">Membership Code</label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input type="text" formControlName="customerCode" class="form-control"
+              oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+              maxlength="30" minlength="4">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">Account Type<span class="warning">*</span></label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <select class="form-control" formControlName="accountType">
+              <option value="" [attr.disabled]="true">--SELECT ACC. TYPE--</option>
+              <option *ngFor="let item of AccountTypeArray" [value]="item.accountType">
+                {{item.accountRef}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">Category<span class="warning">*</span></label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <select class="form-control" formControlName="customerType">
+              <option value="" [attr.disabled]="true">--SELECT CATEGORY--</option>
+              <option *ngFor="let item of membershipTypeArray" [value]="item.customerType">{{item.description}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">Branch Code<span class="warning">*</span></label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <select class="form-control" formControlName="solCode">
+              <option value="" [attr.disabled]="true">--SELECT BRANCH--</option>
+              <option *ngFor="let branch of this.customer_branch_array" [value]="branch.branchCode">
+                {{branch.branchCode}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">Account Status<span class="warning">*</span></label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <select class="form-control" formControlName="accountStatus">
+              <option value="" [attr.disabled]="true">--SELECT ACC. STATUS--</option>
+              <option *ngFor="let item of accountStatusArray" [value]="item">{{item}}</option>
+            </select>
+          </div>
+        </div>
+      </div> -->
+    </div>
+    <div class="row">
+      <div class="col-md-2 offset-md-9">
+        <button type="button" class="btn btn-primary btn-sm pull-right btn" (click)="getFilteredCustomers()">SEARCH
+        </button>
+      </div>
+    </div>
+    <br>
+  </form>
+</div>
+<br>
+<div class="table-row">
+  <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+    </ng-container>
+    <ng-container matColumnDef="cust_id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Account ID</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.acid}} </td>
+    </ng-container>
+    <ng-container matColumnDef="cust_name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Name</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.accountName}}
+        {{row.surname}} </td>
+    </ng-container>
+    <ng-container matColumnDef="accountType">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Account Type</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.accountType}} </td>
+    </ng-container>
+    <ng-container matColumnDef="cust_joiningdate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Joining Date</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.openingDate | date}} </td>
+    </ng-container>
+    <ng-container matColumnDef="verifiedFlag">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Verified Flag</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.verifiedFlag}} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+</div>
+<mat-paginator [pageSizeOptions]="[5, 10, 15, 20, 30, 40, 50, 100]" aria-label="Select page of users"></mat-paginator>

@@ -1,0 +1,147 @@
+<mat-card>
+  <mat-card-header class="breadcrumb">
+    <div>Share Capital Maintenance</div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid pb-2">
+    <form action="" [formGroup]="formData" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label for="" class="start pull-left">Function Type<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <select formControlName="function_type" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.function_type.errors}" (change)="onSelectFunction($event)">
+                <option disabled>--Choose A function--</option>
+                <option *ngFor="let item of functionArray" [value]="item">{{item}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="inquireShareCapitalSelected" class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label for="" class="start pull-left">Customer Code<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="customerCode" class="form-control">
+              <mat-icon (click)="sharesLookup()">search</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label for="" class="start pull-left">Customer Name<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" [attr.disabled]="true" formControlName="customerName" class="form-control"
+                oninput="this.value=this.value.toUpperCase()">
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <button mat-raised-button color="primary" class="pull-right" type="submit">GO</button>
+    </form>
+  </div>
+  <div class="card mt-3" *ngIf="customerDetailsFound">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="pb-5">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="body">
+
+              <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                  <td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">
+                    {{ i + 1 }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="year">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Year</th>
+                  <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                    {{ row.year }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="month">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Month
+                  </th>
+                  <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                    {{ row.month }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="transactionCode">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Transaction code
+                  </th>
+                  <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                    {{ row.transactionCode }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="account">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Account
+                  </th>
+                  <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                    {{ row.account }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="tranDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Tran date
+                  </th>
+                  <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                    {{ row.tranDate | date : "medium" }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="parttranType">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Part tran type
+                  </th>
+                  <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                    {{ row.parttranType }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="tranAmount">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    tran amount
+                  </th>
+                  <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                    {{ row.tranAmount }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="serviceBy">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Service by
+                  </th>
+                  <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                    {{ row.serviceBy }}
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell" colspan="4">
+                    No data matching the filter "{{ input.value }}"
+                  </td>
+                </tr>
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-paginator [pageSize]="10" [pageSizeOptions]="[2, 5, 10, 20, 30, 40, 50, 100]" aria-label="Select page of users">
+  </mat-paginator>
+</mat-card>

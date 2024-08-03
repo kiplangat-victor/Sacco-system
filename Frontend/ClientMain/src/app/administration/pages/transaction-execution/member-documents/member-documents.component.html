@@ -1,0 +1,75 @@
+<div *ngIf="loading">
+	<p><small class="text-info">Loading Member Document ...</small></p>
+	<p>
+		<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+	</p>
+</div>
+<div class="row table-action-row">
+	<div class="on-mobile-hide col-md-6 col-sm-12">
+		<strong>Member Account Document List</strong>
+	</div>
+	<div class="col-md-6 col-sm-12">
+		<input class="pull-right search form-control" (keyup)="applyAccountDocumentsFilter($event)"
+			placeholder="Search..." #input />
+	</div>
+</div>
+<mat-tab-group animationDuration="1000ms">
+	<mat-tab label="MEMBERSHIP DOCUMENTS">
+		<div class="table-row">
+			<table mat-table matSort matTableExporter [dataSource]="memberDocumentsDataSource">
+				<ng-container matColumnDef="index">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+					<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+				</ng-container>
+				<ng-container matColumnDef="documentTitle">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+					<td mat-cell *matCellDef="let row">{{ row.image_name }}</td>
+				</ng-container>
+				<ng-container matColumnDef="view">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header>View Document</th>
+					<td mat-cell *matCellDef="let row">
+						<button mat-icon-button [disabled]="disableViewAction" color="primary"
+							(click)="onViewMemberDoument(row.id)">
+							<mat-icon>visibility</mat-icon>
+						</button>
+					</td>
+				</ng-container>
+				<tr mat-header-row *matHeaderRowDef="memberDocumentsColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: memberDocumentsColumns;"></tr>
+				<tr class="mat-row" *matNoDataRow>
+					<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+				</tr>
+			</table>
+		</div>
+		<mat-paginator #memberDocumentsPaginator="matPaginator" [pageSize]="5" [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+	</mat-tab>
+	<mat-tab label="ACCOUNT DOCUMENTS">
+		<div class="table-row">
+			<table mat-table matSort matTableExporter [dataSource]="accountDocumentsDataSource">
+				<ng-container matColumnDef="index">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+					<td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+				</ng-container>
+				<ng-container matColumnDef="documentTitle">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+					<td mat-cell *matCellDef="let row">{{ row.documentTitle }}</td>
+				</ng-container>
+				<ng-container matColumnDef="view">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header>View Document</th>
+					<td mat-cell *matCellDef="let row">
+						<button mat-icon-button [disabled]="disableViewAction" color="primary"
+							(click)="onViewAccountDoument(row.sn)">
+							<mat-icon>visibility</mat-icon>
+						</button>
+					</td>
+				</ng-container>
+				<tr mat-header-row *matHeaderRowDef="accountDocumentsColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: accountDocumentsColumns;"></tr>
+				<tr class="mat-row" *matNoDataRow>
+					<td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+				</tr>
+			</table>
+		</div>
+		<mat-paginator  #accountDocumentsPaginator="matPaginator" [pageSize]="5" [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+	</mat-tab>
+</mat-tab-group>

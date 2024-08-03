@@ -1,0 +1,36 @@
+<div class="">
+  <div class="row table-action-row">
+    <div class="col-md-6 col-sm-12">
+  <div>
+  </div>
+      </div>
+    <div class="col-md-6 col-sm-12">
+    <mat-icon class="pull-right">search</mat-icon>
+    <input class="pull-right search form-control" placeholder="Filter..." #input>
+    </div>
+  </div>
+  <br>  
+  <div class="table-row">
+    <table class="y-scrollable-table"mat-table matSort matTableExporter [dataSource] = "dataSource">
+     <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+    </ng-container>
+    <ng-container matColumnDef="branchCode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Branch Code</th>
+      <td  (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.branchCode}} </td>
+    </ng-container>
+    <ng-container matColumnDef="branchDescription">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Branch Description</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.branchDescription}} </td>
+    </ng-container>
+        
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+  </div>
+  <mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page of users"></mat-paginator>
+</div>

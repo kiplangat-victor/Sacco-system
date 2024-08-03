@@ -1,0 +1,94 @@
+#---
+#apiVersion: v1
+#kind: Namespace
+#metadata:
+#  name: development
+#---
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: customers
+#  namespace: development
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: customers
+#  template:
+#    metadata:
+#      labels:
+#        app: customers
+#    spec:
+#      containers:
+#        - name: pod-info-container
+#          image: firsttestcontainer.azurecr.io/firsttestcontainer:380
+##          imagePullPolicy: Always
+#          ports:
+#            - containerPort: 2024
+#          env:
+#            - name: POD_NAME
+#              valueFrom:
+#                fieldRef:
+#                  fieldPath: metadata.name
+#      imagePullSecrets:
+#        - name: acr-secret
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: customers-service
+#  namespace: development
+#spec:
+#  selector:
+#    app: customers
+#  ports:
+#    - port: 80
+#      targetPort: 9005
+#  type: LoadBalancer
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: development
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customers
+  namespace: development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customers
+  template:
+    metadata:
+      labels:
+        app: customers
+    spec:
+      containers:
+        - name: pod-info-container
+          image: firsttestcontainer.azurecr.io/customers:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9005
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+      imagePullSecrets:
+        - name: acr-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customers-service
+  namespace: development
+spec:
+  selector:
+    app: customers
+  ports:
+    - port: 80
+      targetPort: 9005
+  type: LoadBalancer

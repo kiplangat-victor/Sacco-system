@@ -1,0 +1,65 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>Standing Orders Maintenance
+    </div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Function<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <select (change)="onSelectFunction($event)" class="form-control" formControlName="function_type"
+                [ngClass]="{ 'is-invalid': submitted && f.function_type.errors }">
+                <option value="" disabled>-- CHOOSE FUNCTION- -</option>
+                <option *ngFor="let function of functionArray" [value]="function">{{ function }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="showCode">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Standing Order Code<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="standingOrderCode" class="form-control"
+
+                [ngClass]="{ 'is-invalid': submitted && f.standingOrderCode.errors }"/> &nbsp;
+              <mat-icon color="primary" (click)="standingOrdersLookup()" *ngIf="onShowSearchIcon">search</mat-icon>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <!-- <mat-hint>{{}}</mat-hint> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <mat-divider></mat-divider>
+      <br>
+      <div class="col-md-12 col-sm-12">
+        <button mat-raised-button class="pull-left bg-secondary text-white" routerLink="/system/"
+          skipLocationChange="">BACK</button>
+        <button mat-raised-button type="submit" class="float-right" color="primary" style="margin-bottom:20px ;"> <span
+            *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>PROCEED</button>
+      </div>
+      <br>
+    </form>
+  </div>
+</mat-card>

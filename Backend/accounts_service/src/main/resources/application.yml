@@ -1,0 +1,131 @@
+server:
+  port: 9006
+data:
+  backup:
+    folder: C:\Users\ngang\eand_m\
+    pause: true
+
+spring:
+  application:
+    name: ACCOUNTS-SERVICE
+    enableEmail: false
+    enableProdMail: false
+    testMail: coullence@gmail.com
+    enableSMS: true
+    enableProdSMS: true
+    testPhone: 254726634786
+    exciseDuty:
+      kraMiddlewareInitializeDeviceURL: http://127.0.0.1:8080/kraEstamp_v1/stamp/initializeDevice
+      kraMiddlewareGetTariffURL: http://127.0.0.1:8080/kraEstamp_v1/stamp/selectTarrifs
+      kraMiddlewareSendTransactionURL: http://127.0.0.1:8080/kraEstamp_v1/stamp/sendTransaction
+      transTyCd: "N"
+      rcptTyCd: "S"
+
+    sms:
+      callbackurl: http://52.15.152.26:9900/api/v1/sms/smsCallbacks
+      url: https://sms.crossgatesolutions.com:18095/v1/bulksms/messages
+      msgtype: promotional
+      profileCode: 2208021
+      apiKey: NDU4MThmODAxMzM2ODk3MUlELTQ2MmU4Y2QwZDA4YjQxOGU5ZjZjMTQ0ZGM0MmE4NDY5
+      template:
+        greetings: Hello
+        preSMS: Your account has been successful
+        postSMS:
+    paybill_account: BNK0014
+    fee:
+      withdrawal_code: EID7
+      cheque_charge_code: EID7
+      paybill_withdrawal_code: pybl
+      account_activation_code: ACT
+      money_transfer_code: MTR
+      balance_enquiry_code: BLE
+      sms_charges_code: SMS
+
+    service:
+      system_config_coll_withdrawal: http://localhost:9003/api/v1/parameters/configurations/event_id/collect/charges/
+      system_config_coll_activation_fee: http://localhost:9003/api/v1/parameters/configurations/event_id/collect/account/activation/charges/
+      system_config_money_transfer:   http://localhost:9003/api/v1/parameters/configurations/event_id/collect/charges/money/transfer/
+      system_config_balance_enquiry:  http://localhost:9003/api/v1/parameters/configurations/event_id/collect/charges/balance/enquiry/
+      system_config_sms_charges:  http://localhost:9003/api/v1/parameters/configurations/event_id/collect/charges/sms/charges/
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  jpa:
+    hibernate:
+      ddl-auto: update
+      use-new-id-generator-mappings: false
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: jdbc:mysql://kigen.mysql.database.azure.com:3306/ayact_africa?useSSL=true&requireSSL=true
+    username: Test
+    password: Kigen@2024
+    driverClassName: org.mariadb.jdbc.Driver
+
+    dbname: ayact_africa
+
+  #EMAIL CONFIGURATIONS
+  mail:
+    protocol: smtps
+    host: mail.emtechhouse.co.ke
+    port: 465
+    username: no-reply@emtechhouse.co.ke
+    password: Pass123$$
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: mail.emtechhouse.co.ke
+
+  organisation:
+    emailRegards: Regards Society Limited
+    emailMessage: Find the attached information from our partnership
+    emailOrganizationName:  Society Limited
+    image_banner: /home/coullence/Documents/PROD/EMT_002_Sacco_Solution/EMT_009_Sacco_Solution/Server/accounts_service/src/main/resources/banner.jpg
+    emailRemarks: Thank You.
+    emailOrganizationLocation: Makupa along Mwachofi Road, off Kenyatta Avenue.
+    emailOrganizationPhone: +254 7** *** ***
+    emailOrganizationWebsite: https://goodwayssacco.co.ke
+    emailOrganizationMail: goodwayssacco2010@gmail.com
+    emailOrganizationAddress: P.O Box 44, 10300 Kerugoya
+    from_mail: no-reply@emtechhouse.co.ke
+    company_logo_path: C:\Users\USER\e_and_m\EMT_009_Sacco_Solution\Server\reports_service\reports\report-icon\goodway.jpg
+    emailSalutation: Dear Sir/Madam,
+    organizationName: Gooways Sacco
+    organizationAddress: P.O BOX
+    organizationPhone: 254---
+    organizationDescription: LOCATED ---
+    reports_absolute_path: C:\Users\Francis\Desktop\EMT_009_Sacco_Solution\Server\reports_service\reports\jrxmls
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:9001/eureka
+  instance:
+    hostname: localhost
+users:
+  app:
+    jwtSecret: /buCOEjS/+H7ZwekxyLKLdDeegHUGEytjxuivosdrzjRG4g4E+kA3uXO5lvGBVsl2NwqsgiGUUI5bjgY/6WG/VSIIG+22b1Rvdb59BY0YRod6Dnjnp0REsPn//hshs6ucnOVCBRp0lbVb1kP+EDOM7W7N72/+t+R1d8JQ4pjisoJZI4e0MV3PlZtzXKI0SY2EQUtI
+    jwtExpirationMs: 43200000
+    client:
+      origin: http://localhost:4200/
+controls:
+  pause-demands: false
+  pause-demands-satisfaction: false
+  runstos: false
+  demanddelays: 1
+  pause-ledgerfees: true
+  reverse-trans: false
+  executerecurring: false
+  initiaterecurring: false
+accounts:
+  fixed-deposit-repayment-account: 410002
+

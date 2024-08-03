@@ -1,0 +1,244 @@
+<!-- MART CARD -->
+<mat-card class="card-container">
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/card-maintenance">Card application Maintenance / </a> Atm Card Application
+<br>
+      <h4>{{function_type }} :-</h4>
+    </div>
+  
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  
+
+  <!--Columns: 1 $ 2-->
+  <div class="container-fluid">
+    <form action="" [formGroup]="formData" novalidate class="form">
+      <mat-tab-group mat-align-tabs="center">
+        <mat-tab class="mat-tab container-fluid" label="General Details" >
+          <br>
+          <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <div class="col-md-6 col-sm-12 form-column">
+                <label for="" class="start">Account Number
+                    <span class="text-danger">*</span></label>
+              </div>
+              <div class="col-md-6 col-sm-12 form-column ">
+                <input type="string"  formControlName="acid" class="form-control"
+                   />
+                   <mat-icon color="primary" (click)="openLookUpDialog()">search</mat-icon>
+               
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <div class="col-md-6 col-sm-12 form-column">
+                <label for="" class="start">Manager
+                    <span class="text-danger" >*</span></label>
+              </div>
+              <div class="col-md-6 col-sm-12 form-column">
+                <input type="text" formControlName="manager" class="form-control"
+                  >
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <div class="col-md-6 col-sm-12 form-column">
+                <label for="" class="start">Account name
+                    <span class="text-danger" >*</span></label>
+              </div>
+              <div class="col-md-6 col-sm-12 form-column">
+                <input type="text" formControlName="accountName" class="form-control"
+                  >
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <div class="col-md-6 col-sm-12 form-column">
+                <label for="" class="start">Account type
+                    <span class="text-danger" >*</span></label>
+              </div>
+              <div class="col-md-6 col-sm-12 form-column">
+                <input type="text" formControlName="accountType" class="form-control"
+                  >
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <div class="col-md-6 col-sm-12 form-column">
+                <label for="" class="start">Sol code
+                    <span class="text-danger" >*</span></label>
+              </div>
+              <div class="col-md-6 col-sm-12 form-column">
+                <input type="text" formControlName="solCode" class="form-control"
+                  >
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <div class="col-md-6 col-sm-12 form-column">
+                <label for="" class="start">Currency
+                    <span class="text-danger" >*</span></label>
+              </div>
+              <div class="col-md-6 col-sm-12 form-column">
+                <input type="text" formControlName="currency" class="form-control"
+                  >
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="form-group">
+              <div class="col-md-6 col-sm-12 form-column">
+                <label for="" class="start">Account status
+                    <span class="text-danger" >*</span></label>
+              </div>
+              <div class="col-md-6 col-sm-12 form-column">
+                <input type="text" formControlName="accountStatus" class="form-control"
+                  >
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+          <br>
+          <button mat-raised-button type="submit" class=" bg-secondary text-white"
+                  routerLink="/system/card-maintenance">BACK</button>
+          
+        </mat-tab>
+        <mat-tab label="Card Details" >
+          <br>
+          <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+            <br>
+            <div class="row">
+            
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Card number</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="cardNumber" class="form-control">
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Card status</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="text" formControlName="cardStatus" class="form-control">
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Card Type</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <select type="text" formControlName="cardType"  class="form-control">
+                      <option *ngFor="let item of cardTypes" [value]="item">{{ item }}</option>
+                    </select>
+                    
+
+                  </div>
+                </div>
+              </div>
+           
+            
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Card Limit</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="cardLimit" class="form-control">
+                  </div>
+                </div>
+              </div>
+            
+           
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Card expiry date</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="cardExpiryDate" class="form-control">
+                  </div>
+                </div>
+              </div>
+            
+          
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Request pin</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="pin" class="form-control">
+                  </div>
+                </div>
+              </div>
+            
+            
+              <!--<div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Branch code</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="branchCode" class="form-control">
+                  </div>
+                </div>
+              </div>-->
+            </div>
+          
+            
+            <br>
+            <mat-divider></mat-divider>
+            <br>
+            <div class="row">
+              <div class="col-md-12 col-sm-12 buttons-container" fxLayout="row" fxLayoutAlign="space-between center" style="margin-top: 2rem;">
+                 <button mat-raised-button type="submit" class="bg-secondary text-white" routerLink="/system/card-maintenance">BACK</button>
+                 <div fxFlex></div> <!-- This div will take up the remaining space, pushing the buttons to the right -->
+                 <button mat-raised-button type="submit" (click)="onSubmit()" *ngIf="onShowSubmitButton" class="float-right" color="primary" style="margin-bottom:20px;">SUBMIT</button>
+                 <button mat-raised-button type="submit" *ngIf="onShowModifyButton" class="float-right" color="primary" style="margin-bottom:20px;">MODIFY</button>
+                 <button mat-raised-button type="submit" *ngIf="onShowVerifyButton" class="float-right" color="accent" style="margin-bottom:20px;">VERIFY</button>
+                 <button mat-raised-button type="submit" *ngIf="onShowDeleteButton" class="float-right" color="accent" style="margin-bottom:20px;">DELETE</button>
+              </div>
+             </div>
+            
+          </form>
+          <br>
+       
+        </mat-tab>
+      </mat-tab-group>
+    </form>
+  </div>
+                  
+                
+            
+
+  
+ 
+

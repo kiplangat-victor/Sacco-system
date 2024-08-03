@@ -1,0 +1,104 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/workclass/maintenance"> Work Class Maintenenace / </a> Work Class
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-4 col-sm-12" *ngIf="onShowResults">
+          <h4>Class ID: <strong>{{this.id}} {{this.roleName}}</strong></h4>
+        </div>
+        <div class="col-md-4 col-sm-12" *ngIf="onShowResults">
+          <h4>Role ID: <strong>{{this.roleId}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12 row" *ngIf="onShowResults">
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <h4>Verification:- <strong>{{this.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <h4>Posted BY:- <strong>{{this.postedBy}}</strong></h4>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <h4>Posted Time:- <strong>{{this.postedTime | date}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <br>
+  <div class="container-fluid ">
+    <form class="form" [formGroup]="formData" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">User Role<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <select (change)="onChanges($event)" class="form-control" formControlName="roleId"
+              [ngClass]="{ 'is-invalid': submitted && f.roleId.errors }">
+                <option value="" disabled>-- CHOOSE USER ROLE --</option>
+                <option *ngFor="let role of rolesData" [value]="role.id">{{ role.name }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Work Class Name</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="workClass"
+              [ngClass]="{ 'is-invalid': submitted && f.workClass.errors }"
+               class="pull-right form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <hr>
+      <div class="row">
+          <h3> <strong>Priviledges</strong></h3>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <div class="col-md-12 col-sm-12 form-column">
+              <ul class="list-group-horizontal d-flex flex-wrap list-style">
+                <div class="col-md-4" *ngFor="let item of displayArray; let i = index">
+                <mat-checkbox [disabled]="this.isDisabled" [checked]="item.selected" (change)="onChange($event, i)" color="primary"> {{item.name}} </mat-checkbox>
+                </div>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button mat-raised-button type="button" class="bg-secondary text-white" routerLink="/system/workclass/maintenance" skipLocationChange="">
+        BACK
+      </button>
+      <button *ngIf="loading" (click)="onSubmit()" class="pull-right" mat-raised-button [color]="btnColor"
+        type="submit">
+        SUBMIT
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        {{btnText}}
+      </button>
+    </form>
+    </div>
+</mat-card>

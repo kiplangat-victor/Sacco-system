@@ -1,0 +1,119 @@
+<div class="">
+  <div *ngIf="loading">
+    <p><small>Loading Group Membership Data, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+  </div>
+  <div class="breadcrumb">
+    <div>
+      Group Membership Lookup
+    </div>
+    <div class="col-md-6 col-sm-12 ml-auto">
+      <input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+    </div>
+  </div>
+  <form action="" [formGroup]="formData" novalidate class="form" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm">
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">Group Name</label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input type="text" class="form-control" formControlName="name">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">Document NO.</label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input type="text" class="form-control" formControlName="uniqueId">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="">Membership Code</label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input type="text" class="form-control" formControlName="customerCode">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="" class="start pull-left">From Date</label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input [matDatepicker]="fromDate" formControlName="fromDate" class="form-control">
+            <span>
+              <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+            </span>
+            <mat-datepicker #fromDate></mat-datepicker>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-4 col-sm-12 form-column">
+            <label for="" class="start pull-left">To Date</label>
+          </div>
+          <div class="col-md-8 col-sm-12 form-column">
+            <input [matDatepicker]="toDate" formControlName="toDate" class="form-control">
+            <span>
+              <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+            </span>
+            <mat-datepicker #toDate></mat-datepicker>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <br>
+    <div class="col-md-2 ml-auto">
+      <button type="submit" class="btn btn-primary btn-sm pull-right btn" (click)="onSubmit()">SUBMIT</button>
+    </div>
+    <br>
+  </form>
+</div>
+<br>
+<div class="table-row">
+  <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+    </ng-container>
+    <ng-container matColumnDef="customerCode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Membership Number</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.customerCode}} </td>
+    </ng-container>
+    <ng-container matColumnDef="customerUniqueId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>National ID / Birth Cert.</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.customerUniqueId}} </td>
+    </ng-container>
+    <ng-container matColumnDef="customerName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.customerName}} </td>
+    </ng-container>
+    <ng-container matColumnDef="postedOn">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Posted On</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.postedOn | date: 'dd-MM-yyyy'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="verifiedFlag">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Verified Flag</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.verifiedFlag}}</td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+</div>
+<mat-paginator [pageSizeOptions]="[5, 10, 15,20,30, 40, 50, 100]" aria-label="Select page"></mat-paginator>

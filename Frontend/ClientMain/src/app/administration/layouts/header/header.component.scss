@@ -1,0 +1,80 @@
+.example-spacer {
+  flex: 1 1 auto;
+  margin-left: 7px;
+}
+
+.screen {
+  cursor: pointer;
+}
+
+.fancy-button {
+  background-color: #9b7f43;
+  color: #fff;
+  border: none;
+  padding: 5px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: background-color .3s ease;
+  margin-right: 10px;
+  font-size: 0.8rem;
+}
+
+.header-btn-button:hover  {
+  cursor: pointer;
+  color: white;
+  background-color: #b48934;
+}
+
+.material-icons {
+  margin-right: 5px;
+}
+
+img {
+  height: 30px !important;
+  width: 100% !important;
+  margin-left: 0;
+  margin-right: 7px;
+}
+
+.mainheader {
+  color: white;
+}
+
+.logo {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 600;
+  color: gold;
+  font-style: italic;
+
+}
+
+// .mat-toolbar {
+//   background-color: rgb(0, 77, 153) !important;
+//   color: white !important;
+// }
+
+.white {
+  background-color: white !important;
+}
+
+p {
+  margin-bottom: 1px !important;
+}
+
+.mat-menu {
+  width: 300px !important;
+  overflow-x: hidden !important;
+}
+
+.notification {
+  width: 250px !important;
+  padding: 2px !important;
+  margin: 2px auto !important;
+}
+
+// ***************************************************************************
+.white-icon {
+	color: white;
+}

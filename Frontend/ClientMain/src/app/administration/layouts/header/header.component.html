@@ -1,0 +1,89 @@
+<div *ngIf="saccoDataloading">
+  <p><small>Loading Sacco Data, Please Wait...</small></p>
+  <p>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </p>
+</div>
+
+<p *ngIf="!saccoDataloading" class="mainheader">
+  <mat-toolbar [ngStyle]="{'background-color':  defaultCustomTitlebarBg}" class="mat-elevation-z8 top-bar">
+    <a mat-icon-button (click)="toggleSideBar()">
+      <mat-icon class="text-white">menu</mat-icon>
+    </a>
+
+    <!-- Use Sacco logo -->
+    <!-- <span *ngIf="this.currentUser.entityId === '20993' ">
+      <img src={{this.saccoLogo}} width="220px" height="180px" class="px-2 mx-2" alt=""
+        style="background-color: transparent" />
+    </span> -->
+
+    <!-- Use default Sacco logo -->
+    <!-- <span *ngIf="this.currentUser.entityId !== '20993' ">
+      <img src={{this.defaultSaccoLogo}} width="220px" height="180px" class="px-2 mx-2" alt=""
+      style="background-color: transparent" />
+    </span> -->
+
+    <span *ngIf="results && results.entityName" [ngStyle]="{'color': 'Black'}">
+      <h4><strong>{{results.entityName}}</strong></h4>
+    </span>
+    
+
+    <span *ngIf="results && !results.entityImageLogo && currentUser.entityId === '20993'">
+      <img src={{defaultSaccoLogo}} width="220px" height="180px" class="px-2 mx-2" alt=""
+        style="background-color: transparent" />
+    </span>
+    <span *ngIf="results && results.entityImageLogo && currentUser.entityId !== '20993' ">
+      <img src={{saccoLogo}} width="220px" height="180px" class="px-2 mx-2" alt=""
+        style="background-color: transparent" />
+    </span>
+
+
+    <span class="example-spacer"></span>
+    <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon"
+      [routerLink]="[ '/system/new/notification/allerts']" routerLinkActive="active" skipLocationChange="">
+
+      <mat-icon class="text-white" matBadge="200" matBadgeColor="warn">notification_important</mat-icon>
+    </button>
+
+    &nbsp; &nbsp;
+    <a [routerLink]="['/system']" class="button fancy-button header-btn-button">
+      <i class="material-icons icon">person</i>
+      <span class="text">User ID: {{this.currentUser.id}}</span>
+    </a>
+
+    <a [routerLink]="['/system']" class="button fancy-button header-btn-button">
+      <i class="material-icons icon">business</i>
+      <span class="text">Entity: {{this.currentUser.entityId}}</span>
+    </a>
+
+    <a [routerLink]="['/system']" class="button fancy-button header-btn-button">
+      <i class="material-icons icon">account_balance</i>
+      <span class="text">Branch: {{this.currentUser.solCode}}</span>
+    </a>
+
+    <a [routerLink]="['/system']" class="button fancy-button header-btn-button">
+      <i class="material-icons icon">calendar_today</i>
+      <span class="text">System Date: {{systemDate | date: 'fullDate'}}</span>
+    </a>
+    <button mat-button [matMenuTriggerFor]="menu" mat-icon-button
+      aria-label="Example icon button with a vertical three dot icon">
+      <mat-icon class="white-icon">more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+      <mat-nav-list>
+        <a mat-list-item routerLinkActive="list-item-active" routerLink="/system/manage/user/profile">
+          <mat-icon color="primary">account_box</mat-icon>
+          Profile
+        </a>
+        <a mat-list-item routerLinkActive="list-item-active" (click)="logout()">
+          <mat-icon color="accent">exit_to_app</mat-icon>
+          Logout
+        </a>
+      </mat-nav-list>
+    </mat-menu>
+
+    <mat-icon class="screen white-icon" *ngIf="!isFullScreen" (click)="openFullscreen($event)">fullscreen</mat-icon>
+    <mat-icon class="screen white-icon" *ngIf="isFullScreen" (click)="closeFullscreen()">fullscreen_exit</mat-icon>
+  </mat-toolbar>
+</p>

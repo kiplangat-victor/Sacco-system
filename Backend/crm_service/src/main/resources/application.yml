@@ -1,0 +1,85 @@
+server:
+  port: 9005
+spring:
+  application:
+    name: CRM-SERVICE
+    enableEmail: false
+    enableProdMail: false
+    testMail: coullence@gmail.com
+    enableSMS: true
+    enableProdSMS: false
+    testPhone: 254726634786
+    sms:
+      callbackurl: http://52.15.152.2:9005/api/v1/sms/smsCallbacks
+      url: https://sms.crossgatesolutions.com:18095/v1/bulksms/messages
+      msgtype: promotional
+      profileCode: 2208021
+      apiKey: NDU4MThmODAxMzM2ODk3MUlELTQ2MmU4Y2QwZDA4YjQxOGU5ZjZjMTQ0ZGM0MmE4NDY5
+  jpa:
+    hibernate:
+      ddl-auto: update
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+#        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        show_sql: false
+  datasource:
+    url: jdbc:mysql://kigen.mysql.database.azure.com:3306/ayact_africa?useSSL=true&requireSSL=true
+    username: Test
+    password: Kigen@2024
+    driverClassName: org.mariadb.jdbc.Driver
+
+    dbname: ayact_africa
+
+  #EMAIL CONFIGURATIONS
+  mail:
+    protocol: smtp
+    host: mail.emtechhouse.co.ke
+    port: 465
+    username: no-reply@emtechhouse.co.ke
+    password: Pass123$$
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: mail.emtechhouse.co.ke
+
+  organisation:
+    emailRegards: Regards Mwamba Imara Sacco Society Limited
+    emailMessage: Find the attached information from our partnership
+    emailOrganizationName: Mwamba Imara Sacco Society Limited
+    image_banner: /home/coullence/Documents/PROD/EMT_002_Sacco_Solution/EMT_009_Sacco_Solution/Server/accounts_service/src/main/resources/banner.jpg
+    emailRemarks: Thank You.
+    emailOrganizationLocation: MMakupa along Mwachofi Road, off Kenyatta Avenue.
+    emailOrganizationPhone: +254 7** *** ***
+    emailOrganizationWebsite: https://mwambaimarasacco.co.ke
+    emailOrganizationMail: mwambaimara2010@gmail.com
+    emailOrganizationAddress: P.O Box 80196, 80100 GPO Mombasa
+    from_mail: no-reply@emtechhouse.co.ke
+    company_logo_path: /home/coullence/Documents/PROD/EMT_002_Sacco_Solution/EMT_009_Sacco_Solution/Server/accounts_service/src/main/resources/logo.png
+    emailSalutation: Dear Sir/Madam,
+
+eureka:
+  client:
+    enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:9001/eureka
+
+  instance:
+    hostname: localhost
+users:
+  app:
+    jwtSecret: /buCOEjS/+H7ZwekxyLKLdDeegHUGEytjxuivosdrzjRG4g4E+kA3uXO5lvGBVsl2NwqsgiGUUI5bjgY/6WG/VSIIG+22b1Rvdb59BY0YRod6Dnjnp0REsPn//hshs6ucnOVCBRp0lbVb1kP+EDOM7W7N72/+t+R1d8JQ4pjisoJZI4e0MV3PlZtzXKI0SY2EQUtI
+    jwtExpirationMs: 43200000
+    client:
+      origin: http://localhost:4200/
+#organization:
+#  code: 11194
+#  individualcode: 01
+#  businesscode: 02
+

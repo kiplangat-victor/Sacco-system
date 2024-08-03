@@ -1,0 +1,86 @@
+<mat-card>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system">Scheme Type Maintenance / </a> Scheme Type
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <h4>Function</h4>
+      <p>{{this.function_type}}</p>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <h4>Scheme Type</h4>
+      <p>{{this.organization_name}}</p>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Scheme Type</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" maxlength="30" formControlName="scheme_type"
+                class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.scheme_type.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Scheme Type Abbreviation</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" maxlength="6" formControlName="scheme_abbreviation"
+                class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.scheme_abbreviation.errors }" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Scheme Category</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" maxlength="40" formControlName="scheme_category"
+                class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.scheme_category.errors }" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Scheme Description</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <textarea type="text" maxlength="60" formControlName="scheme_description"
+                class="pull-right form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.scheme_description.errors }"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <button class="pull-left" routerLink="../../maintenance" skipLocationChange mat-raised-button color="default"
+        type="button">
+        BACK
+      </button>
+      <button *ngIf="isEnabled" class="pull-right" mat-raised-button color="primary" type="submit">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        SUBMIT
+      </button>
+      <br />
+    </form>
+  </div>
+</mat-card>

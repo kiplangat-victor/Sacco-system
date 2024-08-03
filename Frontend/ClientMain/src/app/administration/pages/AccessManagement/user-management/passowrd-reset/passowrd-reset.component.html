@@ -1,0 +1,55 @@
+<div *ngIf="loading">
+  <p><small class="text-primary">Submitting Password Reset Request ...</small></p>
+  <p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </p>
+</div>
+  <div class="text-center">
+    USER PASSWORD RESET
+  </div>
+    <form [formGroup]="authForm">
+      <div class="row text-center">
+        <div class="col-md-12 col-sm-12">
+          <mat-form-field appearance="outline">
+            <mat-label>New Password</mat-label>
+            <input matInput type="password" formControlName="password" placeholder="ENTER NEW PASSWORD" minlength="6"
+              maxlength="30" [type]="hide ? 'password' : 'text'">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf=" authForm.controls['password'].hasError('required')">
+              Password field required.
+            </mat-error>
+            <mat-error *ngIf="authForm.get('password').hasError('minlength' || 'maxLength')">
+              Please enter a valid Password!!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12 col-sm-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" formControlName="confirmPassword" placeholder="ENTER CONFIRM PASSWORD" minlength="6"
+            maxlength="30" [type]="hide ? 'password' : 'text'">
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf=" authForm.controls['confirmPassword'].hasError('required')">
+              Confirm Password field required.
+            </mat-error>
+            <mat-error *ngIf="authForm.get('confirmPassword').hasError('minlength' || 'maxLength')">
+              Please enter a valid Password!!
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  <mat-divider></mat-divider>
+  <div mat-dialog-action [align]="'center'" class="example-button-row">
+    <button class="pull-left" mat-raised-button color="warn" mat-dialog-close matTooltip="CLOSE">CANCEL</button>
+    <button class="pull-right" mat-raised-button color="primary" (click)="onSubmit()" matTooltip="UPDATE">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1">
+      </span>UPDATE
+    </button>
+  </div>

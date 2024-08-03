@@ -1,0 +1,47 @@
+<div class="jcard">
+  <div class="dialog">
+    <div *ngIf="loading">
+      <p><small>Loading, please wait...</small></p>
+      <p>
+        <mat-progress-bar mode="query"></mat-progress-bar>
+      </p>
+    </div>
+    <div class="row breadcrumb">
+      <div class="col-md-6 col-sm-12">
+        <p><strong>Accounts Images</strong></p>
+      </div>
+      <div class="col-md-6 col-sm-12"></div>
+    </div>
+    <br />
+    <div class="row d-flex justify-content-center">
+      <div class="col-6 mb-2">
+        <div class="row d-flex justify-content-center">
+          <h3>Passport Image</h3>
+          <div class="col-12">
+            <div class="d-flex justify-content-center">
+              <img *ngIf="loading" src="assets/Images/load.gif" width="20%" height="20%" />
+            </div>
+          </div>
+          <img *ngIf="!loading" [src]="passportImg" alt="Passport" class="rounded" width="250px" height="250px" />
+        </div>
+        <div class="col-6 mb-2">
+          <div class="row d-flex justify-content-center">
+            <h3>Signature Image</h3>
+            <div class="col-12">
+              <div class="d-flex justify-content-center">
+                <img *ngIf="loading" src="assets/Images/load.gif" width="20%" height="20%" />
+              </div>
+            </div>
+          </div>
+          <img *ngIf="!loading" [src]="signatureImg" alt="Siganutre" class="rounded" width="250px" height="250px" />
+        </div>
+      </div>
+      <div class="rwo">
+        <div class="col">
+          <button class="pull-right mb-2" mat-raised-button color="primary" (click)="closeDialog()">
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

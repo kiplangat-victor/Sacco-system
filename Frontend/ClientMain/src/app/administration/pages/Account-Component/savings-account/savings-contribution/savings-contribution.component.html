@@ -1,0 +1,190 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a>
+			<a routerLink="/system/savings-instruction-contribution/maintenance">Savings Instruction Contribution
+				Maintenance / </a>Savings Instruction Contribution
+		</div>
+	</mat-card-header>
+	<div class="row">
+		<div class="col-md-4 col-sm-12">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<h4>Savings Code: <strong>{{this.fmData.savingCode}}</strong></h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8 col-sm-12 row" *ngIf="onShowResults">
+			<div class="row">
+				<div class="col-md-3 col-sm-12">
+					<h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Posted ON:- <strong>{{this.results.postedTime | date}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Verified BY:- <strong>{{this.results.verifiedBy}}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<mat-divider></mat-divider>
+	<br>
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="" class="start pull-left">Customer Code<span class="text-danger"
+									*ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="customerCode" class="form-control"
+								oninput="this.value=this.value.toUpperCase()"
+								[ngClass]="{ 'is-invalid': submitted && f.customerCode.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="15">
+							&nbsp; &nbsp;
+							<mat-icon *ngIf="showSearch" color="primary" (click)="customerLookup()">
+								search</mat-icon>
+							&nbsp; &nbsp;
+							<mat-icon color="primary" (click)="memberDetailsLookup()"
+								*ngIf="onMemberDetailsLookup">remove_red_eye</mat-icon>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="" class="start pull-left">Application Date</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input readonly [matDatepicker]="applicationDate" formControlName="applicationDate"
+								class="form-control">
+							<span *ngIf="onShowApplicationDate" color="primary">
+								<mat-datepicker-toggle matSuffix [for]="applicationDate"></mat-datepicker-toggle>
+							</span>
+							<mat-datepicker color="primary" #applicationDate></mat-datepicker>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Execution Type<span *ngIf="showWarning" class="text-danger">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column ">
+							<select class="form-control" formControlName="executionType"
+								[ngClass]="{ 'is-invalid': submitted && f.executionType.errors }">
+								<option value="" disabled>-- CHOOSE EXECUTION TYPE --</option>
+								<option *ngFor="let item of executionTypeArray" [value]="item.value">{{ item.name }}
+								</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Amount <span class="text-danger" *ngIf="showWarning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="number" formControlName="amount" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.amount.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="12" minlength="1" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label class="start pull-left">Frequency<span *ngIf="showWarning" class="text-danger">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column ">
+							<select class="form-control" formControlName="frequency"
+								[ngClass]="{ 'is-invalid': submitted && f.frequency.errors }">
+								<option value="" disabled>-- CHOOSE FREQUENCY --</option>
+								<option *ngFor="let item of frequencyArray" [value]="item">{{ item }}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="" class="start pull-left">End Collection Date <span *ngIf="showWarning" class="text-danger">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input [matDatepicker]="endDate" formControlName="endDate" class="form-control">
+							<span *ngIf="onShowEndDate" color="primary">
+								<mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+							</span>
+							<mat-datepicker color="primary" #endDate></mat-datepicker>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label for="" class="start pull-left">Next Collection Date <span *ngIf="showWarning" class="text-danger">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input [matDatepicker]="nextCollectionDate" formControlName="nextCollectionDate"
+								class="form-control">
+							<span *ngIf="onShowNextCollectionDate" color="primary">
+								<mat-datepicker-toggle matSuffix [for]="nextCollectionDate"></mat-datepicker-toggle>
+							</span>
+							<mat-datepicker color="primary" #nextCollectionDate></mat-datepicker>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12" *ngIf="onHideStatus">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Status</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="status" class="form-control">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Description</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<textarea type="text" class="form-control" formControlName="description"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="120" minlength="2"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<hr>
+			<br>
+			<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+				routerLink="/system/savings-instruction-contribution/maintenance">BACK</button>
+			<button [disabled]="submitting" *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor"
+				type="submit">
+				<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+			</button>
+			<br>
+		</form>
+	</div>
+</mat-card>

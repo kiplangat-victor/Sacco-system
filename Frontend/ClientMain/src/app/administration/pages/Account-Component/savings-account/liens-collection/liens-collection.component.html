@@ -1,0 +1,216 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/liens-account/maintenance">Liens Maintenenace / </a>Liens
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-8 col-sm-12">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h4>Function: <strong>{{ this.fmData.function_type }}</strong></h4>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h4>Lien Code: <strong>{{ this.fmData.lien_code }}</strong></h4>
+        </div>
+      </div>
+      <div class="row" *ngIf="this.results">
+        <div class="col-md-6 col-sm-12">
+          <h4>Posted ON: <strong>{{ this.resData.postedTime | date }}</strong></h4>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="onShowResults">
+          <h4>Posted BY: <strong>{{ this.resData.postedBy }}</strong></h4>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h4>Verification: <strong>{{ this.resData.verifiedFlag }}</strong></h4>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h4>Verified BY: <strong>{{ this.resData.verifiedBy }}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <label>Lien Type <span class="warning" *ngIf="onShowWarning">*</span></label>
+             
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+               <select formControlName="lienType" class="form-control"
+            
+                [ngClass]="{ 'is-invalid': submitted && f.lienType.errors }">
+                <option value="" disabled>--SELECT TYPE--</option>
+                <option *ngFor="let item of liensTypeArray" [value]="item">
+                  {{item}}</option> >
+              </select> 
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="status">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <label>Status<span class="warning" *ngIf="onShowWarning">*</span></label>
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+              <select formControlName="status" class="form-control">
+                <option value="" disabled>--SELECT STATUS--</option>
+                <option *ngFor="let item of liensStatusArray" [value]="item">
+                  {{item}}</option>
+              </select> 
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <label>Lien Account No.<span class="warning" *ngIf="onShowWarning">*</span></label>
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+              <input type="text" formControlName="sourceAcid" class="form-control"
+                oninput="this.value=this.value.toUpperCase()"
+                [ngClass]="{ 'is-invalid': submitted && f.sourceAcid.errors}"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="20" minlength="6" /> &nbsp;
+              <mat-icon color="primary" (click)="sourceAccountLookup()" *ngIf="onShowSearchIcon">search</mat-icon>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <label>Destination Account No.<span class="warning" *ngIf="onShowWarning">*</span></label>
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+              <input type="text" formControlName="destinationAcid" class="form-control"
+                oninput="this.value=this.value.toUpperCase()"
+                [ngClass]="{ 'is-invalid': submitted && f.destinationAcid.errors}"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="20" minlength="6" /> &nbsp;
+              <mat-icon color="primary" (click)="destinationAccountLookup()" *ngIf="onShowSearchIcon">search</mat-icon>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <label>Amount<span class="warning" *ngIf="onShowWarning"></span></label>
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+              <input type="number" formControlName="lienAmount" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.lienAmount.errors}"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="12" minlength="2" />
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-md-6 col-sm-12" *ngIf="showAdjustment">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <label>Adjustment Amount<span class="warning" *ngIf="onShowWarning">*</span></label>
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+              <input readonly type="number" formControlName="lienAdjustedAmount" class="form-control"
+                oninput="this.value=this.value.toUpperCase()"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="12" minlength="2" />
+            </div>
+          </div>
+        </div> -->
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <label>Effective Date</label>
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+              <input [matDatepicker]="effectiveFrom" formControlName="effectiveFrom" class="form-control">
+              <span *ngIf="onShowDate" color="primary">
+                <mat-datepicker-toggle matSuffix [for]="effectiveFrom"></mat-datepicker-toggle>
+              </span>
+              <mat-datepicker color="primary" #effectiveFrom></mat-datepicker>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <label>Expiry Date</label>
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+              <input [matDatepicker]="expiryDate" formControlName="expiryDate" class="form-control">
+              <span *ngIf="onShowDate" color="primary">
+                <mat-datepicker-toggle matSuffix [for]="expiryDate"></mat-datepicker-toggle>
+              </span>
+              <mat-datepicker color="primary" #expiryDate></mat-datepicker>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <label>Lien Priority<span class="warning" *ngIf="onShowWarning">*</span></label>
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+             <select formControlName="priority" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.priority.errors }">
+                <option value="" disabled>--SELECT PRIORITY--</option>
+                <option *ngFor="let item of liensPriorityArray" [value]="item.value">
+                  {{item.name}}</option>
+              </select> 
+            </div>
+          </div>
+        </div> -->
+        <!-- <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <label>Allow Partial Deduction<span class="warning" *ngIf="onShowWarning">*</span></label>
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+              <mat-radio-group class="pull-right" aria-label="Select an option" formControlName="impactImmediately">
+                <mat-radio-button color="primary" value="true">YES</mat-radio-button>
+                <mat-radio-button color="primary" value="false">NO</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column ">
+              <label>Description</label>
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+              <textarea type="text" class="form-control" formControlName="lienDescription"
+                oninput="this.value=this.value.toUpperCase()"
+                [ngClass]="{ 'is-invalid': submitted && f.lienDescription.errors }"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="120" minlength="2"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <hr>
+      <button mat-raised-button class="pull-left bg-secondary text-white" routerLink="/system/liens-account/maintenance"
+        skipLocationChange="">BACK</button>
+      <button *ngIf="!hideBtn" (click)="onSubmit()" class="pull-right" mat-raised-button [color]="btnColor"
+        type="submit">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>SUBMIT
+      </button>
+      <br>
+    </form>
+  </div>
+</mat-card>

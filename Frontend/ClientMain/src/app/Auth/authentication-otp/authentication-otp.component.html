@@ -1,0 +1,41 @@
+<span *ngIf="loading"><mat-progress-bar mode="indeterminate" class="bg-gradient text-success"></mat-progress-bar></span>
+<div class="container">
+	<mat-card>
+		<div class="row border">
+			<div class="left-info col-md-6 col-sm-12">
+				<div class="loginImage">
+					<img src="../../../../assets/authimage.png" class="img-responsive">
+				</div>
+			</div>
+			<div class="right-info col-md-6 col-sm-12">
+				<span *ngIf="loading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></span>
+				<h3 class="login-heading mb-4 text-center  text-uppercase fw-bold mb-2">OTP VERIFICATION</h3>
+				<div class="profile-card">
+					<img src="../../../../assets/images/passreset.png" class="img-responsive">
+					<p class="text-muted text-center">Enter OTP Code Below:</p>
+				</div>
+				<div class="card-body">
+					<form [formGroup]="formData" (ngSubmit)="onSubmit()">
+						<mat-form-field appearance="outline">
+							<mat-label>Enter your OTP CODE</mat-label>
+							<input type="text" formControlName="otpCode" matInput>
+							<mat-icon matSuffix class="">sentiment_very_satisfied</mat-icon>
+						</mat-form-field>
+						<button [disabled]="submitting" class="btn btn-block auth-form-btn text-uppercase"
+							type="submit">
+							<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+							VERIFY
+						</button>
+						<br>
+						<br>
+					</form>
+					<small class="brand-left">
+						New SignIn?<a [routerLink]="['/authentication/signin']" routerLinkActive="active"
+							skipLocationChange="">Click here to Signin.</a></small>
+					<small class="brand-rigth">
+						<a href="https://emtechhouse.co.ke" target="_blank">SSO - From E&M Technology House</a></small>
+				</div>
+			</div>
+		</div>
+	</mat-card>
+</div>

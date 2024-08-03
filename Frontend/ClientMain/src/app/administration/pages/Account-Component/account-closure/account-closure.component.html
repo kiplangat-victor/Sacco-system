@@ -1,0 +1,91 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Loading, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/account-closure/maintenance">Account Closure Maintenenace / </a> Account Closure
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h4>Function:- <strong>{{this.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="showResults">
+          <h4>Verified BY:- <strong>{{this.results.verifiedBy}}</strong></h4>
+        </div>
+        <div class="col-md-4 col-sm-12" *ngIf="showResults">          
+          <h4>Verified ON:- <strong>{{this.results.verificationDate | date}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12 row" *ngIf="showResults">
+      <div class="row" *ngIf="this.results">
+        <div class="col-md-4 col-sm-12">
+          <h4>Closed BY:- <strong>{{this.results.closedBy}}</strong></h4>          
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <h4>Activated BY:- <strong>{{this.results.activatedBy}}</strong></h4>          
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <h4>Closed ON:- <strong>{{this.results.closingDate | date}}</strong></h4>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <h4>Activated ON:- <strong>{{this.results.activationDate | date}}</strong></h4>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <h4>Verified Flag:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form action="" [formGroup]="formData" novalidate class="form" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <label>Account ID</label>
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+              <input readonly type="text" formControlName="acid" class="form-control"
+               />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <label>Closure/Activation Reason</label>
+            </div>
+            <div class="col-md-8 col-sm-12 form-column">
+              <textarea type="text" class="form-control" formControlName="closureReason"
+
+                [ngClass]="{ 'is-invalid': submitted && f.closureReason.errors }"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="120" minlength="2"></textarea>
+            </div>
+          </div>
+        </div>
+        </div>
+        <br>
+        <hr>
+        <br>
+        <button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+          routerLink="/system/account-closure/maintenance">BACK</button>
+        <button *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor" type="submit">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+        </button>
+        <br>
+    </form>
+  </div>
+</mat-card>

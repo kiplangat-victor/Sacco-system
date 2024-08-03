@@ -1,0 +1,334 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="query"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a>
+			<a routerLink="/system/transactions/cheques-maintenance">Cheques Maintenenace / </a>Cheques Processing
+		</div>
+	</mat-card-header>
+	<div class="row">
+		<div class="col-md-6 col-sm-12">
+			<div class="row">
+				<div class="col-md-4 col-sm-12">
+					<h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+				</div>
+				<div class="col-md-4 col-sm-12" *ngIf="onShowResults">
+					<h4>Cheque Code:- <strong>{{this.fmData.chequeRandCode}}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12" *ngIf="onShowResults">
+					<h4>Transaction Code:- <strong>{{this.results.transactionCode}}</strong></h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-12 row" *ngIf="onShowResults">
+			<div class="row" *ngIf="this.results">
+				<div class="col-md-4 col-sm-12">
+					<h4>Entered :- <strong>{{this.results.enteredFlag}}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Entered ON:- <strong>{{this.results.enteredTime | date}}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Entered BY:- <strong>{{this.results.enteredBy}}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div *ngIf="matdivider">
+		<mat-divider></mat-divider>
+	</div>
+	<div class="row" *ngIf="onShowResults">
+		<div class="col-md-12 col-sm-12">
+			<div class="row" *ngIf="this.results">
+				<div class="col-md-2 col-sm-12">
+					<h4>First Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+				</div>
+				<div class="col-md-2 col-sm-12">
+					<h4>First Verified ON:- <strong>{{this.results.verifiedTime | date}}</strong></h4>
+				</div>
+				<div class="col-md-2 col-sm-12">
+					<h4>First Verified BY:- <strong>{{this.results.verifiedBy}}</strong></h4>
+				</div>
+				<div class="col-md-2 col-sm-12">
+					<h4>Second Verification:- <strong>{{this.results.verifiedFlag_2}}</strong></h4>
+				</div>
+				<div class="col-md-2 col-sm-12">
+					<h4>Second Verified ON:- <strong>{{this.results.verifiedTime_2 | date}}</strong></h4>
+				</div>
+				<div class="col-md-2 col-sm-12">
+					<h4>Second Verified BY:- <strong>{{this.results.verifiedBy_2}}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div *ngIf="matdivider">
+		<mat-divider></mat-divider>
+	</div>
+	<div class="row" *ngIf="onShowResults">
+		<div class="col-md-12 col-sm-12">
+			<div class="row" *ngIf="this.results">
+				<div class="col-md-3 col-sm-12">
+					<h4>Cleared :- <strong>{{this.results.clearedFlag}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Cleared BY:- <strong>{{this.results.clearedBy}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Bounced :- <strong>{{this.results.bouncedFlag}}</strong></h4>
+				</div>
+				<div class="col-md-3 col-sm-12">
+					<h4>Bounced BY :- <strong>{{this.results.bouncedBy}}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div *ngIf="matdivider">
+		<mat-divider></mat-divider>
+	</div>
+	<div class="row" *ngIf="onShowResults">
+		<div class="col-md-6 col-sm-12">
+			<div class="row" *ngIf="this.results">
+				<div class="col-md-4 col-sm-12">
+					<h4>Posted :- <strong>{{this.results.postedFlag}}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Posted ON:- <strong>{{this.results.postedTime | date}}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-sm-12">
+			<div class="col-md-12 col-sm-12">
+				<button type="button" class="btn btn-success btn-sm pull-right mb-3" *ngIf="showTransactionReciept"
+					(click)="chequeReciept()">
+					Cheque Deposit Receipt <i class="far fa-arrow-alt-circle-down"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+	<mat-divider></mat-divider>
+	<br>
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData"  #resetRequestsForm="ngForm" novalidate>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Cheque Number</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="chequeNumber" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.chequeNumber.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="20" minlength="1" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Cheque Amount</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="number" formControlName="amount" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.amount.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="12" minlength="1" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Bank Name</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="name" formControlName="bankName" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.bankName.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="100" minlength="2" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Bank Branch</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" class="form-control" formControlName="bankBranch" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Bank Code</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" class="form-control" formControlName="bankCode">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Debit Account</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" class="form-control" formControlName="debitOABAccount"
+								[ngClass]="{ 'is-invalid': submitted && f.debitOABAccount.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="12" minlength="1" />
+							&nbsp; &nbsp;<mat-icon *ngIf="onShowSearch" color="primary"
+								(click)="debitOABAccountLookup()">search</mat-icon>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Name As Per Cheque</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" class="form-control" formControlName="nameAsPerCheque"
+								[ngClass]="{ 'is-invalid': submitted && f.nameAsPerCheque.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="120" minlength="1" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Operative Account</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" class="form-control" formControlName="creditCustOperativeAccount"
+								[ngClass]="{ 'is-invalid': submitted && f.creditCustOperativeAccount.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="120" minlength="1" />
+							&nbsp; &nbsp;<mat-icon *ngIf="onShowSearch" color="primary"
+								(click)="savingsCodeLookUp()">search</mat-icon>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label>Maturity Date</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input [matDatepicker]="maturityDate" formControlName="maturityDate" class="form-control">
+							<span *ngIf="onShowmaturityDate">
+								<mat-datepicker-toggle matSuffix [for]="maturityDate"></mat-datepicker-toggle>
+							</span>
+							<mat-datepicker #maturityDate></mat-datepicker>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12" *ngIf="showStatus">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Status</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" class="form-control" formControlName="status">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Charge Code *</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" class="form-control" formControlName="chargeCode" />
+							&nbsp; &nbsp;<mat-icon *ngIf="onShowSearch" color="primary"
+								(click)="chargeCodeLookup()">search</mat-icon>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12" *ngIf="showpenaltyDetails">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label>penalty Amount</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" class="form-control" formControlName="penaltyAmount"
+								[ngClass]="{ 'is-invalid': submitted && f.penaltyAmount.errors }"
+								oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+								maxlength="120" minlength="1" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12" *ngIf="showpenaltyDetails">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column ">
+							<label>Collection Account</label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" class="form-control" formControlName="penaltyCollAc" />
+							&nbsp; &nbsp;<mat-icon *ngIf="onShowSearch" color="primary"
+								(click)="penaltyCollAcLookup()">search</mat-icon>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label class="start">Cheque Document</label>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="onShowDocumentsUpload">
+							<div class="form-group">
+								<div class="col-md-12 col-sm-12 form-column">
+									<input class="form-controls" type="file" required
+										(change)="onImageFileChange($event)">
+								</div>
+							</div>
+							<div class="form-group">
+								<mat-hint><small>Only png, jpeg accepted</small></mat-hint>
+							</div>
+							<div class="form-group">
+								<img [src]="imageSrc" *ngIf="imageSrc" class="col-md-6 img-preview">
+							</div>
+						</div>
+						<div *ngIf="onShowUploadedDocuments">
+							<div class="row">
+								<div class="col-md-12 col-sm-12">
+									<img [src]="this.results.chequeDocument" class="col-md-12 img-preview">
+								</div>
+								<br>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<hr>
+			<br>
+			<button *ngIf="displayBackButton" mat-raised-button type="submit"
+				class="pull-left bg-secondary text-white approval"
+				routerLink="/system/transactions/cheques-maintenance">BACK</button>
+			<button *ngIf="displayApprovalBtn" mat-raised-button type="submit"
+				class="pull-left bg-secondary text-white approval"
+				routerLink="/system/new/notification/allerts">BACK</button>
+			<button *ngIf="!hideBtn" class="pull-right approval" mat-raised-button [color]="btnColor" type="submit"
+			(click)="onSubmit()">
+				<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+			</button>
+			<button *ngIf="hideRejectBtn" class="pull-right approval" mat-raised-button [color]="btnRejectColor"
+				(click)="onRejectTransaction()">
+				{{rejectBtnText}}
+			</button>
+			<br>
+		</form>
+	</div>
+</mat-card>

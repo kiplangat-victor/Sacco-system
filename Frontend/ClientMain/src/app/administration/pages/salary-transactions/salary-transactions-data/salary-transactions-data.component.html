@@ -1,0 +1,408 @@
+<mat-card>
+    <div *ngIf="loading">
+        <p><small>Loading, please wait...</small></p>
+        <p>
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </p>
+    </div>
+    <mat-card-header class="breadcrumb">
+        <div>
+            <a routerLink="/system">Dashboard / </a>
+            <a routerLink="/system/salary-transaction/maintenance">Salary Maintenance / </a>Salaries
+        </div>
+    </mat-card-header>
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+                </div>
+                <div class="col-md-4 col-sm-12" *ngIf="showCode">
+                    <h4>Transaction Code: <strong>{{this.resData.drTransactionCode}}</strong></h4>
+                  </div>
+                <div class="col-md-6 col-sm-12" *ngIf="showCode">
+                    <h4>Salary Upload Code: <strong>{{this.fmData.salaryUploadCode}}</strong></h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 col-sm-12 row" *ngIf="onShowResults">
+            <div class="row" *ngIf="this.resData">
+                <div class="col-md-3 col-sm-12">
+                    <h4>Entered BY:- <strong>{{this.resData.enteredBy}}</strong></h4>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <h4>Entered ON:- <strong>{{this.resData.enteredTime | date}}</strong></h4>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <h4>First Verification:- <strong>{{this.resData.verifiedFlag}}</strong></h4>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <h4>Second Verification::- <strong>{{this.resData.verifiedFlag_2}}</strong></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <br />
+    <div class="container-fluid">
+        <form class="form" [formGroup]="formData">
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label class="start pull-left">Charge Type<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <select (change)="chargeTypeChange($event)" class="form-control" formControlName="salaryChargeCode" [ngClass]="{
+                  'is-invalid': submitted && f.transactionType.errors
+                }">
+                <option value="">-- Choose Function --</option>
+                <option *ngFor="let item of salaryCharges" [value]="item.salaryChargeCode">
+                  {{ item.name }}
+                </option>
+              </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label class="start pull-left">Tran Particulars.</label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <input type="text" oninput="this.value=this.value.toUpperCase()" formControlName="tranParticulars" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label class="start pull-left">Recipient Type<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <select class="form-control" formControlName="recipientType" [ngClass]="{
+                  'is-invalid': submitted && f.recipientType.errors
+                }">
+                <option value="">-- Choose Function --</option>
+                <option *ngFor="let item of recipientTypeArray" [value]="item">
+                  {{ item }}
+                </option>
+              </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label class="start pull-left">Amount.</label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <input type="number" oninput="this.value=this.value.toUpperCase()" formControlName="amount" class="form-control" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label class="start pull-left">Transaction Date<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <input formControlName="transactionDate" class="form-control" required readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label for="" class="start pull-left">Employer<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <input type="text" formControlName="employerCode" class="form-control" oninput="this.value=this.value.toUpperCase()" /> &nbsp;
+                            <mat-icon (click)="employerCodeLookup()" color="primary">search</mat-icon>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label class="start pull-left">Source Account.</label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <input type="text" maxlength="15" oninput="this.value=this.value.toUpperCase()" formControlName="debitAccount" class="form-control" /> &nbsp;
+                            <mat-icon (click)="accountLookup()" color="primary">search</mat-icon><br />
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="showAccountData">
+                        <div class="col-md-4 col-sm-12 form-column">
+                            <mat-hint><strong>Name: </strong> {{ this.accountName }} </mat-hint>
+                        </div>
+                        <div class="col-md-3 col-sm-12 form-column">
+                            <mat-hint><strong>Status: </strong> {{ this.accountStatus }}</mat-hint>
+                        </div>
+                        <div class="col-md-2 col-sm-12 form-column">
+                            <mat-hint><strong>CUR: </strong> {{ this.accountCurrency }}</mat-hint>
+                        </div>
+                        <div class="col-md-3 col-sm-12 form-column">
+                            <mat-hint><strong>BAL: </strong> {{ this.accountBalance | currency : "KES " }}
+                            </mat-hint>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <mat-divider></mat-divider>
+            <br />
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label for="" class="start pull-left">Incur Charges?<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <mat-radio-group readonly aria-label="Select an option" formControlName="collectCharges">
+                                <mat-radio-button disabled (change)="onIncurCharge($event)" value="Y" color="primary">Yes</mat-radio-button>
+                                <mat-radio-button disabled (change)="onIncurCharge($event)" value="N" color="accent">No</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label for="" class="start pull-left">Charge From?<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <mat-radio-group readonly aria-label="Select an option" formControlName="chargeFrom">
+                                <mat-radio-button disabled (change)="onIncurCharge($event)" value="employer">Employer</mat-radio-button>
+                                <mat-radio-button disabled (change)="onIncurCharge($event)" value="employee">Employee</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label class="start pull-left">Charge Code.</label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <input type="text" readonly maxlength="15" oninput="this.value=this.value.toUpperCase()" formControlName="eventIdCode" class="form-control" />&nbsp;
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="showchargesAccountData">
+                        <div class="col-md-4 col-sm-12 form-column">
+                            <mat-hint><strong>Name: </strong> {{ this.chargesAccountName }} </mat-hint>
+                        </div>
+                        <div class="col-md-3 col-sm-12 form-column">
+                            <mat-hint><strong>Status: </strong> {{ this.chargesaccountStatus }}</mat-hint>
+                        </div>
+                        <div class="col-md-2 col-sm-12 form-column">
+                            <mat-hint><strong>CUR: </strong> {{ this.chargesAccountCurrency }}</mat-hint>
+                        </div>
+                        <div class="col-md-3 col-sm-12 form-column">
+                            <mat-hint><strong>BAL: </strong> {{ this.chargesAccountBalance | currency : "KES " }}
+                            </mat-hint>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div *ngIf="activateChequeDetails">
+                <mat-divider></mat-divider>
+                <br />
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-12 form-column">
+                                <label class="start pull-left">Cheque Type<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-6 col-sm-12 form-column">
+                                <select class="form-control" formControlName="transactionType" [ngClass]="{
+                    'is-invalid': submitted && f.chequeType.errors}">
+                  <option value="">-- Choose Type --</option>
+                  <option *ngFor="let item of chequeTypeArray" [value]="item.name">
+                    {{ item.name }}
+                  </option>
+                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-12 form-column">
+                                <label class="start pull-left">Cheque Status.</label>
+                            </div>
+                            <div class="col-md-6 col-sm-12 form-column">
+                                <input type="text" oninput="this.value=this.value.toUpperCase()" formControlName="chequeStatus" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-12 form-column">
+                                <label class="start pull-left">Cheque No.</label>
+                            </div>
+                            <div class="col-md-6 col-sm-12 form-column">
+                                <input type="number" oninput="this.value=this.value.toUpperCase()" formControlName="chequeNo" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-12 form-column">
+                                <label for="" class="start pull-left">Cheque Date<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-6 col-sm-12 form-column">
+                                <input [matDatepicker]="npicker" formControlName="chequeDate" class="form-control" />
+                                <mat-datepicker-toggle matSuffix [for]="npicker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #npicker></mat-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-12 form-column">
+                                <label class="start pull-left">Cheque Image.</label>
+                            </div>
+                            <div class="col-md-6 col-sm-12 form-column">
+                                <input #file type="file" accept="image/* , application/pdf" [disabled]="isFileLoading | async" (change)="onSelectFile(file.files)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-12 form-column">
+                                <label class="start pull-left">Cheque Preview.</label>
+                            </div>
+                            <div class="col-md-6 col-sm-12 form-column">
+                                <div class="row">
+                                    <ol>
+                                        <li *ngFor="let row of selectedFiles">
+                                            <a target="_blank" [href]="row?.url | safe : 'resourceUrl'">{{ row?.name }}</a>
+
+                                            <br />
+                                            <img [src]="row?.base64" alt="img" width="150px" height="70px" />
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <mat-divider></mat-divider>
+            <br />
+            <div *ngIf="!disableUploadFile">
+                <div *ngIf="!disableActions">
+                    <h4>Upload Excel File</h4>
+                    <div class="mx-3">
+                        <app-excel-upload (change)="onFileChange($event)"></app-excel-upload>
+                    </div>
+                    <div class="container-fluid" *ngIf="this.excelSelected">
+                        <div class="row justify-content-center mt-3">
+                            <mat-label>First Page preview of Excel File</mat-label>
+                        </div>
+                        <div class="row justify-content-center mt-3">
+                            <table class="table table-striped table-bordered nowrap table-respons mx-3">
+                                <tbody>
+                                    <tr *ngFor="let row of exceldata">
+                                        <td *ngFor="let cell of row">
+                                            {{ cell }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="this.excelDataPresent">
+                <br />
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <mat-form-field>
+                            <span matPrefix> </span>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="Search..." #input />
+                            <button matSuffix mat-button> &nbsp;
+                <mat-icon color="primary">search</mat-icon>
+              </button>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <br />
+                <div class="table-row">
+                    <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+                            <td mat-cell *matCellDef="let element; let i = index">
+                                {{ i + 1 }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="account">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Account NO.</th>
+                            <td mat-cell *matCellDef="let row">{{ row.account | uppercase }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="accountName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Account Name
+                            </th>
+                            <td mat-cell *matCellDef="let row">{{ row.accountName }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="idNumber">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                ID Number
+                            </th>
+                            <td mat-cell *matCellDef="let row">{{ row.idNumber }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="amount">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+                            <td mat-cell *matCellDef="let row">{{ row.amount }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="memberNumber">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Member Number
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                {{ row.memberNumber }}
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr (click)="onSelect()" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">
+                                No data matching the filter "{{ input.value }}"
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+            </div>
+            <br>
+            <button *ngIf="displayBackButton" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval" routerLink="/system/salary-transaction/maintenance">BACK</button>
+            <button *ngIf="displayApprovalBtn" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval" routerLink="/system/new/notification/allerts">BACK</button>
+            <button *ngIf="!hideBtn" class="pull-right approval" mat-raised-button [color]="btnColor" type="submit" (click)="onSubmit()">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+      </button>
+            <button *ngIf="hideRejectBtn" class="pull-right approval" mat-raised-button [color]="btnRejectColor" (click)="onRejectTransaction()">
+        <span *ngIf="loadingRejections" class="spinner-border spinner-border-sm mr-1"></span>{{rejectBtnText}}
+      </button>
+            <br>
+        </form>
+    </div>
+</mat-card>

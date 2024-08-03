@@ -1,0 +1,59 @@
+<!-- Title group  -->
+<div class="">
+    <mat-card>
+    <div class="title-group">
+        <h3 class="mat-h1">
+         <strong>Register Now</strong> 
+       </h3>
+        <mat-divider></mat-divider>
+    </div>
+    <div class="container">
+        <div class="row">
+    <div class="col-md-6 col-sm-12 col-xs-12 mt-5">
+    
+        <div class="loginImage">
+        <img src="../../../../assets/Images/loginImage.png" class="
+        img-responsive">
+      </div><!--end of header-->
+        <div class="infoSection">
+        Remember all logins credentials attempts are recorded for security scanning, analysis and intepretation.Any form of physing, 
+                hacking shall be recorded and you may be subjected to law.<br>
+                Avoid Trials
+                <br>
+                Regards <strong>Procurement Group</strong>
+            
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12 col-xs-12 mt-5 ">
+        
+        <div class="card mat-elevation-z8 center">
+        <span *ngIf="loading" ><mat-progress-bar mode="indeterminate"></mat-progress-bar></span>
+            
+            <div class="card-header">
+                <div class="">
+                    <span><h1>Congratulations! </h1></span>
+
+                    <span><h2>Your Account was activated succeffully. Kindly wait for your submission request to be approved by respective officers. </h2></span>
+                <p>
+                    <small>For any issue, regarding your account and data submissions, you may call our customer care service or visit to our office</small>
+                   <br> <small>Customer care: +254726634786</small>
+                </p>  
+                </div>
+    
+            </div>
+            <div class="card-body center">
+                <a class="center" routerLink="/Auth/login">
+                <button [disabled]="loading" class="btn btn-primary">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    Click Here to Sign in
+                </button>
+            </a>
+            </div>
+            
+            
+        </div>
+    </div>
+    </div>
+    </div>
+    </mat-card>
+      </div>

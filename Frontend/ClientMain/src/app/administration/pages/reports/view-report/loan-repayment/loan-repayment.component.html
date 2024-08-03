@@ -1,0 +1,155 @@
+<!-- <h1>Loan Repayment</h1>
+<form action="" [formGroup]="downloadReport" #resetRequestsForm="ngForm" novalidate>
+    Please provide the following details:
+<p>
+    <mat-form-field appearance="outline" required>
+      <mat-label>From Date</mat-label>
+      <input formControlName="fromDate" matInput [matDatepicker]="Apicker" />
+      <mat-datepicker-toggle matSuffix [for]="Apicker"></mat-datepicker-toggle>
+      <mat-datepicker #Apicker></mat-datepicker>
+  </mat-form-field>
+</p>
+<p>
+  <mat-form-field appearance="outline" required>
+      <mat-label>To Date</mat-label>
+      <input formControlName="toDate" matInput [matDatepicker]="Bpicker" />
+      <mat-datepicker-toggle matSuffix [for]="Bpicker"></mat-datepicker-toggle>
+      <mat-datepicker #Bpicker></mat-datepicker>
+  </mat-form-field>
+</p>
+<br>
+    <div class=" btn btn-sm btn-block example-button-row" >
+      <button (click)="generateReport()" mat-raised-button color="primary">
+          <mat-icon>cloud_download</mat-icon>
+        Generate Report
+      </button>
+    </div>
+  </form> -->
+<!-- 
+  <form>
+    <div class="mx-auto">
+      <div class="row mb-4">
+        <div class="col">
+          <div class="form-outline">
+            <input type="text" id="form6Example1" class="form-control" />
+            <label class="form-label" for="form6Example1">First name</label>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-outline">
+            <input type="text" id="form6Example2" class="form-control" />
+            <label class="form-label" for="form6Example2">Last name</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-outline mb-4">
+        <input type="text" id="form6Example3" class="form-control" />
+        <label class="form-label" for="form6Example3">Company name</label>
+      </div>
+      <div class="form-outline mb-4">
+        <input type="text" id="form6Example4" class="form-control" />
+        <label class="form-label" for="form6Example4">Address</label>
+      </div>
+      <div class="form-outline mb-4">
+        <input type="email" id="form6Example5" class="form-control" />
+        <label class="form-label" for="form6Example5">Email</label>
+      </div>
+      <div class="form-outline mb-4">
+        <input type="number" id="form6Example6" class="form-control" />
+        <label class="form-label" for="form6Example6">Phone</label>
+      </div>
+      <div class="form-outline mb-4">
+        <textarea class="form-control" id="form6Example7" rows="4"></textarea>
+        <label class="form-label" for="form6Example7">Additional information</label>
+      </div>
+      <div class="form-check d-flex justify-content-center mb-4">
+        <input class="form-check-input me-2" type="checkbox" value="" id="form6Example8" checked />
+        <label class="form-check-label" for="form6Example8"> Create an account? </label>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block mb-4">Place order</button>
+    </div>
+  </form> -->
+
+  <div class="addContainer">
+    <div class="modalHeader">
+      <div class="editRowModal">
+        <div class="modalHeader clearfix">
+          <div class="modalHeader clearfix">
+            <img src="../../../../../assets/images/emtec.png" alt="avatar" />
+            <div class="modal-about">
+              <div class="font-weight-bold p-t-5 ms-2 me-2 font-17">
+                Update Category Details
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        mat-icon-button
+       
+        aria-label="Close dialog"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div mat-dialog-content>
+      <form class="register-form m-4">
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>GL code</mat-label>
+              <input matInput formControlName="glCode" required />
+              <!-- <mat-error
+                *ngIf="updateCategoryForm.get('glCode').hasError('required')"
+              >
+              GL code is required
+              </mat-error> -->
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Category name</mat-label>
+              <input matInput formControlName="categoryName" required />
+              <!-- <mat-error
+                *ngIf="updateCategoryForm.get('categoryName').hasError('required')"
+              >
+              Category name is required
+              </mat-error> -->
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Category description</mat-label>
+              <textarea formControlName="categoryDescription" matInput></textarea>
+              <!-- <mat-error
+              *ngIf="updateCategoryForm.get('categoryDescription').hasError('required')"
+            >
+            Category description is required
+            </mat-error> -->
+            </mat-form-field>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <div class="example-button-row" align="end">
+              <button
+           
+                mat-raised-button
+                color="primary"
+               
+              >
+                Save
+              </button>
+              <button mat-raised-button color="warn">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

@@ -1,0 +1,175 @@
+
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/chequebook/maintenance">Cheque Book Maintenenace / </a>Cheque Book
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-4 col-sm-12">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h4>Function :- <strong>{{this.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-6 col-sm-12"  *ngIf="onShowResults">
+          <h4>Cheque ID :- <strong>{{this.chequeId}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 col-sm-12 row" *ngIf="onShowResults">
+      <div class="row">
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted BY :- <strong>{{this.postedBy}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted ON :- <strong>{{this.postedTime | date}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verification :- <strong>{{this.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verified BY :- <strong>{{this.verifiedBy}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" #resetRequestsForm="ngForm" novalidate>
+      <div class="row my-3">
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Account Number.</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" maxlength="40" oninput="this.value=this.value.toUpperCase()"
+                formControlName="accountNumber" class="form-control" [readonly]="accountReadonly"/> &nbsp;
+              <mat-icon *ngIf="!accountReadonly" (click)="accountLookup()" color="primary">search</mat-icon>&nbsp;<br/>
+              <mat-icon *ngIf="!accountReadonly" (click)="accountImagesLookup()" color="primary">account_box</mat-icon>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-4 col-sm-12 form-column">
+              <mat-hint>Name: {{ accountName }} </mat-hint>
+            </div>
+            <div class="col-md-3 col-sm-12 form-column">
+              <mat-hint>Status: {{ accountStatus }}</mat-hint>
+            </div>
+            <div class="col-md-2 col-sm-12 form-column">
+              <mat-hint>Cur: {{ accountCurrency }}</mat-hint>
+            </div>
+            <div class="col-md-3 col-sm-12 form-column">
+              <mat-hint>Bal: {{ accountBalance | currency : "KES " }}</mat-hint>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Account Name. </label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" oninput="this.value=this.value.toUpperCase()" formControlName="accountName"
+                class="form-control" required readonly />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Date of issue. </label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input [matDatepicker] formControlName="dateOfIssue" class="form-control" required readonly />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label for="" class="start pull-left">Expiry Date.</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input [matDatepicker]="expiryDate" formControlName="expiryDate" class="form-control">
+              <span>
+                <mat-datepicker-toggle matSuffix [for]="expiryDate" color="primary"></mat-datepicker-toggle>
+              </span>
+              <mat-datepicker #expiryDate></mat-datepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Customer Code.</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="customerCode" class="form-control" /> &nbsp;
+              <mat-icon (click)="membershipLookup()" color="primary">search</mat-icon>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">No Of Leafs.</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="number" formControlName="noOfLeafs" class="form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">Start Serial No.</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="startSerialNo" class="form-control" />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column">
+              <label class="start pull-left">End Serial No.</label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column">
+              <input type="text" formControlName="endSerialNo" class="form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <hr>
+      <button mat-raised-button class="pull-left bg-primary text-white" routerLink="/system/chequebook/maintenance"
+        skipLocationChange="">BACK</button>
+      <button *ngIf="!hideBtn" (click)="onSubmit()" class="pull-right" mat-raised-button [color]="btnColor"
+        type="submit">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{ btnText }}
+      </button>
+      <br />
+    </form>
+  </div>
+</mat-card>

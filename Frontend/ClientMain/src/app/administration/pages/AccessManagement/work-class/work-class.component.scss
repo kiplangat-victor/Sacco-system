@@ -1,0 +1,61 @@
+.example-stepper {
+  margin-top: 8px;
+}
+
+.mat-form-field {
+  margin-top: 16px;
+}
+
+.example-small-box, .example-large-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+//   .example-small-box {
+//     height: 100px;
+//     width: 100px;
+//   }
+
+//   .example-large-box {
+//     height: 300px;
+//     width: 300px;
+//   }
+.table-main-action-btn {
+  margin: 2px;
+  padding: 2px;
+  height: 25px !important;
+  width: min-content !important;
+  line-height: 20px !important;
+  text-align: center !important;
+  font-size: 10px !important;
+  margin-top: 0px !important;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.pull-left {
+  text-align: left !important;
+}
+
+.table-action-row {
+  margin-top: 5px !important;
+  padding-top: 5px;
+}
+.example-button-row .mat-button-base {
+margin: 8px 8px 8px 0;
+}
+
+.pull-right {
+float: right !important;
+margin: 8px 8px 8px 0;
+}
+
+.pull-left {
+float: left !important;
+margin-left: 10px !important;
+padding-left: 10px!important;
+}

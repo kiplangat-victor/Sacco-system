@@ -1,0 +1,116 @@
+<mat-card>
+    <mat-card-header class="breadcrumb">
+        <div>
+            <a routerLink="/system">Dashboard / </a>
+            <a routerLink="/system">Guarantors Parameters Maintenance / </a>Guarantors Parameters
+        </div>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <br>
+    <div class="container-fluid">
+        <form action="" class="form" (ngSubmit)="onSubmit()" novalidate [formGroup]="formData">
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label for="" class="start pull-left">Check Customer Activeness</label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <mat-radio-group formControlName="checkCustomerActiveness" aria-label="Select an option">
+                                <mat-radio-button value="Y">YES</mat-radio-button>
+                                <mat-radio-button value="N">NO</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label for="" class="start pull-left">Check Customer Subsequent Guarantee Status</label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <mat-radio-group formControlName="checkCustomerSubsequentGuaranteStatus"
+                                aria-label="Select an option">
+                                <mat-radio-button value="Y">YES</mat-radio-button>
+                                <mat-radio-button value="N">NO</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label for="" class="start pull-left">Check Customer Loan Status</label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <mat-radio-group formControlName="checkCustomerLoanStatus" aria-label="Select an option">
+                                <mat-radio-button value="Y">YES</mat-radio-button>
+                                <mat-radio-button value="N">NO</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label for="" class="start pull-left">Check Customer Shares Qualification</label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <mat-radio-group formControlName="checkCustomerSharesQualification" Loan
+                                Statusaria-label="Select an option">
+                                <mat-radio-button value="Y">YES</mat-radio-button>
+                                <mat-radio-button value="N">NO</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label for="" class="start pull-left">Check Customer Maximum Active Guaranteed No</label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <mat-radio-group formControlName="checkCustomerMaximumActiveGuaranteedNo"
+                                aria-label="Select an option">
+                                <mat-radio-button value="Y">YES</mat-radio-button>
+                                <mat-radio-button value="N">NO</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column ">
+                            <label class="start pull-left">Input Max No of Guaranteed<span
+                                    class="warning">*</span></label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <input type="text" maxlength="6" formControlName="customerMaximumGuaranteed"
+                                class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <button mat-raised-button color="primary" type="submit" class="pull-right">Submit</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <br>
+    <div class="container-fluid">
+        <!-- <app-share-capital-params-lookup></app-share-capital-params-lookup> -->
+    </div>
+</mat-card>

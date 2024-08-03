@@ -1,0 +1,64 @@
+<div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+</div>
+<div class="col-md-6 col-sm-12 ml-auto">
+    <input class="pull-right search form-control" (keyup)="salariesFilter($event)" placeholder="Filter..." #input>
+</div>
+<br>
+<br>
+<div class="table-row">
+    <table mat-table matSort matTableExporter [dataSource]="salariesDataSource">
+        <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+            <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+        </ng-container>
+        <ng-container matColumnDef="uniqueCode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Code</th>
+            <td mat-cell *matCellDef="let row"> {{row.uniqueCode }} </td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+            <td mat-cell *matCellDef="let row"> {{row.type}} </td>
+        </ng-container>
+        <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+            <td mat-cell *matCellDef="let row"> {{row.amount }} </td>
+        </ng-container>
+        <ng-container matColumnDef="entryTime">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Entry Date</th>
+            <td mat-cell *matCellDef="let row"> {{row.entryTime | date:
+                'dd-MM-yyyy hh:mm:SS'}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="account">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Account</th>
+            <td mat-cell *matCellDef="let row"> {{row.account }} </td>
+        </ng-container>
+        <ng-container matColumnDef="verified_flag">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>1st Verification</th>
+            <td mat-cell *matCellDef="let row"> {{row.verified_flag }} </td>
+        </ng-container>
+        <ng-container matColumnDef="verified_flag_2">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>2nd Verification</th>
+            <td mat-cell *matCellDef="let row"> {{row.verified_flag_2 }} </td>
+        </ng-container>
+        <ng-container matColumnDef="verify">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+            <td mat-cell *matCellDef="let row">
+                <button mat-icon-button color="primary" (click)="verifyTransaction(row.uniqueCode, row.typeCode)">
+                    <mat-icon>launch</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="salariesColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: salariesColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr>
+    </table>
+</div>
+<mat-paginator #salariesPaginator="matPaginator" [pageSizeOptions]="[5, 10, 15,20,30, 40, 50, 100]"
+    aria-label="Select page"></mat-paginator>

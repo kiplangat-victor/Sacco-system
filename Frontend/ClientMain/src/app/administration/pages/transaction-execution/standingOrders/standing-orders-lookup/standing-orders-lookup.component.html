@@ -1,0 +1,49 @@
+<div *ngIf="loading">
+  <p><small>Loading Standing Order Data, please wait...</small></p>
+  <p>
+    <mat-progress-bar mode="query"></mat-progress-bar>
+  </p>
+</div>
+<mat-card-header class="breadcrumb">
+  <div>Standing Order Look-up</div>
+  <div class="col-md-6 col-sm-12 ml-auto">
+    <input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+  </div>
+</mat-card-header>
+<div class="table-row">
+  <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+    </ng-container>
+    <ng-container matColumnDef="standingOrderCode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Std. Order Code</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.standingOrderCode}} </td>
+    </ng-container>
+    <ng-container matColumnDef="customerCode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer Code</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.customerCode}} </td>
+    </ng-container>
+    <ng-container matColumnDef="sourceAccountNo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Source Account</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.sourceAccountNo}} </td>
+    </ng-container>
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.amount}} </td>
+    </ng-container>
+    <ng-container matColumnDef="verifiedFlag">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Verified</th>
+      <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+        <span *ngIf="row.verifiedFlag == 'Y' " class="badge badge-pill badge-primary">Verified</span>
+      <span *ngIf="row.verifiedFlag == 'N' " class="badge badge-pill badge-danger ">Unverified</span>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+</div>
+<mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>

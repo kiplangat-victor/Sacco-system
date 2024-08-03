@@ -1,0 +1,51 @@
+<div class="card card-header container-fluid">
+  <div class="card-body text-center">
+    <h2 class="card-title ">REPORT DEFINITION</h2>
+    <form (ngSubmit)="submitReport()" ngNaveVatilidate>
+      <div class="row container-fluid">
+        <div class="col-md-6">
+          <div class="form-group row mb-1">
+            <label for="acname" class="col-sm-4 col-form-label text-left">Report Name *</label>
+            <div class="col-sm-7">
+              <input type="text" oninput="this.value=this.value.toUpperCase()" class="form-control form-control-sm"
+                id="acname" [(ngModel)]='reportName' name="reportName">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group row mb-1">
+            <label for="aglsub" class="col-sm-4 col-form-label text-left">Jrxml *</label>
+            <div class="col-sm-7">
+              <input class="form-control" type="file" (change)="jrxmlChange($event)">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <h3>PARAMETERS</h3>
+      </div>
+      <div class="row container-fluid">
+        <div class="col-md-4" *ngFor="let param of parameters; let i=index">
+          <div class="row mt-1">
+            <div class="col-md-8">
+              <label class="form-check-label text-left" for="exampleCheck1">{{param.parameterName}}<i
+                  *ngIf="containsObject(param, params)" class="fa fa-check" aria-hidden="true"></i></label>
+            </div>
+            <div class="col-md-4">
+              <mat-icon class="Primary" (click)="add(param)">add_circle</mat-icon>
+              <mat-icon class="Warning" (click)="remove(param)">remove_circle</mat-icon>
+              <!-- <button class="btn btn-sm btn-light mr-1" type="button" (click)="add(param)">ADD</button>
+    <button class="btn btn-sm btn-danger" type="button" (click)="remove(param)">REMOVE</button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row mb-0 mt-2">
+        <div class="col-sm-4 offset-md-8">
+          <button type="reset" class="btn btn-sm btn-danger mr-2">Reset</button>
+          <button type="submit" class="btn btn-sm btn-success">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

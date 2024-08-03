@@ -1,0 +1,63 @@
+<div class="container">
+  <div mat-dialog-content>
+    <form [formGroup]="formData" class="register-form m-4">
+      <div
+        class="row mb-3"
+      >
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+             <label class="start pull-left">Account Id<span class="warning">*</span></label>
+            </div>
+            <div class="col-md-6 col-sm-12 form-column ">
+              <input maxlength="6" type="text" oninput ="this.value=this.value.toUpperCase()" formControlName="acid" class="pull-right form-control" />
+              <mat-icon (click)="accountLookup()">search</mat-icon>
+            </div>
+         </div>
+        </div>
+      </div>
+      <div
+        class="row mb-3"
+      >
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="form-group">
+            <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">Report scope<span class="warning">*</span></label>
+             </div>
+             <div class="col-md-6 col-sm-12 form-column ">
+              <select
+              class="form-control"
+              formControlName="year"
+            >
+              <option value="" disabled>-- Select --</option>
+              <option
+                *ngFor="let year of years"
+                [value]="year"
+              >
+                {{ year }}
+              </option>
+            </select>
+             </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row" align="end">
+            <button
+              (click)="submit()"
+              mat-raised-button
+              color="primary"
+              class="mr-2"
+            >
+              Submit
+            </button>
+            <button (click)="cancel()" mat-raised-button color="warn">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

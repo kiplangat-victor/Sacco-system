@@ -1,0 +1,87 @@
+<mat-card>
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/configurations/global/gl-subhead/maintenance">GL Subhead Maintenance / </a>GL Subhead
+    </div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-5 col-sm-12">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h4>Function:- <strong>{{this.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <h4>GL.Subhead. Code:- <strong>{{this.glSubheadCode}}</strong></h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7 col-sm-12 row" *ngIf="onShowResults">
+      <div class="row" *ngIf="this.results">
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Posted ON:- <strong>{{this.results.postedTime | date}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-3 col-sm-12">
+          <h4>Verified BY:- <strong>{{this.results.verifiedBy}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form class="form" [formGroup]="formData" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm" novalidate>
+      <div class="row">
+        <div class="col-md-5 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-6 col-sm-12 form-column ">
+            <label class="start pull-left">GL. Code<span class="text-danger" *ngIf="showWarning">*</span></label>
+          </div>
+          <div class="col-md-6 col-sm-12 form-column">
+            <input type="text" [value]="this.glCode"
+              formControlName="glCode" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.glCode.errors }"
+              oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+              maxlength="8" minlength="1"/> &nbsp; &nbsp;
+            <mat-icon color="primary" *ngIf="showsearchIcon" (click)="refCodeLookup()">search</mat-icon>
+          </div>
+        </div>
+        </div>
+        <div class="col-md-7 col-sm-12">
+          <div class="form-group">
+            <div class="col-md-5 col-sm-12 form-column ">
+              <label>Gl Subhead Description<span class="text-danger" *ngIf="showWarning">*</span></label>
+            </div>
+            <div class="col-md-7 col-sm-12 form-column">
+              <textarea type="text" formControlName="glSubheadDescription"
+                class="form-control" [ngClass]="{ 'is-invalid': submitted && f.glSubheadDescription.errors }"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="100" minlength="2"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <hr>
+      <br>
+      <button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+        routerLink="/system/configurations/global/gl-subhead/maintenance">BACK</button>
+      <button *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor" type="submit">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+      </button>
+      <br>
+    </form>
+  </div>
+</mat-card>

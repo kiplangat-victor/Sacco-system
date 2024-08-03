@@ -1,0 +1,29 @@
+footer .row {
+  width: 100% !important;
+  font-size: 12px !important;
+}
+.left {
+  padding: 10px;
+  text-align: left;
+}
+.center {
+  padding: 10px;
+  text-align: center;
+}
+.right {
+  padding: 10px;
+  text-align: right;
+}
+a {
+  border-left: solid 1px black;
+  padding: 5px !important;
+  color: rgb(0, 119, 255) !important;
+}
+.brand {
+  position: absolute;
+  bottom: 0 !important;
+  right: 0 !important;
+}
+.footer {
+  background-color: orange !important;
+}

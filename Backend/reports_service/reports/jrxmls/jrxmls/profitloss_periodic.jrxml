@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.3.final using JasperReports Library version 6.20.3-415f9428cffdb6805c6f85bbb29ebaf18813a2ab  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report4" pageWidth="595" pageHeight="842" columnWidth="500" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="95130235-5971-401b-8837-ba89e92d008d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="local"/>
+	<parameter name="report_icon" class="java.lang.String"/>
+	<parameter name="to_date" class="java.lang.String"/>
+	<parameter name="from_date" class="java.lang.String"/>
+	<parameter name="sacco_name" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT *, IF(balance > 0, balance, 0) income_bal, IF(balance < 0, ABS(balance), 0) expense_bal  
+		FROM (SELECT ROUND(SUM(pbal.bal), 2) AS balance, gl.gl_description AS glDescription,   
+		glsubhead.gl_subhead_code AS subcode,  glsubhead.gl_subhead_description AS subHeadDescription FROM accounts
+INNER JOIN (select distinct pt.acid, SUM(CAST((case when pt.part_tran_type='Debit' then tran_amount*-1 else tran_amount end) AS DECIMAL(65, 2))) as bal from part_tran pt join dtd on pt.transaction_header_id = dtd.sn and dtd.posted_flag = 'Y'  where pt.tran_date BETWEEN $P{from_date} AND DATE_ADD( $P{to_date}, INTERVAL 1 DAY)  AND  acid IN(SELECT acid FROM accounts WHERE gl_subhead IN(SELECT gl_subhead_code FROM glsubhead WHERE gl_code IN (SELECT gl_code FROM gl WHERE classification = 'INCOMES' OR classification = 'EXPENSES' )))  GROUP BY acid) AS pbal ON accounts.acid = pbal.acid      
+INNER JOIN  (SELECT * FROM glsubhead WHERE gl_code IN (SELECT gl_code FROM gl WHERE classification = 'INCOMES' OR classification = 'EXPENSES' )) glsubhead ON glsubhead.gl_subhead_code = accounts.gl_subhead
+INNER JOIN  gl ON glsubhead.gl_code = gl.gl_code 
+ WHERE accounts.account_balance <> 0  GROUP BY glsubhead.gl_subhead_code) k ORDER BY glDescription ASC, subHeadDescription ASC, balance DESC]]>
+	</queryString>
+	<field name="balance" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="balance"/>
+		<property name="com.jaspersoft.studio.field.label" value="balance"/>
+	</field>
+	<field name="glDescription" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="glDescription"/>
+		<property name="com.jaspersoft.studio.field.label" value="glDescription"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="gl"/>
+	</field>
+	<field name="subcode" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="subcode"/>
+		<property name="com.jaspersoft.studio.field.label" value="subcode"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="gl_subhead_code"/>
+	</field>
+	<field name="subHeadDescription" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="subHeadDescription"/>
+		<property name="com.jaspersoft.studio.field.label" value="subHeadDescription"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="gl_subhead_code"/>
+	</field>
+	<field name="income_bal" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="income_bal"/>
+		<property name="com.jaspersoft.studio.field.label" value="income_bal"/>
+	</field>
+	<field name="expense_bal" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="expense_bal"/>
+		<property name="com.jaspersoft.studio.field.label" value="expense_bal"/>
+	</field>
+	<variable name="variable1" class="java.lang.Double" resetType="Group" resetGroup="glDescription" calculation="Sum">
+		<variableExpression><![CDATA[$F{balance}]]></variableExpression>
+	</variable>
+	<variable name="grand" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{balance}]]></variableExpression>
+		<initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+	</variable>
+	<group name="glDescription" keepTogether="true">
+		<groupExpression><![CDATA[$F{glDescription}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement mode="Opaque" x="185" y="0" width="198" height="20" backcolor="#FFFFFF" uuid="23e6aba2-c19c-49c7-bed2-597ff49b1028"/>
+					<box leftPadding="10" rightPadding="10">
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{glDescription}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="383" y="0" width="172" height="20" uuid="9b5d3959-50ab-40c6-8835-fc575a8ca4a0"/>
+					<box>
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="0" width="185" height="20" uuid="eebcca1d-42a0-48de-b58b-4ad67da539a2"/>
+					<box>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<textField pattern="#,##0.00;(-#,##0.00)">
+					<reportElement mode="Opaque" x="383" y="0" width="172" height="19" backcolor="#CCCCCC" uuid="0cf3e1b5-8837-40fd-a6ee-150f46285b0b"/>
+					<box leftPadding="10" rightPadding="10">
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font size="10" isBold="true" isUnderline="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{variable1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="0" width="185" height="19" backcolor="#CCCCCC" uuid="5ffb0803-3a70-4085-acfc-e3555b9f45d2"/>
+					<box leftPadding="10" rightPadding="10">
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="185" y="0" width="198" height="19" backcolor="#CCCCCC" uuid="61448b11-80d8-40c2-9035-34a673753457"/>
+					<box leftPadding="10" rightPadding="10">
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{glDescription}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="69" splitType="Stretch">
+			<staticText>
+				<reportElement x="111" y="25" width="155" height="21" uuid="84d7f77b-5bce-4c79-9cf5-a33dcfb28102"/>
+				<textElement>
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Profit and Loss for dates]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="266" y="25" width="289" height="21" uuid="fb974894-7b72-413e-a78b-d0f5bed71e0b"/>
+				<textElement>
+					<font fontName="SansSerif" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy-MM-dd").parse($P{from_date})) + "  -  " + new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy-MM-dd").parse($P{to_date}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="421" y="0" width="80" height="24" uuid="6bd6c101-211f-4934-8a4a-34f7b8d46020"/>
+				<box leftPadding="10" rightPadding="0"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="501" y="0" width="40" height="24" uuid="8e493065-098c-4b27-adcd-d44cba98e465"/>
+				<box leftPadding="0" rightPadding="0"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="-20" width="111" height="88" uuid="a0d44777-c985-48e2-be32-9822c3d76b2f"/>
+				<imageExpression><![CDATA[$P{report_icon}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="111" y="46" width="180" height="20" uuid="7a601e75-7464-4461-b174-6a7c946cc144"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[For All Branches]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="111" y="-9" width="329" height="30" uuid="60cac6de-219e-4573-a571-d91b46db7fff"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{sacco_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="185" height="20" uuid="b0dd9e28-8466-403a-8088-4cc1389e3795"/>
+				<box leftPadding="10" rightPadding="10">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GL SubHead Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="185" y="0" width="198" height="20" uuid="202abe56-166c-4683-917f-c57d65883fd8"/>
+				<box leftPadding="10" rightPadding="10">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GL Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="383" y="0" width="172" height="20" uuid="2512008a-72b0-48bd-8d40-334f1a304059"/>
+				<box leftPadding="10" rightPadding="10">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Amount]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="185" y="0" width="198" height="19" uuid="16f5faea-ad0b-42ea-9530-076ae8493392"/>
+				<box leftPadding="10" rightPadding="10">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{glDescription}]]></textFieldExpression>
+			</textField>
+			<elementGroup/>
+			<textField>
+				<reportElement x="0" y="0" width="185" height="19" uuid="cf2bae2e-5e65-4f27-a836-e999aa63088c"/>
+				<box leftPadding="10" rightPadding="10">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{subHeadDescription}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(-#,##0.00)">
+				<reportElement x="383" y="0" width="172" height="19" uuid="e0463c17-6990-4a65-8eec-77dfa11de4a8"/>
+				<box leftPadding="10" rightPadding="10">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{balance}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<elementGroup>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="0" width="185" height="20" forecolor="#FFFFFF" backcolor="#000000" uuid="5eb902de-1d9b-49c7-a1c3-aa2e96e6d7f6"/>
+					<box leftPadding="10" rightPadding="10">
+						<pen lineWidth="1.0"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Profit]]></text>
+				</staticText>
+			</elementGroup>
+			<textField pattern="#,##0.00;(-#,##0.00)">
+				<reportElement mode="Opaque" x="383" y="0" width="172" height="20" forecolor="#FFFFFF" backcolor="#000000" uuid="4413f76d-cc21-48e8-9f3b-98ca772070d4"/>
+				<box leftPadding="10" rightPadding="10">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" markup="none">
+					<font size="10" isBold="true" isItalic="false" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{grand}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="185" y="0" width="198" height="20" forecolor="#FFFFFF" backcolor="#000000" uuid="1cb9ecc5-3108-4de8-a89f-1ae59c2c246d"/>
+				<box leftPadding="10" rightPadding="10">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

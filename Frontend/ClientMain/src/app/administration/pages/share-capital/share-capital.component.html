@@ -1,0 +1,166 @@
+<mat-card>
+    <div *ngIf="loading" >
+        <p><small>Loading, please wait...</small></p>
+        <p><mat-progress-bar mode="query"></mat-progress-bar></p>
+      </div>
+    <mat-card-header class="breadcrumb">
+        <div>Share-Capital</div>
+    </mat-card-header>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <h4>Function</h4>
+            <p>{{this.function_type}}</p>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <h4>Customer Code</h4>
+            <p>{{this.cust_code}}</p>
+         </div>
+     </div>
+     <div class="row">
+         <div class="col-md-6 col-sm-12">
+            <h4>Customer Name</h4>
+            <p>{{this.cust_name}}</p>
+         </div>
+         <div class="col-md-6 col-sm-12">
+            <h4>Customer Account (caa)</h4>
+            <p>{{this.cust_account_caa}}</p>
+         </div>
+     </div>
+    <mat-divider></mat-divider>
+    <br>
+    <div class="container-fluid">
+        <form action="" (ngSubmit)="onSubmit()"
+        novalidate
+        [formGroup]="formData">
+
+        <div  class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column ">
+                 <label class="start pull-left">Buy From </label> <span class="warning">*</span>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <mat-radio-group class="pull-right" aria-label="Select an option" formControlName="buySharesFrom">
+                    <mat-radio-button (change)="onBuyFrmSacco($event)" value="All">Sacco. </mat-radio-button>
+                    <mat-radio-button (change)="onBuyFrmMember($event)" value="Specific">Member. </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+             </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+            <div *ngIf="this.requireSaccoAc" class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Sacco P&L a/c<span class="warning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="officeAc" class="form-control">
+                    <mat-icon (click)="officeAccountLookup()">search</mat-icon>
+                </div>
+            </div>
+            <div  *ngIf="this.requireMemberAc" class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                    <label for="" class="start pull-left">Member ac<span class="warning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                    <input type="number" formControlName="custSellerAc" class="form-control">
+                    <mat-icon (click)="customerAccountLookup()">search</mat-icon>
+                </div>
+            </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <div class="col-md-6 col-sm-12 form-column">
+                        <label for="" class="start pull-left">Shares<span class="warning">*</span></label>
+                    </div>
+                    <div class="col-md-6 col-sm-12 form-column">
+                        <input (keyup)="onSharesKeypressEvent($event)" type="number" class="form-control" formControlName="sharesQuantity">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+
+                <div class="form-group">
+                    <div class="col-md-6 col-sm-12 form-column">
+                        <label for="" class="start pull-left">Shares Amount<span class="warning">*</span></label>
+                    </div>
+                    <div class="col-md-6 col-sm-12 form-column">
+                        <input [attr.disabled]="true" type="number" class="form-control" formControlName="sharesAmount">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <button mat-raised-button class="pull-left" color="default" type="submit" routerLink="../../maintenance">Back</button>
+        <button mat-raised-button class="pull-right" color="primary" type="submit">Buy</button>
+
+        </form>
+    </div>
+
+    <div class="">
+        <div class="row breadcrumb">
+          <div class="col-md-6 col-sm-12">
+            <p><strong>Shares Installments</strong></p>
+            </div>
+          <div class="col-md-6 col-sm-12">
+          <mat-icon class="pull-right">search</mat-icon>
+          <input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+          </div>
+        </div>
+          <br>
+
+          <div class="table-row">
+            <table class="y-scrollable-table"mat-table matSort matTableExporter [dataSource] = "dataSource">
+             <ng-container matColumnDef="index">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+              <td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="cust_code">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Customer Code</th>
+              <td  (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.cust_code}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="cust_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer Name </th>
+              <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.cust_name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="sharesQuantity">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Shares Quantity</th>
+              <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.sharesQuantity}} </td>
+            </ng-container>
+            <ng-container matColumnDef="sharesAmount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Shares Amount</th>
+              <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.sharesAmount}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="buySharesFrom">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Bought Shares From</th>
+                <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.buySharesFrom}}</td>
+              </ng-container>
+
+            <ng-container matColumnDef="custSellerAc">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Bought Shares From A/c</th>
+                <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.custSellerAc}}</td>
+              </ng-container>
+
+            <ng-container matColumnDef="postedTime">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Bought on</th>
+                <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.postedTime | date}}</td>
+              </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+          </div>
+          <mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page of users"></mat-paginator>
+    </div>
+
+</mat-card>

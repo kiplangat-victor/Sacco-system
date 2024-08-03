@@ -1,0 +1,1113 @@
+<mat-card>
+  <mat-card-header class="breadcrumb">
+    <div>
+      <a routerLink="/system">Dashboard / </a>
+      <a routerLink="/system/group-membership/maintenance">Group Membership Maintenenace / </a>
+      Group Membership
+    </div>
+  </mat-card-header>
+  <div *ngIf="loading">
+    <p><small>Loading, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+  </div>
+  <div *ngIf="submitting">
+    <p><small>Submitting Group Membership Data, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </p>
+  </div>
+  <div class="row">
+    <div class="col-md-5 col-sm-12">
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+          <h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="onShowCode">
+          <div *ngIf="this.results">
+            <h4>Group Code:- <strong>{{this.results.customerCode}}</strong></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7 col-sm-12 row" *ngIf="onShowResults">
+      <div class="row" *ngIf="this.results">
+        <div class="col-md-4 col-sm-12">
+          <h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <h4>Posted ON:- <strong>{{this.results.postedTime | date}}</strong></h4>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form action="" class="form" [formGroup]="formData" novalidate>
+      <mat-tab-group mat-align-tabs="center">
+        <mat-tab class="mat-tab" label="GENERAL DETAILS">
+          <br>
+          <div class="row">
+            <div class="col-md-4 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start pull-left">Branch Code<span class="text-danger"
+                      *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column">
+                  <input type="text" formControlName="branchCode" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.branchCode.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="8">
+                  &nbsp; &nbsp;
+                  <mat-icon *ngIf="onShowSearchIcon" color="primary" (click)="branchesCodeLookup()">
+                    search</mat-icon>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start pull-left">Group Name<span class="text-danger"
+                      *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="text" formControlName="groupName" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.groupName.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="255">
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">NO:</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input readonly placeholder="AUTO" type="text" formControlName="no" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Group Type<span class="text-danger" *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <select formControlName="groupType" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.groupType.errors}">
+                    <option value="" disabled>--SELECT GROUP TYPE--</option>
+                    <option *ngFor="let item of membershipTypeArray" [value]="item.customerType">
+                      {{item.description}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label for="" class="start">Document Type *</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <select formControlName="verificationDocument" class="form-control">
+                    <option value="" disabled>SELECT DOCUMENT</option>
+                    <option *ngFor="let item of documentTypeArray" [value]="item">{{ item }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Document Number<span class="text-danger" *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="text" formControlName="verificationDocNumber" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.verificationDocNumber.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="20">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12" *ngIf="onShowGroupStatus">
+              <div class="form-group">
+                <div class="col-md-6 col-sm-12 form-column">
+                  <label for="" class="start">Group Status</label>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column" *ngIf="onShowStatusSelectValue">
+                  <select formControlName="status" class="form-control">
+                    <option value="" disabled>SELECT STATUS</option>
+                    <option *ngFor="let item of groupStatusArray" [value]="item">
+                      {{item}}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-md-6 col-sm-12 form-column" *ngIf="onShowStatusValue">
+                  <input readonly placeholder="DRAFT" type="text" formControlName="status" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="20">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Membership Date</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input [matDatepicker]="membershipDate" formControlName="membershipDate" class="form-control">
+                  <span *ngIf="onShowDate" color="primary">
+                    <mat-datepicker-toggle matSuffix [for]="membershipDate"></mat-datepicker-toggle>
+                  </span>
+                  <mat-datepicker color="primary" #membershipDate></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Country</label>
+                </div>
+                <div class="col-md-8 col-sm-12 ">
+                  <select formControlName="country" class="form-control">
+                    <option value="" disabled>SELECT COUNTRY</option>
+                    <option *ngFor="let countries of country" [value]="countries.name">{{ countries.code }} -- {{
+                      countries.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label for="" class="start">Manager ID<span class="text-danger" *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input formControlName="groupManagerId" placeholder="" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.groupManagerId.errors }">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label for="" class="start">Manager Name<span class="text-danger"
+                      *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input readonly formControlName="groupManagerName" placeholder="" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.groupManagerName.errors }">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Joint Account<span class="text-danger" *ngIf="onShowWarning">?</span></label>
+                </div>
+                <div class="col-md-4 col-sm-12 form-column">
+                  <mat-checkbox formControlName="jointAccount" class="example-margin pull-right" color="primary">
+                  </mat-checkbox>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Has Approval<span class="text-danger" *ngIf="onShowWarning">?</span></label>
+                </div>
+                <div class="col-md-4 col-sm-12 form-column">
+                  <mat-checkbox formControlName="hasApproval" class="example-margin pull-right" color="primary">
+                  </mat-checkbox>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button *ngIf="displayBackButton" mat-raised-button type="submit"
+                class="pull-left bg-secondary text-white"
+                routerLink="/system/group-membership/maintenance">BACK</button>
+              <button *ngIf="displayApproavalBtn" mat-raised-button type="submit"
+                class="pull-left bg-secondary text-white" routerLink="/system/new/notification/allerts">BACK</button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab class="mat-tab" label="BUSINESS DETAILS">
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Business Type</label>
+                </div>
+                <div class="col-md-8 col-sm-12 ">
+                  <select formControlName="businessType" class="form-control">
+                    <option value="" disabled>SELECT BUSINESS</option>
+                    <option *ngFor="let item of businessTypeArray" [value]="item">{{ item }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Other Business Type.</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input maxlength="20" type="text" formControlName="otherBusinessType" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="40">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Business Registration No.<span class="text-danger"
+                      *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="text" formControlName="businessRegNo" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.businessRegNo.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="20">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Registration Date</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input [matDatepicker]="registrationDate" formControlName="registrationDate" class="form-control">
+                  <span *ngIf="onShowDate" color="primary">
+                    <mat-datepicker-toggle matSuffix [for]="registrationDate"></mat-datepicker-toggle>
+                  </span>
+                  <mat-datepicker color="primary" #registrationDate></mat-datepicker>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Nature of Business<span class="text-danger"
+                      *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input maxlength="20" type="text" formControlName="businessNature" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.businessNature.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="20">
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button *ngIf="displayBackButton" mat-raised-button type="submit"
+                class="pull-left bg-secondary text-white"
+                routerLink="/system/group-membership/maintenance">BACK</button>
+              <button *ngIf="displayApproavalBtn" mat-raised-button type="submit"
+                class="pull-left bg-secondary text-white" routerLink="/system/new/notification/allerts">BACK</button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab class="mat-tab" label="COMMUNICATION DETAILS">
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Postal Code.</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="number" formControlName="postCode" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="8">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Town.</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="text" formControlName="town" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="40">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Country Code</label>
+                </div>
+                <div class="col-md-8 col-sm-12 ">
+                  <select formControlName="countryCode" class="form-control">
+                    <option value="" disabled>SELECT COUNTRY CODE</option>
+                    <option *ngFor="let countries of country" [value]="countries.code">{{ countries.code }} -- {{
+                      countries.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">County.</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="text" formControlName="county" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="100">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Sub County.</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="text" formControlName="subCounty" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="100">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Ward.</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="text" formControlName="ward" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="100">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Postal Address.</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="text" formControlName="postalAddress" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="80">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Home Address</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="text" formControlName="homeAddress" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="80">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Current Address</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="text" formControlName="currentAddress" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="80">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Primary Phone No.</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="number" formControlName="primaryPhone" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Other Phone No.</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="number" formControlName="otherPhone" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="12">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Group E-Mail</label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="email" formControlName="groupMail" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="255">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label for="" class="start">Representative<span class="text-danger"
+                      *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input formControlName="representative" placeholder="" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.representative.errors }"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="100">
+                  &nbsp; &nbsp;
+                  <mat-icon *ngIf="onShowSearchIcon" color="primary" (click)="representativeLookup()">
+                    search</mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button *ngIf="displayBackButton" mat-raised-button type="submit"
+                class="pull-left bg-secondary text-white"
+                routerLink="/system/group-membership/maintenance">BACK</button>
+              <button *ngIf="displayApproavalBtn" mat-raised-button type="submit"
+                class="pull-left bg-secondary text-white" routerLink="/system/new/notification/allerts">BACK</button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab class="mat-tab" label="BANK DETAILS">
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Bank Name</label>
+                </div>
+                <div class="col-md-8 col-sm-12 ">
+                  <select formControlName="bankName" class="form-control" (change)="onSelectedBank($event)"
+                    [ngClass]="{ 'is-invalid': submitted && f.bankName.errors}">
+                    <option value="" disabled>SELECT BANK NAME</option>
+                    <option *ngFor="let bank of banks" [value]="bank.name">{{ bank.code }} -- {{ bank.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Bank Branch</label>
+                </div>
+                <div class="col-md-8 col-sm-12 ">
+                  <select formControlName="bankBranch" class="form-control" *ngIf="onShowSelect">
+                    <option value="" disabled>SELECT BANK BRANCH</option>
+                    <option *ngFor="let item of branch" [value]="item.branchName">{{ item.branchCode }} -- {{
+                      item.branchName }}
+                    </option>
+                  </select>
+                  <input type="text" formControlName="bankBranch" class="form-control" *ngIf="isHidden"
+                    [ngClass]="{ 'is-invalid': submitted && f.bankBranch.errors}"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="20">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="col-md-4 col-sm-12 form-column">
+                  <label class="start">Bank Account No.<span class="text-danger" *ngIf="onShowWarning">*</span></label>
+                </div>
+                <div class="col-md-8 col-sm-12 form-column">
+                  <input type="text" formControlName="bankAccountNo" class="form-control"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    maxlength="20">
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button *ngIf="displayBackButton" mat-raised-button type="submit"
+                class="pull-left bg-secondary text-white"
+                routerLink="/system/group-membership/maintenance">BACK</button>
+              <button *ngIf="displayApproavalBtn" mat-raised-button type="submit"
+                class="pull-left bg-secondary text-white" routerLink="/system/new/notification/allerts">BACK</button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab class="mat-tab" label="SIGNATORIES DETAILS">
+          <br>
+          <form [formGroup]="signatoriesForm">
+            <div class="row" *ngIf="onShowSignatoriesForm">
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label for="" class="start">Signatory Code<span class="text-danger"
+                        *ngIf="onShowWarning">*</span></label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 form-column">
+                    <input type="text" formControlName="memberCode" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedSing && s.memberCode.errors}"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="20">
+                    &nbsp; &nbsp;
+                    <mat-icon *ngIf="onShowSearchIcon" color="primary" (click)="signatoryCodeLookup()">
+                      search</mat-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label class="start">Signatory Name</label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 ">
+                    <input  type="text" formControlName="memberName" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedSing && s.memberName.errors}"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="100">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label class="start">Expriry Date<span class="text-danger" *ngIf="onShowWarning">*</span></label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 form-column">
+                    <input [matDatepicker]="expriyDate" formControlName="expriyDate" class="form-control">
+                    <span *ngIf="onShowDate" color="primary">
+                      <mat-datepicker-toggle matSuffix [for]="expriyDate"></mat-datepicker-toggle>
+                    </span>
+                    <mat-datepicker color="primary" #expriyDate></mat-datepicker>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label class="start">DESIGNATION <span class="text-danger" *ngIf="onShowWarning">*</span> </label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 ">
+                    <select formControlName="designation" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedSing && s.designation.errors}">
+                      <option value="" disabled>SELECT DESIGNATION</option>
+                      <option *ngFor="let occupation of occupations" [value]="occupation">{{occupation}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label for="" class="start">Document Type *</label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 form-column">
+                    <select formControlName="verificationDocument" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedSing && s.verificationDocument.errors}">
+                      <option value="" disabled>SELECT DOCUMENT</option>
+                      <option *ngFor="let item of documentTypeArray" [value]="item">{{ item }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label class="start">Document Number <span class="text-danger" *ngIf="onShowWarning">*</span>
+                    </label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 ">
+                    <input type="text" formControlName="verificationDocumentNo" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedSing && s.verificationDocumentNo.errors}"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      type="text" maxlength="20">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label class="start">Nationality <span class="text-danger" *ngIf="onShowWarning">*</span> </label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 ">
+                    <select formControlName="nationality" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedSing && s.nationality.errors}">
+                      <option value="" disabled>SELECT NATIONALITY</option>
+                      <option *ngFor="let countries of country" [value]="countries.name">{{ countries.code }} -- {{
+                        countries.name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label class="start">Phone Number <span class="text-danger" *ngIf="onShowWarning">*</span> </label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 ">
+                    <input type="number" formControlName="phoneNumber" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedSing && s.phoneNumber.errors}"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      type="number" maxlength="12">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label for="" class="start">Mode of Operation<span class="text-danger"
+                        *ngIf="onShowWarning">*</span></label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 form-column">
+                    <select formControlName="signOperation" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedSing && s.signOperation.errors}">
+                      <option value="" disabled>SELECT OPERATION</option>
+                      <option *ngFor="let item of operationsArray" [value]="item">{{ item }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label class="start">Must Sign<span class="text-danger" *ngIf="onShowWarning">? *</span></label>
+                  </div>
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <mat-checkbox formControlName="mustSign" class="example-margin pull-right" color="primary"
+                      [ngClass]="{ 'is-invalid': submittedSing && s.mustSign.errors}">
+                    </mat-checkbox>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="showButtons">
+              <button *ngIf="addButton" (click)="addSignatory()" class="pull-right btn btn-success btn-sm"
+                [disabled]="!signatoriesForm.valid || disableAddButton" mat-raised-button color="primary" type="button">
+                Add Signatory
+              </button>
+              <button *ngIf="editButton" class="pull-right btn btn-primary btn-sm" (click)="updateSignatory()"
+                [disabled]="!signatoriesForm.valid || disableAddButton" mat-raised-button color="primary" type="button">
+                Update Signatory
+              </button>
+            </div>
+          </form>
+
+          <div class="row table-action-row">
+            <div class="col-md-6 col-sm-12">
+              <strong>Signatories List</strong>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <input class="pull-right search form-control" (keyup)="applySignatoryFilter($event)"
+                placeholder="Search..." #input />
+            </div>
+          </div>
+          <br>
+          <div class="table-row">
+            <table mat-table matSort matTableExporter [dataSource]="signatoriesDataSource">
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+              </ng-container>
+              <ng-container matColumnDef="memberCode">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Member Code</th>
+                <td mat-cell *matCellDef="let row">{{ row.memberCode}}</td>
+              </ng-container>
+              <ng-container matColumnDef="memberName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Member Name</th>
+                <td mat-cell *matCellDef="let row">{{ row.memberName}}</td>
+              </ng-container>
+              <ng-container matColumnDef="signOperation">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Sign Operation</th>
+                <td mat-cell *matCellDef="let row">{{ row.signOperation}}</td>
+              </ng-container>
+              <ng-container matColumnDef="nationality">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nationality</th>
+                <td mat-cell *matCellDef="let row">{{ row.nationality}}</td>
+              </ng-container>
+              <ng-container matColumnDef="verificationDocument">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Document<th>
+                <td mat-cell *matCellDef="let row">{{ row.verificationDocument}}</td>
+              </ng-container>
+              <ng-container matColumnDef="verificationDocumentNo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Doc. Number</th>
+                <td mat-cell *matCellDef="let row">{{ row.verificationDocumentNo}}</td>
+              </ng-container>
+              <ng-container matColumnDef="expriyDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Expriy Date</th>
+                <td mat-cell *matCellDef="let row">{{ row.expriyDate | date: 'dd/MM/yyyy'}}</td>
+              </ng-container>
+              <ng-container matColumnDef="designation">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Pesignation</th>
+                <td mat-cell *matCellDef="let row">{{ row.designation}}</td>
+              </ng-container>
+              <ng-container matColumnDef="phoneNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone Number</th>
+                <td mat-cell *matCellDef="let row">{{ row.phoneNumber}}</td>
+              </ng-container>
+              <ng-container matColumnDef="mustSign">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Must Sign</th>
+                  <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+                    <span *ngIf="row.mustSign == true " class="badge badge-pill badge-primary">YES</span>
+                    <span *ngIf="row.mustSign == false " class="badge badge-pill badge-secondary ">NO</span>
+                  </td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                <td mat-cell *matCellDef="let row">
+                  <button mat-icon-button [disabled]="disableActions" color="primary" (click)="editSignatories(row)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button [disabled]="disableActions" (click)="deleteSignatory(row)" color="warn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="signatoriesColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: signatoriesColumns;"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+              </tr>
+            </table>
+          </div>
+          <mat-paginator #signatoriesPaginator="matPaginator" [pageSize]="5"
+            [pageSizeOptions]="[2, 5, 10, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+
+          <br>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button *ngIf="displayBackButton" mat-raised-button type="submit"
+                class="pull-left bg-secondary text-white"
+                routerLink="/system/group-membership/maintenance">BACK</button>
+              <button *ngIf="displayApproavalBtn" mat-raised-button type="submit"
+                class="pull-left bg-secondary text-white" routerLink="/system/new/notification/allerts">BACK</button>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab class="mat-tab" label="GROUP MEMBER DETAILS">
+          <br>
+          <form action="" class="form" [formGroup]="groupmemberForm" *ngIf="showgroupmemberForm">
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label for="" class="start">Membership Code<span class="text-danger"
+                        *ngIf="onShowWarning">*</span></label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 form-column">
+                    <input type="text" formControlName="customerCode" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedgmbr && m.customerCode.errors}"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="10">
+                    &nbsp; &nbsp;
+                    <mat-icon *ngIf="onShowSearchIcon" color="primary" (click)="groupMemberCodeLookup()">
+                      search</mat-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label class="start">Member Name</label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 ">
+                    <input  type="text" formControlName="customerName" class="form-control"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      maxlength="100">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label class="start">Serial Number <span class="text-danger" *ngIf="onShowWarning">*</span> </label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 ">
+                    <input type="text" formControlName="serialNo" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedgmbr && m.serialNo.errors}"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      type="text" maxlength="20">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label class="start">Contact<span class="text-danger" *ngIf="onShowWarning">*</span> </label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 ">
+                    <input type="text" formControlName="contact" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedgmbr && m.contact.errors}"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      type="text" maxlength="12">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label class="start">Total Savings<span class="text-danger" *ngIf="onShowWarning">*</span> </label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 ">
+                    <input type="text" formControlName="totalSaving" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedgmbr && m.totalSaving.errors}"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      type="number" maxlength="12">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-4 col-sm-12 form-column">
+                    <label class="start">Loan Balance<span class="text-danger" *ngIf="onShowWarning">*</span> </label>
+                  </div>
+                  <div class="col-md-8 col-sm-12 ">
+                    <input type="number" formControlName="loanBalance" class="form-control"
+                      [ngClass]="{ 'is-invalid': submittedgmbr && m.loanBalance.errors}"
+                      oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                      type="number" maxlength="12">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="showButtons">
+              <div *ngIf="showButtons">
+                <button *ngIf="addButton" (click)="addgroupmember()" class="pull-right btn btn-success btn-sm"
+                  [disabled]="!groupmemberForm.valid || disableAddButton" mat-raised-button color="primary"
+                  type="button">
+                  Add Group Member
+                </button>
+                <button *ngIf="editButton" class="pull-right btn btn-primary btn-sm" (click)="updategroupmember()"
+                  [disabled]="!groupmemberForm.valid || disableAddButton" mat-raised-button color="primary"
+                  type="button">
+                  Update Group Member
+                </button>
+              </div>
+            </div>
+          </form>
+          <div class="row table-action-row">
+            <div class="col-md-6 col-sm-12">
+              <strong>Group Members List</strong>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <input class="pull-right search form-control" (keyup)="applygroupmemberFilter($event)"
+                placeholder="Search..." #input />
+            </div>
+          </div>
+          <br>
+          <div class="table-row">
+            <table mat-table matSort matTableExporter [dataSource]="groupmemberDataSource">
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+              </ng-container>
+              <ng-container matColumnDef="customerCode">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer Code</th>
+                <td mat-cell *matCellDef="let row">{{ row.customerCode}}</td>
+              </ng-container>
+              <ng-container matColumnDef="customerName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer Name</th>
+                <td mat-cell *matCellDef="let row">{{ row.customerName}}</td>
+              </ng-container>
+              <ng-container matColumnDef="serialNo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Serial No.</th>
+                <td mat-cell *matCellDef="let row">{{ row.serialNo}}</td>
+              </ng-container>
+              <ng-container matColumnDef="contact">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Contact</th>
+                <td mat-cell *matCellDef="let row">{{ row.contact}}</td>
+              </ng-container>
+              <ng-container matColumnDef="loanBalance">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Loan Balance</th>
+                <td mat-cell *matCellDef="let row">{{ row.loanBalance}}</td>
+              </ng-container>
+              <ng-container matColumnDef="totalSaving">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Saving</th>
+                <td mat-cell *matCellDef="let row">{{ row.totalSaving}}</td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                <td mat-cell *matCellDef="let row">
+                  <button mat-icon-button [disabled]="disableActions" color="primary" (click)="editgroupmember(row)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button [disabled]="disableActions" (click)="deletegroupmember(row)" color="warn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="groupmemberColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: groupmemberColumns;"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+              </tr>
+            </table>
+          </div>
+          <mat-paginator #groupmemberPaginator="matPaginator" [pageSize]="5"
+            [pageSizeOptions]="[2, 5, 10, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+          <br>
+          <div class="row">
+            <div class="col-md-12 col-sm-12">
+              <button *ngIf="displayBackButton" mat-raised-button type="submit"
+                class="pull-left bg-secondary text-white"
+                routerLink="/system/group-membership/maintenance">BACK</button>
+              <button *ngIf="displayApproavalBtn" mat-raised-button type="submit"
+                class="pull-left bg-secondary text-white" routerLink="/system/new/notification/allerts">BACK</button>
+            </div>
+          </div>
+        </mat-tab>
+
+        <mat-tab class="mat-tab" label="SIGNATORY PHOTOS">
+          <br>
+          <form [formGroup]="accountDocumentsForm" *ngIf="onShowImagesForm">
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <label class="start pull-left">Document Type</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12 form-column">
+                    <select formControlName="image_name" class="form-control">
+                      <option value="" disabled>CHOOSE DOCUMENT</option>
+                      <option *ngFor="let image of imageTypeArray" [value]="image">{{image}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                  <div class="col-md-3 col-sm-12 form-column">
+                    <label class="start">Document</label>
+                  </div>
+                  <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                      <div class="col-md-12 col-sm-12 form-column">
+                        <input class="form-controls" type="file" required (change)="onImageFileChange($event)">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <mat-hint><small>Only png, jpeg accepted</small></mat-hint>
+                    </div>
+                    <div class="form-group">
+                      <img [src]="imageSrc" *ngIf="imageSrc" class="col-md-6 img-preview">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="showButtons">
+              <button *ngIf="addButton" (click)="addAccountDocuments()" class="pull-right btn btn-success btn-sm"
+                [disabled]="!accountDocumentsForm.valid || disableAddButton" mat-raised-button color="primary"
+                type="button">
+                Add Document File.
+              </button>
+              <button *ngIf="editButton" (click)="updateAccountDocuments()" class="pull-right btn btn-primary btn-sm"
+                [disabled]="!accountDocumentsForm.valid || disableAddButton" mat-raised-button color="primary"
+                type="button">
+                Update Document File.
+              </button>
+            </div>
+          </form>
+          <div class="row table-action-row">
+            <div class="on-mobile-hide col-md-6 col-sm-12">
+              <strong>Group Document List</strong>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <input class="pull-right search form-control" (keyup)="applyAccountDocumentsFilter($event)"
+                placeholder="Search..." #input />
+            </div>
+          </div>
+          <div class="table-row">
+            <table mat-table matSort matTableExporter [dataSource]="accountDocumentsDataSource">
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+              </ng-container>
+              <ng-container matColumnDef="documentTitle">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+                <td mat-cell *matCellDef="let row">{{ row.image_name }}</td>
+              </ng-container>
+              <ng-container matColumnDef="view">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>View Document</th>
+                <td mat-cell *matCellDef="let row">
+                  <button mat-icon-button [disabled]="disableViewAction" color="primary"
+                    (click)="onViewDoument(row.id)">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                <td mat-cell *matCellDef="let row">
+                  <button mat-icon-button [disabled]="disableActions" color="primary"
+                    (click)="editAccountDocuments(row)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button [disabled]="disableActions" (click)="deleteAccountDocuments(row)"
+                    color="warn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="accountDocumentsColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: accountDocumentsColumns;"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+              </tr>
+            </table>
+          </div>
+          <mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page"></mat-paginator>
+          <br>
+          <button *ngIf="displayBackButton" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+            routerLink="/system/group-membership/maintenance">BACK</button>
+          <button *ngIf="displayApproavalBtn" mat-raised-button type="submit" class="pull-left bg-secondary text-white approval"
+            routerLink="/system/new/notification/allerts">BACK</button>
+          <button *ngIf="!hideBtn" class="pull-right approval" mat-raised-button [color]="btnColor" type="submit"
+            (click)="onSubmit()">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+          </button>
+          <button *ngIf="hideRejectBtn" class="pull-right approval" mat-raised-button [color]="btnRejectColor"
+            (click)="onRejectMember()">
+            {{rejectBtnText}}
+          </button>
+        </mat-tab>
+      </mat-tab-group>
+    </form>
+  </div>
+</mat-card>

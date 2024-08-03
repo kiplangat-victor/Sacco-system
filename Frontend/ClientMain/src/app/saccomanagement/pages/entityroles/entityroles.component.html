@@ -1,0 +1,85 @@
+<mat-card>
+	<div *ngIf="loading">
+		<p><small>Processing, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</p>
+	</div>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/saccomanagement">Dashboard / </a>
+			<a routerLink="/saccomanagement/entity-roles/maintenance">User Entity Roles Maintenance / </a> User Entity
+			Roles
+		</div>
+	</mat-card-header>
+	<mat-divider></mat-divider>
+	<br>
+	<div class="row">
+		<div class="col-md-5 col-sm-12">
+			<div class="row">
+				<div class="col-md-4 col-sm-12">
+					<h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Role Code: <strong>{{this.fmData.roleCode}}</strong></h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-7 col-sm-12 row" *ngIf="onShowResults">
+			<div class="row">
+				<div class="col-md-4 col-sm-12">
+					<h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Posted Time:- <strong>{{this.results.postedTime | date}}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<mat-divider></mat-divider>
+	<br>
+	<div class="container-fluid">
+		<form class="form" [formGroup]="formData" #resetRequestsForm="ngForm" novalidate>
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label class="start pull-left">Role Name<span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<input type="text" formControlName="name" class="form-control"
+								[ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<div class="form-group">
+						<div class="col-md-6 col-sm-12 form-column">
+							<label class="start pull-left">Is a Entity Managerial? <span class="warning">*</span></label>
+						</div>
+						<div class="col-md-6 col-sm-12 form-column">
+							<mat-radio-group class="pull-right" aria-label="Select an option"
+								formControlName="managerial">
+								<mat-radio-button [value]="true" color="primary">YES</mat-radio-button>
+								<mat-radio-button [value]="false">NO</mat-radio-button>
+							</mat-radio-group>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+			<button mat-raised-button type="button" class="bg-secondary text-white"
+				routerLink="/saccomanagement/entity-roles/maintenance" skipLocationChange="">
+				BACK
+			</button>
+			<button *ngIf="!hideBtn" (click)="onSubmit()" class="pull-right" mat-raised-button [color]="btnColor"
+				type="submit">
+				<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{ btnText }}
+			</button>
+			<br />
+		</form>
+	</div>
+</mat-card>

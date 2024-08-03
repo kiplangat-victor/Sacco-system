@@ -1,0 +1,75 @@
+
+<div class="">
+  <div *ngIf="loading">
+    <p><small>Processing, please wait...</small></p>
+    <p>
+      <mat-progress-bar mode="query"></mat-progress-bar>
+    </p>
+  </div>
+  <mat-card-header class="breadcrumb">
+    <div>Share Capital Parameters</div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br>
+
+  <div class="row table-action-row">
+    <div class="col-md-6 col-sm-12">
+      <div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <mat-icon class="pull-right">search</mat-icon>
+      <input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+    </div>
+  </div>
+  <br>
+  <div class="table-row">
+    <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+      <ng-container matColumnDef="index">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+        <td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="share_capital_unit">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit</th>
+        <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.share_capital_unit}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="share_capital_amount_per_unit">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Amount</th>
+        <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.share_capital_amount_per_unit}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="share_min_unit">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Min Unit</th>
+        <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.share_min_unit}} </td>
+      </ng-container>
+      <ng-container matColumnDef="isActive">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+          <span *ngIf="row.isActive==true" class="badge badge-pill badge-success">True</span>
+          <span *ngIf="row.isActive==false" class="badge badge-pill badge-danger">False</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="postedTime">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Posted Time</th>
+        <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.postedTime | date: "short" }} </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+  </div>
+  <mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page of users"></mat-paginator>
+</div>
+
+
+
+
+

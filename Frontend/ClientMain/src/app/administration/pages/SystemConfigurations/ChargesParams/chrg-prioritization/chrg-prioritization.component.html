@@ -1,0 +1,100 @@
+
+<mat-card>
+    <mat-card-header  class="breadcrumb">
+      <div>Home/Configuration/charge/prioritization</div>
+  </mat-card-header>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+        <h4>Function</h4>
+        <p>{{this.function_type}}</p>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <h4>Cif</h4>
+        <p>{{this.event_type_description }}</p> 
+    </div>
+</div>
+  <mat-divider></mat-divider>
+  <br>
+  <div class="container-fluid">
+    <form
+    class="form"
+    [formGroup]="formData"
+    (ngSubmit)="onSubmit()"
+    #resetRequestsForm="ngForm"
+    novalidate
+  >
+
+ <div class="row">
+    <div class="col-md-6 col-sm-12">
+           <div class="form-group">
+             <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">1st Priority <span class="warning">*</span></label>
+             </div>
+             <div class="col-md-6 col-sm-12 form-column">
+                <select (change)="onSelectAmountDerv($event)" class="form-control" formControlName="chrg_derivation" [ngClass]="{ 'is-invalid': submitted && f.chrg_derivation.errors }" >
+                  <option value="" disabled>-- Select Priority --</option>
+                  <option *ngFor="let flag of  prioritizationArray" [value]="flag">{{ flag }}</option>
+                </select>
+             </div>
+          </div>           
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-6 col-sm-12 form-column ">
+           <label class="start pull-left">2nd Priority <span class="warning">*</span></label>
+          </div>
+          <div class="col-md-6 col-sm-12 form-column">
+             <select (change)="onSelectAmountDerv($event)" class="form-control" formControlName="chrg_derivation" [ngClass]="{ 'is-invalid': submitted && f.chrg_derivation.errors }" >
+               <option value="" disabled>-- Select Priority --</option>
+               <option *ngFor="let flag of  prioritizationArray" [value]="flag">{{ flag }}</option>
+             </select>
+          </div>
+       </div>           
+ </div>
+</div>  
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+           <div class="form-group">
+             <div class="col-md-6 col-sm-12 form-column ">
+              <label class="start pull-left">3rd Priority <span class="warning">*</span></label>
+             </div>
+             <div class="col-md-6 col-sm-12 form-column">
+                <select (change)="onSelectAmountDerv($event)" class="form-control" formControlName="chrg_derivation" [ngClass]="{ 'is-invalid': submitted && f.chrg_derivation.errors }" >
+                  <option value="" disabled>-- Select Priority --</option>
+                  <option *ngFor="let flag of  prioritizationArray" [value]="flag">{{ flag }}</option>
+                </select>
+             </div>
+          </div>           
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <div class="col-md-6 col-sm-12 form-column ">
+           <label class="start pull-left">4th Priority <span class="warning">*</span></label>
+          </div>
+          <div class="col-md-6 col-sm-12 form-column">
+             <select (change)="onSelectAmountDerv($event)" class="form-control" formControlName="chrg_derivation" [ngClass]="{ 'is-invalid': submitted && f.chrg_derivation.errors }" >
+               <option value="" disabled>-- Select Priority --</option>
+               <option *ngFor="let flag of  prioritiesArray" [value]="flag">{{ flag }}</option>
+             </select>
+          </div>
+       </div>           
+ </div>
+</div> 
+
+    <br />
+    <button *ngIf="isEnabled" class="pull-right" mat-raised-button color="primary" type="submit">
+      <span
+        *ngIf="loading"
+        class="spinner-border spinner-border-sm mr-1"
+      ></span>
+      Submit
+    </button>
+    <br />
+  </form>
+    </div>
+  </mat-card>
+  
+  
+  
+  
+  

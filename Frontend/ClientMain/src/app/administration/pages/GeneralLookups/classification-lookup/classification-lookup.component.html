@@ -1,0 +1,24 @@
+ 
+
+	<table mat-table matSort matTableExporter [dataSource]="dataSource">
+		<ng-container matColumnDef="index">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>No</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">
+				{{ i + 1 }}
+			</td>
+		</ng-container>
+		<ng-container matColumnDef="classification">
+			<th mat-header-cell *matHeaderCellDef mat-sort-header>Classification</th>
+			<td (click)="onSelect(row)" mat-cell *matCellDef="let row">
+				{{ row }}
+			</td>
+		</ng-container>
+	
+		<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+		<tr class="mat-row" *matNoDataRow>
+			<td class="mat-cell" colspan="4">
+				No data matching the filter "{{ input.value }}"
+			</td>
+		</tr>
+	</table>

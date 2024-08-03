@@ -1,0 +1,89 @@
+<!-- <div class="">
+    <div *ngIf="loading">
+      <p><small>Loading, please wait...</small></p>
+      <p>
+        <mat-progress-bar mode="query"></mat-progress-bar>
+      </p>
+    </div>
+    <div class="row breadcrumb">
+      <div >Customers Lookup
+      </div>
+    </div>
+    <br>
+    <mat-divider></mat-divider>
+    <div class="filter-form">
+      <p>
+        Filter by:
+      </p>
+      <form action="" [formGroup]="formData" novalidate class="form" (ngSubmit)="onSubmit()" #resetRequestsForm="ngForm">
+        <div class="row">
+          <div class="col-4">
+            <mat-form-field class="m-2" appearance="fill">
+              <mat-label>From date</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="fromDate" readonly>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-4">
+            <mat-form-field class="m-2" appearance="fill">
+              <mat-label>To date</mat-label>
+              <input matInput [matDatepicker]="picker1" formControlName="toDate" readonly>
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </div>
+          </div>
+        <br>
+        <div class="col-md-2 ml-auto">
+          <button class="table-main-action-btn h1" color="primary" mat-raised-button (click)="getFilteredShares()"><i
+            class="fa fa-exchange" aria-hidden="true"></i> &nbsp; FILTER
+        </button>
+      </div>
+      </form>
+    </div>
+    <mat-divider></mat-divider>
+    <br>
+    <div class="row table-action-row">
+      <div class="col-md-6 col-sm-12">
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <input class="pull-right search form-control" (keyup)="applyFilter($event)" placeholder="Filter..." #input>
+      </div>
+    </div>
+    &nbsp;
+    <div class="table-row">
+      <table class="y-scrollable-table" mat-table matSort matTableExporter [dataSource]="dataSource">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+          <td (click)="onSelect(row)" mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="cust_code">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Customer Code</th>
+          <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.customerCode}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="cust_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Customer Name</th>
+          <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.customerName}}
+          </td>
+        </ng-container>
+  
+  
+        <ng-container matColumnDef="cust_joiningdate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Joining Date</th>
+          <td (click)="onSelect(row)" mat-cell *matCellDef="let row"> {{row.postedTime | date}} </td>
+        </ng-container>
+  
+  
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[7, 20, 30, 40, 50, 100]" aria-label="Select page of users"></mat-paginator>
+  </div> -->

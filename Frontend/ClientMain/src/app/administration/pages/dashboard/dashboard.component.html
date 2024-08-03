@@ -1,0 +1,37 @@
+<mat-card>
+  <div class="container-fluid">
+    <mat-tab-group mat-align-tabs="center">
+      <!-- <mat-tab class="mat-tab container-fluid" label="Main">
+        <app-main-dashboard-page></app-main-dashboard-page>
+      </mat-tab> -->
+      <mat-tab class="mat-tab container-fluid" label="Custom dashboard">
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <app-widget-membership></app-widget-membership>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <app-widget-lending></app-widget-lending>
+            <!-- <app-widget-share-capital></app-widget-share-capital> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <!-- <app-widget-lending></app-widget-lending> -->
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <!-- <app-widget-charges></app-widget-charges> -->
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Power BI dashboard">
+        <div class="row">
+          <div class="col-12">
+            <div class="mx-auto">
+              <iframe title="Goodway Sacco Society LTD" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=318683e1-2783-4d44-a657-358ec5ec0d9d&autoAuth=true&ctid=1f7fe655-aa8d-442e-8cad-d636fe69c01e" frameborder="0" allowFullScreen="true"></iframe>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</mat-card>

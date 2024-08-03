@@ -1,0 +1,60 @@
+<mat-card>
+    <mat-card-header class="breadcrumb">
+        <div>
+            <a routerLink="/system">Dashboard / </a>Membership Maintenance
+        </div>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <br>
+    <div *ngIf="loading">
+        <p><small>Processing, please wait...</small></p>
+        <p>
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </p>
+    </div>
+    <div class="container-fluid">
+        <form class="form" [formGroup]="formData" #resetRequestsForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label>Function<span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <select formControlName="function_type" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.function_type.errors}"
+                                (change)="onSelectFunction($event)">
+                                <option value="" disabled>-- SELECT FUNCTION --</option>
+                                <option *ngFor="let item of functionArray" [value]="item">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12" *ngIf="showCustCode">
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <label class="start" for="">Birth Cert. / ID NO. <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-column">
+                            <input type="text" class="form-control" formControlName="uniqueId"
+                                [ngClass]="{ 'is-invalid': submitted && f.uniqueId.errors}"
+                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                maxlength="20" minlength="1">&nbsp; &nbsp;
+                            <mat-icon color="primary" *ngIf="onShowSearchIcon" (click)="membershipLookup()">search
+                            </mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="col-md-12 col-sm-12">
+                <button mat-raised-button class="pull-left bg-secondary text-white" routerLink="/system/"
+                    skipLocationChange="">BACK</button>
+                <button mat-raised-button type="submit" class="float-right" color="primary"
+                    style="margin-bottom:20px ;"> <span *ngIf="loading"
+                        class="spinner-border spinner-border-sm mr-1"></span>PROCEED</button>
+            </div>
+            <br />
+        </form>
+    </div>
+</mat-card>

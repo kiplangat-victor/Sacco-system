@@ -1,0 +1,343 @@
+<mat-card>
+	<mat-card-header class="breadcrumb">
+		<div>
+			<a routerLink="/system">Dashboard / </a>
+			<a routerLink="/system/product/office-product/maintenance">Office Product Maintenenace / </a>
+			Office Product
+		</div>
+	</mat-card-header>
+	<div *ngIf="loading">
+		<p><small>Loading, please wait...</small></p>
+		<p>
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</p>
+	</div>
+	<div class="row">
+		<div class="col-md-5 col-sm-12">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<h4>Function:- <strong>{{this.fmData.function_type}}</strong> </h4>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<h4>OAB Code:- <strong>{{this.fmData.productCode}}</strong></h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-7 col-sm-12 row" *ngIf="onShowResults">
+			<div class="row" *ngIf="this.results">
+				<div class="col-md-4 col-sm-12">
+					<h4>Posted ON:- <strong>{{this.results.postedTime | date }}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Posted BY:- <strong>{{this.results.postedBy}}</strong></h4>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<h4>Verification:- <strong>{{this.results.verifiedFlag}}</strong></h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<mat-divider></mat-divider>
+	<br>
+	<div class="container-fluid">
+		<form action="" class="form" [formGroup]="formData" novalidate>
+			<mat-tab-group mat-align-tabs="center">
+				<mat-tab class="mat-tab" label="General Details">
+					<br>
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="input-group mb-3">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Effective From Date
+										<span class="text-danger" *ngIf="onShowWarning">*</span>
+									</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input [matDatepicker]="effective_from_date" formControlName="effective_from_date"
+										class="form-control" [ngClass]="{ 'is-invalid': submitted && f.effective_from_date.errors }">
+									<span *ngIf="onShowDate" color="primary">
+										<mat-datepicker-toggle matSuffix
+											[for]="effective_from_date"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker color="primary" #effective_from_date></mat-datepicker>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="input-group mb-3">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Effective To Date
+										<span class="text-danger" *ngIf="onShowWarning">*</span>
+									</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input [matDatepicker]="effective_to_date" formControlName="effective_to_date"
+										class="form-control" [ngClass]="{ 'is-invalid': submitted && f.effective_to_date.errors }">
+									<span *ngIf="onShowDate" color="primary">
+										<mat-datepicker-toggle matSuffix
+											[for]="effective_to_date"></mat-datepicker-toggle>
+									</span>
+									<mat-datepicker color="primary" #effective_to_date></mat-datepicker>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Number Generation<span class="text-danger"
+											*ngIf="onShowWarning">? *</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<mat-radio-group (change)="handleChange($event)" class="pull-right" aria-label="Select an option"
+										formControlName="acidGeneration" [ngClass]="{ 'is-invalid': submitted && f.acidGeneration.errors }">
+										<mat-radio-button value="Y" color="primary">YES</mat-radio-button>
+										<mat-radio-button value="N" color="warn">NO</mat-radio-button>
+									</mat-radio-group>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="showAcidStructure">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label>Acid Structure</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="acidStructure" class="form-control" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12" *ngIf="showAcidStructure">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column ">
+									<label>Increment</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="increment" class="form-control" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">							     
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column ">
+								<label class="start pull-left">Account Currency </label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column ">
+								<input type="text" oninput="this.value=this.value.toUpperCase()" formControlName="chrg_calc_crncy"
+									class="pull-right form-control" [ngClass]="{ 'is-invalid': submitted && f.chrg_calc_crncy.errors }" />
+								<mat-icon *ngIf="isEnabled" (click)="chrgCalcCrncyLookup()">search</mat-icon>
+								</div>
+							</div>						
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Account Prefix<span class="text-danger"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="acPrefix" placeholder="" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.acPrefix.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="20">
+								</div>
+							</div>
+						</div>
+						<!-- <div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Scheme Name<span class="text-danger"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="schemeName" placeholder="" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.schemeName.errors }">
+									&nbsp;&nbsp;
+									<mat-icon color="primary" *ngIf="showSearch"
+										(click)="mainAssetsCodeLookup()">search</mat-icon>
+								</div>
+							</div>
+						</div> -->
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Supervisor ID<span class="text-danger"
+											*ngIf="onShowWarning">*</span></label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="schemeSupervisorID" placeholder=""
+										class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.schemeSupervisorID.errors }">
+									&nbsp; &nbsp;
+									<mat-icon *ngIf="showSearch" color="primary" (click)="accountManagerLookup()">
+										search</mat-icon>
+								</div>
+							</div>
+						</div>
+						<!-- <div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start pull-left">Collect Ledger Fee ?</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<mat-radio-group (change)="handleFeeChange($event)" class="pull-right" aria-label="Select an option"
+										formControlName="collectLedgerFee">
+										<mat-radio-button [value]="true" color="primary">YES</mat-radio-button>
+										<mat-radio-button [value]="false">NO</mat-radio-button>
+									</mat-radio-group>
+								</div>
+							</div>
+						</div> -->
+						<!-- <div class="col-md-6 col-sm-12" *ngIf="showledgerFeeEventIdCode">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label class="start">Ledger Fee Code</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="text" formControlName="ledgerFeeEventIdCode" class="form-control">
+									&nbsp; &nbsp;
+									<mat-icon *ngIf="showSearch" color="primary" (click)="ledgerFeeEventIdCodeLookup()">
+										search</mat-icon>
+								</div>
+							</div>
+						</div> -->
+					</div>
+					<br>
+					<hr>
+					<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+						routerLink="/system/product/office-product/maintenance">BACK</button>
+				</mat-tab>
+				<mat-tab class="mat-tab" label="OAB Details">
+					<br>
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label>Cash Limit Cr.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="cashLimitCr" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.cashLimitCr.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label>Cash Limit Dr.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="cashLimitDr" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.cashLimitDr.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label>Clearing Limit Cr.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="clearingLimitCrExce" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.clearingLimitCrExce.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label>Clearing Limit Dr.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="clearingLimitDrExce" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.clearingLimitDrExce.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label>EOD Max. Bal.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="eodMaxBalExce" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.eodMaxBalExce.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label>EOD Min. Bal.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="eodMinBalExce" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.eodMinBalExce.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label>Trans. Restriction</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<select  class="form-control" formControlName="tranRestriction"
+										[ngClass]="{ 'is-invalid': submitted && f.tranRestriction.errors }">
+										<option value="" disabled>-- Choose Transfer --</option>
+										<option *ngFor="let item of tranRestrictionArray" [value]="item">{{ item }}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label>Transfer Limit Cr.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="transferLimitCr" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.transferLimitCr.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<div class="col-md-6 col-sm-12 form-column">
+									<label>Transfer Limit Dr.</label>
+								</div>
+								<div class="col-md-6 col-sm-12 form-column">
+									<input type="number" formControlName="transferLimitDr" class="form-control"
+										[ngClass]="{ 'is-invalid': submitted && f.transferLimitDr.errors }"
+										oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+										maxlength="12" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<hr>
+					<button mat-raised-button type="submit" class="pull-left bg-secondary text-white"
+						routerLink="/system/product/office-product/maintenance">BACK</button>
+					<button *ngIf="!hideBtn" class="pull-right" mat-raised-button [color]="btnColor" type="submit" (click)="onSubmit()">
+						<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>{{btnText}}
+					</button>
+					<br>
+				</mat-tab>
+			</mat-tab-group>
+		</form>
+	</div>
+</mat-card>
